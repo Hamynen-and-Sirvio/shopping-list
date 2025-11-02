@@ -9,6 +9,8 @@ services:
     environment:
       PORT: 3000
       HOST: 0.0.0.0
+      PASSWORD_HASH: aecd9cd7f5ca210c4dd6a265c4844b4d:a29854c8bdc20fd9bca1884fb6f8c4b5f3dde7fd81884afdc383946f873e28a32b77fff6af3bcba72e69c6a33d5936ecdb78f47a53cc66b83c1439ba96bfe887
+      SECRET: secret
     pull_policy: never
 
   frontend:
