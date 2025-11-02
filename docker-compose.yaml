@@ -1,0 +1,27 @@
+services:
+  backend:
+    image: typic-lists-backend
+    build: backend
+    command: npx node index.js
+    volumes:
+      - ./backend:/app
+      - node_modules_backend:/app/node_modules
+    environment:
+      PORT: 3000
+      HOST: 0.0.0.0
+    pull_policy: never
+
+  frontend:
+    image: typic-lists-frontend
+    build: frontend
+    command: npx vite --host 0.0.0.0
+    ports:
+      - 127.0.0.1:5173:5173
+    volumes:
+      - ./frontend:/app
+      - node_modules_frontend:/app/node_modules
+    pull_policy: never
+
+volumes:
+  node_modules_backend:
+  node_modules_frontend:
