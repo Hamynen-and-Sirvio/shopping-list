@@ -22,9 +22,14 @@ const App = () => {
     const curToken = localStorage.getItem('token')
     if (curToken) {
       setToken(curToken)
-      reloadEntries()
     }
   }, [])
+
+  useEffect(() => {
+    if (token) {
+      reloadEntries()
+    }
+  }, [token])
 
   const addEntry = async (event) => {
     event.preventDefault()
