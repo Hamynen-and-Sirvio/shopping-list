@@ -4,6 +4,9 @@ import 'dotenv/config'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
+import { RateLimiterMemory } from 'rate-limiter-flexible'
+
+const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
 const PORT = process.env.PORT
 const HOST = process.env.HOST
@@ -37,35 +40,66 @@ const getTokenFrom = req => {
   return null
 }
 
+const limiterConsecutiveFailsByIp = new RateLimiterMemory({
+  points: MAX_CONSECUTIVE_FAILS_BY_IP,
+  duration: 60 * 60 * 3,
+  blockDuration: 60 * 15,
+})
+
 app.get('/', (req, res) => {
   res.send('DO NOT USE ROOT PATH')
 })
 
-app.post('/login', (req, res) => {
-  if (typeof req.body !== 'object') {
-    res.status(400).send('Request body should be JSON object')
-    return
-  }
+app.post('/login', async (req, res) => {
+  const ipAddr = req.ip
+  const rlResIp = await limiterConsecutiveFailsByIp.get(ipAddr)
 
-  if (typeof req.body.password !== 'string') {
-    res.status(400).send('Request body should contain "password" field of string type')
+  if (rlResIp !== null && rlResIp.consumedPoints > MAX_CONSECUTIVE_FAILS_BY_IP) {
+    const retrySecs = Math.round(rlResIp.msBeforeNext / 1000) || 1
+    res.set('Retry-After', String(retrySecs))
+    res.status(429).send('Too many login attempts')
     return
-  }
+  } else {
+    if (typeof req.body !== 'object') {
+      res.status(400).send('Request body should be JSON object')
+      return
+    }
 
-  if (req.body.password.length < 5 || req.body.password.length > 50) {
-    res.status(400).send('Password should be 5-50 characters')
-    return
-  }
+    if (typeof req.body.password !== 'string') {
+      res.status(400).send('Request body should contain "password" field of string type')
+      return
+    }
 
-  const password = Uint8Array.from(Buffer.from(req.body.password, 'base64').toString('binary'), c => c.charCodeAt(0))
-  const [salt, key] = PASSWORD_HASH.split(':')
-  const hash = crypto.scryptSync(password, salt, 64).toString('hex')
-  if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
-    res.status(401).send('Incorrect password')
-    return
-  }
+    if (req.body.password.length < 5 || req.body.password.length > 50) {
+      res.status(400).send('Password should be 5-50 characters')
+      return
+    }
 
-  res.json({ token: jwt.sign({}, process.env.SECRET) })
+    const password = Uint8Array.from(Buffer.from(req.body.password, 'base64').toString('binary'), c => c.charCodeAt(0))
+    const [salt, key] = PASSWORD_HASH.split(':')
+    const hash = crypto.scryptSync(password, salt, 64).toString('hex')
+    if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
+      try {
+        await limiterConsecutiveFailsByIp.consume(ipAddr)
+        res.status(401).send('Incorrect password')
+        return
+      } catch (rlRejected) {
+        if (rlRejected instanceof Error) {
+          throw rlRejected
+        } else {
+          res.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000) || 1))
+          res.status(429).send('Too many login attempts')
+          return
+        }
+      }
+    }
+
+    if (rlResIp !== null && rlResIp.consumedPoints > 0) {
+      await limiterConsecutiveFailsByIp.delete(ipAddr)
+    }
+
+    res.json({ token: jwt.sign({}, process.env.SECRET) })
+  }
 })
 
 app.use((req, res, next) => {
