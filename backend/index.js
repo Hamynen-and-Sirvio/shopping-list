@@ -52,8 +52,8 @@ app.post('/login', (req, res) => {
     return
   }
 
-  if (req.body.password.length > 1000) {
-    res.status(400).send('Password should be less than 1000 characters')
+  if (req.body.password.length < 5 || req.body.password.length > 50) {
+    res.status(400).send('Password should be 5-50 characters')
     return
   }
 
