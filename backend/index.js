@@ -136,8 +136,16 @@ app.post('/entries', (req, res) => {
 
 app.delete('/entries/:id', (req, res) => {
   const id = req.params.id
-  const row = db.prepare('DELETE FROM entries WHERE id = ? RETURNING *').get(id)
-  db.prepare('UPDATE entries SET position = position - 1 WHERE position > ?').run(id)
+  let row = null
+  db.prepare('BEGIN').run()
+  try {
+    row = db.prepare('DELETE FROM entries WHERE id = ? RETURNING *').get(id)
+    db.prepare('UPDATE entries SET position = position - 1 WHERE position > ?').run(id)
+  } catch (e) {
+    db.prepare('ROLLBACK').run()
+    throw e
+  }
+  db.prepare('COMMIT').run()
   res.status(200).json({ id: row.id, position: row.position, content: row.content, checked: row.checked === 1 })
 })
 
@@ -148,51 +156,65 @@ app.patch('/entries/:id', (req, res) => {
   const editStatements = []
   const bindParams = []
 
-  if (editedFields.hasOwnProperty('checked')) {
-    editStatements.push('checked = ?')
-    bindParams.push(editedFields.checked ? 1 : 0)
-  }
+  let row = null
 
-  if (editedFields.hasOwnProperty('content')) {
-    editStatements.push('content = ?')
-    bindParams.push(editedFields.content)
-  }
+  db.prepare('BEGIN').run()
 
-  if (editedFields.hasOwnProperty('position')) {
-    if (editedFields.position < 1) {
-      res.status(400).send('Position should be >= 1')
+  try {
+    if (editedFields.hasOwnProperty('checked')) {
+      editStatements.push('checked = ?')
+      bindParams.push(editedFields.checked ? 1 : 0)
+    }
+
+    if (editedFields.hasOwnProperty('content')) {
+      editStatements.push('content = ?')
+      bindParams.push(editedFields.content)
+    }
+
+    if (editedFields.hasOwnProperty('position')) {
+      if (editedFields.position < 1) {
+        res.status(400).send('Position should be >= 1')
+        db.prepare('ROLLBACK').run()
+        return
+      }
+
+      const numOfEntries = db.prepare('SELECT COUNT(id) AS count FROM entries').get().count
+      if (editedFields.position > numOfEntries) {
+        res.status(400).send(`Position should be <= {numOfEntries}`)
+        db.prepare('ROLLBACK').run()
+        return
+      }
+
+      const oldPos = db.prepare('SELECT position FROM entries WHERE id = ?').get(id).position
+      if (editedFields.position > oldPos) {
+        db.prepare(
+          'UPDATE entries SET position = position - 1 WHERE position > ? AND position <= ?'
+        ).run(oldPos, editedFields.position)
+      } else {
+        db.prepare(
+          'UPDATE entries SET position = position + 1 WHERE position >= ? AND position < ?'
+        ).run(editedFields.position, oldPos)
+      }
+
+      editStatements.push('position = ?')
+      bindParams.push(editedFields.position)
+    }
+
+    if (editStatements.length === 0) {
+      res.status(400).send('Should edit "content" and/or "position" fields')
+      db.prepare('ROLLBACK').run()
       return
     }
 
-    const numOfEntries = db.prepare('SELECT COUNT(id) AS count FROM entries').get().count
-    if (editedFields.position > numOfEntries) {
-      res.status(400).send(`Position should be <= {numOfEntries}`)
-      return
-    }
-
-    const oldPos = db.prepare('SELECT position FROM entries WHERE id = ?').get(id).position
-    if (editedFields.position > oldPos) {
-      db.prepare(
-        'UPDATE entries SET position = position - 1 WHERE position > ? AND position <= ?'
-      ).run(oldPos, editedFields.position)
-    } else {
-      db.prepare(
-        'UPDATE entries SET position = position + 1 WHERE position >= ? AND position < ?'
-      ).run(editedFields.position, oldPos)
-    }
-
-    editStatements.push('position = ?')
-    bindParams.push(editedFields.position)
+    row = db.prepare(
+      `UPDATE entries SET ${editStatements.join(', ')} WHERE id = ? RETURNING *`
+    ).get(...bindParams, id)
+  } catch (e) {
+    db.prepare('ROLLBACK').run()
+    throw e
   }
 
-  if (editStatements.length === 0) {
-    res.status(400).send('Should edit "content" and/or "position" fields')
-    return
-  }
-
-  const row = db.prepare(
-    `UPDATE entries SET ${editStatements.join(', ')} WHERE id = ? RETURNING *`
-  ).get(...bindParams, id)
+  db.prepare('COMMIT').run()
 
   res.json({ id: row.id, position: row.position, content: row.content, checked: row.checked === 1 })
 })
