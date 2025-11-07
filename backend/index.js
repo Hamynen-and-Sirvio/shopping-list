@@ -8,24 +8,30 @@ import { RateLimiterMemory } from 'rate-limiter-flexible'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
+const DATABASE_URI = process.env.DATABASE_URI
 const PORT = process.env.PORT
 const HOST = process.env.HOST
 const PASSWORD_HASH = process.env.PASSWORD_HASH
 const SECRET = process.env.SECRET
 
-process.on('SIGINT', () => process.exit())
-process.on('SIGTERM', () => process.exit())
-
-const db = new Database(':memory:')
+const db = new Database(DATABASE_URI)
 db.pragma('journal_mode = WAL')
 db.prepare(
-  'CREATE TABLE entries (' +
+  'CREATE TABLE IF NOT EXISTS entries (' +
   'id INTEGER PRIMARY KEY, ' +
   'position INTEGER NOT NULL CHECK (position >= 1), ' +
   'content TEXT NOT NULL, ' +
   'checked BOOLEAN NOT NULL DEFAULT 0 CHECK (checked IN (0, 1))' +
   ')'
 ).run()
+
+process.on('exit', () => {
+  if (db) {
+    db.close()
+  }
+})
+process.on('SIGINT', () => process.exit())
+process.on('SIGTERM', () => process.exit())
 
 const app = express()
 
