@@ -146,7 +146,7 @@ app.delete('/entries/:id', (req, res) => {
   db.prepare('BEGIN').run()
   try {
     row = db.prepare('DELETE FROM entries WHERE id = ? RETURNING *').get(id)
-    db.prepare('UPDATE entries SET position = position - 1 WHERE position > ?').run(id)
+    db.prepare('UPDATE entries SET position = position - 1 WHERE position > ?').run(row.position)
   } catch (e) {
     db.prepare('ROLLBACK').run()
     throw e
