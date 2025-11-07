@@ -52,16 +52,18 @@ const App = () => {
   const deleteEntry = entry => {
     return async (event) => {
       event.preventDefault()
-      await fetch(
-        `/api/entries/${entry.id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
+      if (confirm(`Delete "${entry.content}"?`)) {
+        await fetch(
+          `/api/entries/${entry.id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
           },
-        },
-      )
-      reloadEntries()
+        )
+        reloadEntries()
+      }
     }
   }
 
