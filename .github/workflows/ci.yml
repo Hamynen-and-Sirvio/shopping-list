@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initialize SSH variables
+        run: |
+          mkdir -p -m u=rwx,go= ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_KNOWN_PUBLIC_KEYS }}" > ~/.ssh/known_hosts
+          chmod u=rw,go= ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh ${{ secrets.SSH_USER_NAME }}@${{ secrets.SSH_HOST }} '
+            if [ -d ~/${{ env.REPOSITORY_NAME }}/.git ]; then
+              cd ~/${{ env.REPOSITORY_NAME }} &&
+              git fetch --all &&
+              git reset --hard origin/main
+            else
+              rm -rf ~/${{ env.REPOSITORY_NAME }} &&
+              git clone git@github.com:${{ github.repository }}.git &&
+              cd ~/${{ env.REPOSITORY_NAME }} &&
+              cd backend &&
+              echo "DATABASE_URI=${{ env.DATABASE_URI }}" >> .env &&
+              echo "PORT=3001" >> .env &&
+              echo "HOST=127.0.0.1" >> .env &&
+              echo "PASSWORD_HASH=${{ secrets.PASSWORD_HASH }}" >> .env &&
+              echo "SECRET=${{ secrets.SECRET }}" >> .env &&
+              echo "NODE_ENV=production" >> .env &&
+              cd ..
+            fi &&
+
+            cd backend &&
+            if ! cmp -s package-lock.json package-lock.json.old; then
+              npm clean-install
+            fi &&
+            cp package-lock.json package-lock.json.old &&
+            cd .. &&
+
+            cd frontend &&
+            if ! cmp -s package-lock.json package-lock.json.old; then
+              npm clean-install
+            fi &&
+            cp package-lock.json package-lock.json.old &&
+            rm -rf dist/ &&
+            npm run build &&
+            cd .. &&
+
+            sudo /usr/bin/systemctl restart typic-lists
+          '
+        env:
+          DATABASE_URI: /home/typic-lists/typic-lists-database/typic-lists.db
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
