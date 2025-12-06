@@ -1,0 +1,150 @@
+body {
+  background: #1c1c1c;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #1c1c1c;
+}
+
+.header {
+  position: sticky;
+  background: #1c1c1c;
+  padding: 30px 20px 20px 20px;
+}
+
+.title {
+  font-size: 42px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.edit-button {
+  position: absolute;
+  right: 20px;
+  top: 35px;
+  background: #3a3a3a;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  font-size: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background: #4a4a4a;
+}
+
+.shopping-list {
+  margin: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.list-entry {
+  background: #333333;
+  padding: 18px 20px;
+  border-radius: 22px;
+  font-size: 20px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.entry-text {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+.list-entry input {
+  background: #444;
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 10px;
+  width: auto;
+}
+
+.list-entry form {
+  display: inline-block;
+}
+
+.save-button {
+  margin-left: 10px;
+  background: #23612f;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background: #666;
+}
+
+.entry-edit-buttons button {
+  background: #444;
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 8px 12px;
+  margin-left: 6px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.entry-edit-buttons button:hover {
+  background: #555;
+}
+
+.entry-edit-buttons form {
+  display: inline-block;
+}
+
+.add-row {
+  margin: 30px 20px;
+  position: sticky;
+  bottom: 0;
+  background: #1c1c1c;
+}
+
+.add-row form {
+  display: flex;
+  gap: 10px;
+}
+
+.add-row input {
+  flex: 1;
+  background: #333;
+  border: none;
+  padding: 16px;
+  font-size: 18px;
+  color: white;
+  border-radius: 22px;
+}
+
+.add-row button {
+  background: #333;
+  border: none;
+  padding: 0 24px;
+  border-radius: 22px;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.add-row button:hover {
+  background: #444;
+}

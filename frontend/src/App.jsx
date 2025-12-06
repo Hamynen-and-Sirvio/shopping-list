@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import './App.css'
 
 const App = () => {
   const [entries, setEntries] = useState([])
@@ -133,45 +134,62 @@ const App = () => {
   if (token) {
     return (
       <>
-        <div>
-          {entries.map(entry =>
-            <div key={entry.id}>
-              {entry.id === editEntryId ?
-                <form style={{ display: 'inline-block' }} onSubmit={editEntry(entry)}>
-                  <input
-                    value={editEntryField}
-                    onChange={event => setEditEntryField(event.target.value)}
-                  />
-                  <button type="submit">Save</button>
-                </form> :
-                entry.content
-              }
-              <form style={{ display: 'inline-block' }} onSubmit={deleteEntry(entry)}>
-                <button type="submit">🗑</button>
-              </form>
-              {entry.position > 1 &&
-                <form style={{ display: 'inline-block' }} onSubmit={moveEntry(entry, -1)}>
-                  <button type="submit">↑</button>
-                </form>
-              }
-              {entry.position < entries.length &&
-                <form style={{ display: 'inline-block' }} onSubmit={moveEntry(entry, 1)}>
-                  <button type="submit">↓</button>
-                </form>
-              }
-              <form style={{ display: 'inline-block' }} onSubmit={selectEditEntry(entry)}>
-                <button type="submit">✎</button>
-              </form>
-            </div>
-          )}
+        <div className="app-container">
+          <div className="header">
+            <h1 className="title">Shopping list</h1>
+            <button
+              className="edit-button"
+              onClick={() => setEditMode(!editMode)}
+            >
+              {editMode ? "Done" : "Edit"}
+            </button>
+          </div>
+          <div className='shopping-list'>
+            {entries.map(entry =>
+              <div key={entry.id} className='list-entry'>
+                {entry.id === editEntryId ?
+                  <form onSubmit={editEntry(entry)}>
+                    <input
+                      value={editEntryField}
+                      onChange={event => setEditEntryField(event.target.value)}
+                    />
+                    <button type="submit" className='save-button'>Save</button>
+                  </form> :
+                  <div className="entry-text">{entry.content}</div>
+                }
+                {editMode && (
+                <div className='entry-edit-buttons'>
+                  <form onSubmit={deleteEntry(entry)}>
+                    <button type="submit">🗑</button>
+                  </form>
+                  {entry.position > 1 &&
+                    <form onSubmit={moveEntry(entry, -1)}>
+                      <button type="submit">↑</button>
+                    </form>
+                  }
+                  {entry.position < entries.length &&
+                    <form onSubmit={moveEntry(entry, 1)}>
+                      <button type="submit">↓</button>
+                    </form>
+                  }
+                  <form onSubmit={selectEditEntry(entry)}>
+                    <button type="submit">✎</button>
+                  </form>
+                </div>
+                )}
+              </div>
+            )}
+          </div>
+          <div className='add-row'>
+            <form onSubmit={addEntry}>
+              <input
+                value={newEntryField}
+                onChange={event => setNewEntryField(event.target.value)}
+              />
+              <button type="submit">Add</button>
+            </form>
+          </div>
         </div>
-        <form onSubmit={addEntry}>
-          <input
-            value={newEntryField}
-            onChange={event => setNewEntryField(event.target.value)}
-          />
-          <button type="submit">Add</button>
-        </form>
       </>
     )
   } else {
