@@ -113,6 +113,16 @@ body {
   display: inline-block;
 }
 
+.list-entry.checked {
+  background: #2a2a2a;
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.list-entry {
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
 .add-row {
   margin: 30px 20px;
   position: sticky;

@@ -115,6 +115,26 @@ const App = () => {
     }
   }
 
+  const checkEntry = entry => {
+    return async (event) => {
+      event.preventDefault()
+      const response = await fetch(
+        `/api/entries/${entry.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ checked: !entry.checked }),
+        },
+      )
+      const checkedEntry = await response.json()
+      entry.checked = checkedEntry.checked
+      reloadEntries()
+    }
+  }
+
   const logIn = async (event) => {
     event.preventDefault()
     const response = await fetch(
@@ -146,34 +166,46 @@ const App = () => {
           </div>
           <div className='shopping-list'>
             {entries.map(entry =>
-              <div key={entry.id} className='list-entry'>
+              <div
+                key={entry.id}
+                className={`list-entry ${entry.checked ? 'checked' : ''}`}
+                onClick={checkEntry(entry)}
+              >
                 {entry.id === editEntryId ?
-                  <form onSubmit={editEntry(entry)}>
+                  <form onSubmit={editEntry(entry)} onClick={(e) => e.stopPropagation()}>
                     <input
                       value={editEntryField}
                       onChange={event => setEditEntryField(event.target.value)}
                     />
-                    <button type="submit" className='save-button'>Save</button>
+                    <button
+                      type="submit"
+                      className='save-button'
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Save
+                    </button>
                   </form> :
-                  <div className="entry-text">{entry.content}</div>
+                  <div className="entry-text">
+                    {entry.content}
+                  </div>
                 }
                 {editMode && (
                 <div className='entry-edit-buttons'>
                   <form onSubmit={deleteEntry(entry)}>
-                    <button type="submit">🗑</button>
+                    <button type="submit" onClick={(e) => e.stopPropagation()}>🗑</button>
                   </form>
                   {entry.position > 1 &&
                     <form onSubmit={moveEntry(entry, -1)}>
-                      <button type="submit">↑</button>
+                      <button type="submit" onClick={(e) => e.stopPropagation()}>↑</button>
                     </form>
                   }
                   {entry.position < entries.length &&
                     <form onSubmit={moveEntry(entry, 1)}>
-                      <button type="submit">↓</button>
+                      <button type="submit" onClick={(e) => e.stopPropagation()}>↓</button>
                     </form>
                   }
                   <form onSubmit={selectEditEntry(entry)}>
-                    <button type="submit">✎</button>
+                    <button type="submit" onClick={(e) => e.stopPropagation()}>✎</button>
                   </form>
                 </div>
                 )}
