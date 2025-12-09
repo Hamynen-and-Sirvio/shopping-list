@@ -9,6 +9,7 @@ const App = () => {
   const [editEntryField, setEditEntryField] = useState('')
   const [passwordField, setPasswordField] = useState('')
   const [token, setToken] = useState('')
+  const [selectedEntries, setSelectedEntries] = useState([])
 
   const reloadEntries = async () => {
     const response = await fetch(
@@ -32,6 +33,33 @@ const App = () => {
     }
   }, [token])
 
+  const selectEntry = (entry) => {
+    if (selectedEntries.includes(entry.id)) {
+      setSelectedEntries(selectedEntries.filter(id => id !== entry.id))
+    } else {
+      setSelectedEntries(selectedEntries.concat(entry.id))
+    }
+  }
+
+  const deleteSelectedEntries = async (event) => {
+    event.preventDefault()
+    if (confirm(`Delete ${selectedEntries.length} selected entries?`)) {
+      for (const entryId of selectedEntries) {
+        await fetch(
+          `/api/entries/${entryId}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          },
+        )
+      }
+      setSelectedEntries([])
+      reloadEntries()
+    }
+  }
+
   const addEntry = async (event) => {
     event.preventDefault()
     const response = await fetch(
@@ -48,24 +76,6 @@ const App = () => {
     const addedEntry = await response.json()
     setEntries(entries.concat(addedEntry))
     setNewEntryField('')
-  }
-
-  const deleteEntry = entry => {
-    return async (event) => {
-      event.preventDefault()
-      if (confirm(`Delete "${entry.content}"?`)) {
-        await fetch(
-          `/api/entries/${entry.id}`,
-          {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          },
-        )
-        reloadEntries()
-      }
-    }
   }
 
   const moveEntry = (entry, amount) => {
@@ -157,58 +167,77 @@ const App = () => {
         <div className="app-container">
           <div className="header">
             <h1 className="title">Shopping list</h1>
-            <button
-              className="edit-button"
-              onClick={() => setEditMode(!editMode)}
-            >
-              {editMode ? "Done" : "Edit"}
-            </button>
+            <div className="header-buttons">
+              {editMode && selectedEntries.length > 0 && (
+                <button
+                  className="delete-selected-button"
+                  onClick={deleteSelectedEntries}
+                >
+                  Delete
+                </button>
+              )}
+              <button
+                className="edit-button"
+                onClick={() => setEditMode(!editMode)}
+              >
+                {editMode ? "Done" : "Edit"}
+              </button>
+            </div>
           </div>
           <div className='shopping-list'>
             {entries.map(entry =>
               <div
                 key={entry.id}
-                className={`list-entry ${entry.checked ? 'checked' : ''}`}
-                onClick={checkEntry(entry)}
+                className="list-entry-container"
               >
-                {entry.id === editEntryId ?
-                  <form onSubmit={editEntry(entry)} onClick={(e) => e.stopPropagation()}>
-                    <input
-                      value={editEntryField}
-                      onChange={event => setEditEntryField(event.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      className='save-button'
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      Save
-                    </button>
-                  </form> :
-                  <div className="entry-text">
-                    {entry.content}
-                  </div>
-                }
                 {editMode && (
-                <div className='entry-edit-buttons'>
-                  <form onSubmit={deleteEntry(entry)}>
-                    <button type="submit" onClick={(e) => e.stopPropagation()}>🗑</button>
-                  </form>
-                  {entry.position > 1 &&
-                    <form onSubmit={moveEntry(entry, -1)}>
-                      <button type="submit" onClick={(e) => e.stopPropagation()}>↑</button>
-                    </form>
-                  }
-                  {entry.position < entries.length &&
-                    <form onSubmit={moveEntry(entry, 1)}>
-                      <button type="submit" onClick={(e) => e.stopPropagation()}>↓</button>
-                    </form>
-                  }
-                  <form onSubmit={selectEditEntry(entry)}>
-                    <button type="submit" onClick={(e) => e.stopPropagation()}>✎</button>
-                  </form>
-                </div>
+                  <input
+                    type="checkbox"
+                    className='select-checkbox'
+                    onChange={() => selectEntry(entry)}
+                  />
                 )}
+                <div
+                  key={entry.id}
+                  className={`list-entry ${entry.checked ? 'checked' : ''}`}
+                  onClick={checkEntry(entry)}
+                >
+                  {entry.id === editEntryId ?
+                    <form onSubmit={editEntry(entry)} onClick={(e) => e.stopPropagation()}>
+                      <input
+                        value={editEntryField}
+                        onChange={event => setEditEntryField(event.target.value)}
+                      />
+                      <button
+                        type="submit"
+                        className='save-button'
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Save
+                      </button>
+                    </form> :
+                    <div className="entry-text">
+                      {entry.content}
+                    </div>
+                  }
+                  {editMode && (
+                    <div className='entry-edit-buttons'>
+                      {entry.position > 1 &&
+                        <form onSubmit={moveEntry(entry, -1)}>
+                          <button type="submit" onClick={(e) => e.stopPropagation()}>↑</button>
+                        </form>
+                      }
+                      {entry.position < entries.length &&
+                        <form onSubmit={moveEntry(entry, 1)}>
+                          <button type="submit" onClick={(e) => e.stopPropagation()}>↓</button>
+                        </form>
+                      }
+                      <form onSubmit={selectEditEntry(entry)}>
+                        <button type="submit" onClick={(e) => e.stopPropagation()}>✎</button>
+                      </form>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
