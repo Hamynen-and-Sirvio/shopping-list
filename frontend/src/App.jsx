@@ -9,7 +9,7 @@ const App = () => {
   const [editEntryField, setEditEntryField] = useState('')
   const [passwordField, setPasswordField] = useState('')
   const [token, setToken] = useState('')
-  const [selectedEntries, setSelectedEntries] = useState([])
+  const [checkedEntries, setCheckedEntries] = useState([])
 
   const reloadEntries = async () => {
     const response = await fetch(
@@ -18,6 +18,7 @@ const App = () => {
     )
     const fetchedEntries = await response.json()
     setEntries(fetchedEntries)
+    setCheckedEntries(fetchedEntries.filter(entry => entry.checked).map(entry => entry.id))
   }
 
   useEffect(() => {
@@ -32,33 +33,6 @@ const App = () => {
       reloadEntries()
     }
   }, [token])
-
-  const selectEntry = (entry) => {
-    if (selectedEntries.includes(entry.id)) {
-      setSelectedEntries(selectedEntries.filter(id => id !== entry.id))
-    } else {
-      setSelectedEntries(selectedEntries.concat(entry.id))
-    }
-  }
-
-  const deleteSelectedEntries = async (event) => {
-    event.preventDefault()
-    if (confirm(`Delete ${selectedEntries.length} selected entries?`)) {
-      for (const entryId of selectedEntries) {
-        await fetch(
-          `/api/entries/${entryId}`,
-          {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          },
-        )
-      }
-      setSelectedEntries([])
-      reloadEntries()
-    }
-  }
 
   const addEntry = async (event) => {
     event.preventDefault()
@@ -141,6 +115,28 @@ const App = () => {
       )
       const checkedEntry = await response.json()
       entry.checked = checkedEntry.checked
+      if (checkedEntries.includes(entry.id)) {
+        setCheckedEntries(checkedEntries.filter(id => id !== entry.id))
+      } else {
+        setCheckedEntries(checkedEntries.concat(entry.id))
+      }
+      reloadEntries()
+    }
+  }
+
+  const deleteCheckedEntries = async (event) => {
+    event.preventDefault()
+    if (confirm(`Delete ${checkedEntries.length} checked entries?`)) {
+      for (const entryId of checkedEntries) {
+        await fetch(
+          `/api/entries/${entryId}`,
+          {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` },
+          },
+        )
+      }
+      setCheckedEntries([])
       reloadEntries()
     }
   }
@@ -168,10 +164,10 @@ const App = () => {
           <div className="header">
             <h1 className="title">Shopping list</h1>
             <div className="header-buttons">
-              {editMode && selectedEntries.length > 0 && (
+              {editMode && checkedEntries.length > 0 && (
                 <button
-                  className="delete-selected-button"
-                  onClick={deleteSelectedEntries}
+                  className="delete-checked-button"
+                  onClick={deleteCheckedEntries}
                 >
                   Delete
                 </button>
@@ -190,13 +186,6 @@ const App = () => {
                 key={entry.id}
                 className="list-entry-container"
               >
-                {editMode && (
-                  <input
-                    type="checkbox"
-                    className='select-checkbox'
-                    onChange={() => selectEntry(entry)}
-                  />
-                )}
                 <div
                   key={entry.id}
                   className={`list-entry ${entry.checked ? 'checked' : ''}`}
