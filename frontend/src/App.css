@@ -4,178 +4,161 @@ body {
   margin: 0;
   padding: 0;
   color: white;
+  overscroll-behavior: none;
 }
 
 .app-container {
-  height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: #1c1c1c;
+  background: #1c262f;
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  position: relative;
-}
-
-.title {
-  font-size: 42px;
-  font-weight: 500;
-  margin: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 24px;
+  flex: 0;
+  background: #1c262f;
 }
 
 .header-buttons {
   display: flex;
-  gap: 12px;
+  flex-direction: row;
+  gap: 0.5em;
+  justify-content: space-between
 }
 
 .edit-button {
-  background: #3a3a3a;
+  background: #2b323a;
   border: none;
   color: white;
-  padding: 10px 24px;
-  font-size: 18px;
-  border-radius: 20px;
+  padding: 8px 16px;
   cursor: pointer;
+  border-radius: 25px;
+  width: 80px;
 }
 
-.edit-button:hover {
-  background: #4a4a4a;
+.edit-button.active {
+  background: #6a5597;
 }
 
-.shopping-list {
-  margin: 20px;
+.edit-button:active {
+  transform: scale(0.97);
+}
+
+.delete-button {
+  background: #cc5151;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 25px;
+  width: 80px;
+}
+
+.content {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.list-entry-container {
+.content-header {
+  font-size: 1.2em;
+  justify-content: center;
   display: flex;
-  align-items: center;
-  width: 100%;
+  flex: 1;
 }
 
-.delete-checked-button {
-  background: #a12323;
-  border: none;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  margin-left: 10px;
+.content-list {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  flex: 5;
+}
+
+.entry-container {
+  height: 40px
 }
 
 .list-entry {
-  background: #333333;
-  padding: 18px 20px;
-  border-radius: 22px;
-  font-size: 20px;
-  margin-bottom: 14px;
+  font-size: 1em;
+  justify-content: flex-start;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.list-entry.checked {
+  text-decoration: line-through;
+  color: #cfcaca;
 }
 
 .entry-text {
+  flex: 1;
+  justify-content: flex-start;
+  display: flex;
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;
 }
 
-.list-entry input {
-  background: #444;
-  border: none;
-  color: white;
-  padding: 10px;
-  font-size: 18px;
-  border-radius: 10px;
-  width: auto;
+.edit-container {
+  display: flex;
+  gap: 0.5em;
+  flex: 1;
+  justify-content: flex-end;
 }
 
-.list-entry form {
-  display: inline-block;
-}
-
-.save-button {
-  margin-left: 10px;
-  background: #23612f;
+.entry-edit-button {
+  background: transparent;
   border: none;
   color: white;
-  padding: 10px 16px;
-  border-radius: 12px;
   cursor: pointer;
+  padding: 8px 8px;
 }
 
-.save-button:hover {
-  background: #666;
-}
-
-.entry-edit-buttons button {
-  background: #444;
-  border: none;
-  color: white;
-  font-size: 18px;
-  padding: 8px 12px;
-  margin-left: 6px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.entry-edit-buttons button:hover {
-  background: #555;
-}
-
-.entry-edit-buttons form {
-  display: inline-block;
-}
-
-.list-entry.checked {
-  background: #2a2a2a;
-  opacity: 0.5;
-  text-decoration: line-through;
-}
-
-.list-entry {
-  transition: background 0.2s ease, opacity 0.2s ease;
-}
-
-.add-row {
-  margin: 30px 20px;
+.footer {
   position: sticky;
   bottom: 0;
-  background: #1c1c1c;
-}
-
-.add-row form {
+  z-index: 10;
   display: flex;
-  gap: 10px;
+  justify-content: center;
+  padding: 24px;
+  padding-bottom: 12px;
+  flex: 0;
+  background: #1c262f;
 }
 
-.add-row input {
+.add-content-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.add-content-container form {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.add-content-container input {
   flex: 1;
-  background: #333;
+  background: #2b323a;
   border: none;
-  padding: 16px;
-  font-size: 18px;
+  font-size: 14px;
   color: white;
-  border-radius: 22px;
+  padding: 12px;
 }
 
-.add-row button {
-  background: #333;
+.add-content-container button {
+  flex-shrink: 0;
+  background: #2b323a;
   border: none;
   padding: 0 24px;
-  border-radius: 22px;
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   cursor: pointer;
-}
-
-.add-row button:hover {
-  background: #444;
 }
