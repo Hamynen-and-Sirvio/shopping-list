@@ -46,15 +46,6 @@ body {
   background: #4a4a4a;
 }
 
-.delete-selected-button {
-  background: #a12323;
-  border: none;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
 .shopping-list {
   margin: 20px;
   flex: 1;
@@ -67,14 +58,7 @@ body {
   width: 100%;
 }
 
-.select-checkbox {
-  margin-right: 12px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
-.delete-selected-button {
+.delete-checked-button {
   background: #a12323;
   border: none;
   color: white;
