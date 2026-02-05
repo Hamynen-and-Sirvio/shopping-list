@@ -90,11 +90,6 @@ body {
   gap: 0.5em;
 }
 
-.list-entry.checked {
-  text-decoration: line-through;
-  color: #cfcaca;
-}
-
 .entry-text {
   flex: 1;
   justify-content: flex-start;
@@ -103,6 +98,11 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;
+}
+
+.entry-text.checked {
+  text-decoration: line-through;
+  color: #cfcaca;
 }
 
 .edit-container {

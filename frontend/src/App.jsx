@@ -198,11 +198,11 @@ const App = () => {
               >
                 <div
                   key={entry.id}
-                  className={`list-entry ${entry.checked ? 'checked' : ''}`}
+                  className="list-entry"
                   onClick={checkEntry(entry)}
                 >
                   {entry.id === editEntryId ?
-                    <div className="entry-text">
+                    <div className={`entry-text ${entry.checked ? 'checked' : ''}`}>
                       <form onSubmit={editEntry(entry)} onClick={(e) => e.stopPropagation()}>
                         <input
                           value={editEntryField}
@@ -218,7 +218,7 @@ const App = () => {
                         </button>
                       </form>
                     </div> :
-                    <div className="entry-text">
+                    <div className={`entry-text ${entry.checked ? 'checked' : ''}`}>
                       {entry.content}
                     </div>
                   }
