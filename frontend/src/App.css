@@ -251,3 +251,59 @@ body {
   color: white;
   cursor: pointer;
 }
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  background: #1c262f;
+  padding: 2em;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 2em;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.password-field {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: 1px solid #364959;
+  background: #263440;
+  color: white;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: 0.2s all;
+}
+
+.password-field:focus {
+  border-color: #59558B;
+  box-shadow: 0 0 10px #59558B;
+}
+
+.login-button {
+  background: #59558B;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.login-button:hover {
+  background: #6a5597;
+}
+
+.login-button:active {
+  transform: scale(0.97);
+}

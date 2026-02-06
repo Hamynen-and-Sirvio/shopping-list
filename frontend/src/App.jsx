@@ -281,7 +281,7 @@ const App = () => {
     )
   } else {
     return (
-      <>
+      <div className="login-container">
         <form onSubmit={logIn}>
           <input
             type="password"
@@ -290,10 +290,11 @@ const App = () => {
             maxLength="50"
             value={passwordField}
             onChange={event => setPasswordField(event.target.value)}
+            className="password-field"
           />
-          <button type="submit">Login</button>
+          <button type="submit" className="login-button">Login</button>
         </form>
-      </>
+      </div>
     )
   }
 }
