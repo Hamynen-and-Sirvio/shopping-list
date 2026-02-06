@@ -37,7 +37,7 @@ body {
 }
 
 .edit-button {
-  background: #2b323a;
+  background: #263440;
   border: none;
   color: white;
   padding: 8px 16px;
@@ -47,7 +47,7 @@ body {
 }
 
 .edit-button.active {
-  background: #6a5597;
+  background: #59558B;
 }
 
 .edit-button:active {
@@ -55,7 +55,7 @@ body {
 }
 
 .delete-button {
-  background: #cc5151;
+  background: #C83E4D;
   border: none;
   color: white;
   padding: 8px 16px;
@@ -65,7 +65,7 @@ body {
 }
 
 .delete-button:disabled {
-  background: #2b323a;
+  background: #263440;
 }
 
 .content {
@@ -132,7 +132,7 @@ body {
 
 .entry-text-edit input {
   flex: 1;
-  background: #2b323a;
+  background: #263440;
   border: none;
   font-size: 16px;
   color: white;
@@ -200,7 +200,7 @@ body {
 
 .add-content-container input {
   flex: 1;
-  background: #2b323a;
+  background: #263440;
   border: none;
   font-size: 16px;
   color: white;
@@ -211,7 +211,7 @@ body {
 
 .add-content-container button {
   flex-shrink: 0;
-  background: #2b323a;
+  background: #263440;
   border: none;
   padding: 0 24px;
   font-size: 18px;
