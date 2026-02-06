@@ -205,11 +205,12 @@ const App = () => {
                   onClick={checkEntry(entry)}
                 >
                   {entry.id === editEntryId ?
-                    <div className={`entry-text ${entry.checked ? 'checked' : ''}`}>
+                    <div className="entry-text-edit">
                       <form onSubmit={editEntry(entry)} onClick={(e) => e.stopPropagation()}>
                         <input
                           value={editEntryField}
                           onChange={event => setEditEntryField(event.target.value)}
+                          autoFocus
                         />
                         <button
                           type="submit"
