@@ -171,7 +171,7 @@ const App = () => {
         <div className="header">
           <div className="header-buttons">
             <button
-              className="delete-button"
+              className={`delete-button ${checkedEntries.length === 0 ? "disabled" : ""}`}
               onClick={deleteCheckedEntries}
               disabled={checkedEntries.length === 0}
             >
