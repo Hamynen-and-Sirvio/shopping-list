@@ -115,22 +115,14 @@ body {
   width: 100%;
 }
 
-.list-entry {
-  font-size: 16px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-}
-
-.entry-text {
+.entry-text,
+.entry-text-edit {
   flex: 1;
-  justify-content: flex-start;
+  min-width: 0;
   display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow-x: auto;
-  overflow-y: hidden;
-  max-width: 150px;
 }
 
 .entry-text.checked {
@@ -138,17 +130,10 @@ body {
   color: #cfcaca;
 }
 
-.entry-text-edit {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  max-width: 150px;
-}
-
 .entry-text-edit form {
-  display: flex;
   flex: 1;
   align-items: center;
+  width: 100%;
 }
 
 .entry-text-edit input {
@@ -157,9 +142,7 @@ body {
   border: none;
   font-size: 16px;
   color: white;
-  height: 100%;
   box-sizing: border-box;
-  max-width: 150px;
 }
 
 .entry-text-edit input:focus {
