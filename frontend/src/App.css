@@ -65,7 +65,6 @@ body {
 }
 
 .delete-button:disabled {
-  transform: scale(0.97);
   background: #2b323a;
 }
 
@@ -111,7 +110,7 @@ body {
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-  max-width: 100%;
+  max-width: 60%;
 }
 
 .entry-text.checked {
@@ -143,18 +142,36 @@ body {
 
 .edit-container {
   display: flex;
-  gap: 0.5em;
+  gap: 6px;
   margin-left: auto;
-  min-width: 96px;
+  width: 96px;
 }
 
 .entry-edit-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: none;
   color: white;
   cursor: pointer;
-  padding: 8px;
   line-height: 1;
+}
+
+.entry-edit-button:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25%;
+}
+
+.entry-edit-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.entry-edit-button svg {
+  font-size: 16px;
 }
 
 .footer {

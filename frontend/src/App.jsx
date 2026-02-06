@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { LiaChevronDownSolid, LiaChevronUpSolid, LiaEditSolid } from "react-icons/lia"
 import './App.css'
 
 const App = () => {
@@ -237,7 +238,7 @@ const App = () => {
                             : cancelEditEntry(entry)
                         }
                       >
-                        ✎
+                        <LiaEditSolid />
                       </button>
                       <button
                         type="button"
@@ -245,7 +246,7 @@ const App = () => {
                         disabled={entry.position <= 1}
                         onClick={moveEntry(entry, -1)}
                       >
-                        ↑
+                        <LiaChevronUpSolid />
                       </button>
                       <button
                         type="button"
@@ -253,7 +254,7 @@ const App = () => {
                         disabled={entry.position >= entries.length}
                         onClick={moveEntry(entry, 1)}
                       >
-                        ↓
+                        <LiaChevronDownSolid />
                       </button>
                     </div>
                   )}
