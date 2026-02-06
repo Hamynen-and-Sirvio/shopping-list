@@ -36,6 +36,9 @@ const App = () => {
 
   const addEntry = async (event) => {
     event.preventDefault()
+    if (newEntryField === '') {
+      return
+    }
     const response = await fetch(
       '/api/entries',
       {
