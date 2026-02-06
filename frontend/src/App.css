@@ -130,7 +130,7 @@ body {
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
-  max-width: 60%;
+  max-width: 150px;
 }
 
 .entry-text.checked {
@@ -142,6 +142,7 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
+  max-width: 150px;
 }
 
 .entry-text-edit form {
@@ -158,6 +159,7 @@ body {
   color: white;
   height: 100%;
   box-sizing: border-box;
+  max-width: 150px;
 }
 
 .entry-text-edit input:focus {
