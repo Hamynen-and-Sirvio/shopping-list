@@ -192,7 +192,9 @@ const App = () => {
         </div>
         <div className="content">
           <div className="content-header">
-            <h1 className="title">Shopping list</h1>
+            <h1 className="title">
+              <a href="/" className="title-link">Shopping list</a>
+            </h1>
           </div>
           <div className="content-list">
             {entries.map(entry =>
