@@ -150,6 +150,11 @@ body {
   box-sizing: border-box;
 }
 
+.entry-text-edit input:focus {
+  outline: none;
+  box-shadow: 0 0 10px #364959;
+}
+
 .edit-container {
   display: flex;
   gap: 6px;
@@ -219,6 +224,12 @@ body {
   padding: 12px;
   padding-left: 24px;
   border-radius: 25px;
+}
+
+.add-content-container input:focus {
+  outline: none;
+  border: 1px solid #364959;
+  box-shadow: 0 0 10px #364959;
 }
 
 .add-content-container button {
