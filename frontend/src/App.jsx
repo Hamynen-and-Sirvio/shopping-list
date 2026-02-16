@@ -11,7 +11,7 @@ const App = () => {
   const [entries, setEntries] = useState([])
   const [checkedEntries, setCheckedEntries] = useState([])
   const [editMode, setEditMode] = useState(false)
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState(tokenService.fetchToken() || "")
 
   const reloadEntries = async () => {
     const fetchedEntries = await entryService.getEntries()
@@ -20,13 +20,6 @@ const App = () => {
       fetchedEntries.filter((entry) => entry.checked).map((entry) => entry.id),
     )
   }
-
-  useEffect(() => {
-    const curToken = tokenService.fetchToken()
-    if (curToken) {
-      setToken(curToken)
-    }
-  }, [])
 
   useEffect(() => {
     if (token) {
