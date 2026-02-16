@@ -4,7 +4,7 @@ const getEntries = async () => {
   const response = await fetch("/api/entries", {
     headers: { "Authorization": `Bearer ${tokenService.fetchToken()}` },
   })
-  return response
+  return response.json()
 }
 
 const deleteEntry = async (entryId) => {

@@ -14,7 +14,7 @@ const App = () => {
   const [token, setToken] = useState("")
 
   const reloadEntries = async () => {
-    const fetchedEntries = await (await entryService.getEntries()).json()
+    const fetchedEntries = await entryService.getEntries()
     setEntries(fetchedEntries)
     setCheckedEntries(
       fetchedEntries.filter((entry) => entry.checked).map((entry) => entry.id),
