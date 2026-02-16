@@ -1,21 +1,19 @@
 import { useState } from "react"
+import userService from "../services/userService"
+import tokenService from "../services/tokenService"
 import "../App.css"
 
-const Login = ({ reloadEntries, setToken }) => {
+const Login = ({ setToken }) => {
   const [passwordField, setPasswordField] = useState("")
 
   const logIn = async (event) => {
     event.preventDefault()
-    const response = await fetch(`/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: passwordField }),
-    })
+    const response = await userService.login(passwordField)
     const loginData = await response.json()
-    localStorage.setItem("token", loginData.token)
+    tokenService.setToken(loginData.token)
     setToken(loginData.token)
-    await reloadEntries()
   }
+
   return (
     <div className="login-container">
       <form onSubmit={logIn}>

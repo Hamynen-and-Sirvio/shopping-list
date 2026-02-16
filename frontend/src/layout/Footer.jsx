@@ -1,24 +1,19 @@
 import { useState } from "react"
+import entryService from "../services/entryService"
 import "../App.css"
 
-const Footer = ({ reloadEntries, token }) => {
+const Footer = ({ reloadEntries }) => {
   const [newEntryField, setNewEntryField] = useState("")
   const addEntry = async (event) => {
     event.preventDefault()
     if (newEntryField === "") {
       return
     }
-    await fetch("/api/entries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({ content: newEntryField }),
-    })
+    await entryService.addEntry(newEntryField)
     setNewEntryField("")
     reloadEntries()
   }
+
   return (
     <div className="footer">
       <div className="add-content-container">

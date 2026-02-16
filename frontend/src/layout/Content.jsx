@@ -4,25 +4,17 @@ import {
   LiaChevronUpSolid,
   LiaEditSolid,
 } from "react-icons/lia"
+import entryService from "../services/entryService"
 import "../App.css"
 
-const Content = ({ entries, editMode, reloadEntries, token }) => {
+const Content = ({ entries, editMode, reloadEntries }) => {
   const [editEntryId, setEditEntryId] = useState(-1)
   const [editEntryField, setEditEntryField] = useState("")
 
   const checkEntry = (entry) => {
     return async (event) => {
       event.preventDefault()
-      const response = await fetch(`/api/entries/${entry.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify({ checked: !entry.checked }),
-      })
-      const checkedEntry = await response.json()
-      entry.checked = checkedEntry.checked
+      await entryService.checkEntry(entry)
       reloadEntries()
     }
   }
@@ -30,14 +22,7 @@ const Content = ({ entries, editMode, reloadEntries, token }) => {
   const moveEntry = (entry, amount) => {
     return async (event) => {
       event.preventDefault()
-      await fetch(`/api/entries/${entry.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify({ position: entry.position + amount }),
-      })
+      await entryService.moveEntry(entry, amount)
       reloadEntries()
     }
   }
@@ -61,18 +46,10 @@ const Content = ({ entries, editMode, reloadEntries, token }) => {
   const editEntry = (entry) => {
     return async (event) => {
       event.preventDefault()
-      const response = await fetch(`/api/entries/${entry.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify({ content: editEntryField }),
-      })
-      const editedEntry = await response.json()
-      entry.content = editedEntry.content
+      await entryService.editEntry(entry, editEntryField)
       setEditEntryField("")
       setEditEntryId(-1)
+      reloadEntries()
     }
   }
 

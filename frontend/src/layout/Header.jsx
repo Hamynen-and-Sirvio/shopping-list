@@ -1,3 +1,4 @@
+import entryService from "../services/entryService"
 import "../App.css"
 
 const Header = ({
@@ -6,16 +7,12 @@ const Header = ({
   editMode,
   setEditMode,
   reloadEntries,
-  token,
 }) => {
   const deleteCheckedEntries = async (event) => {
     event.preventDefault()
     if (confirm(`Delete ${checkedEntries.length} checked entries?`)) {
       for (const entryId of checkedEntries) {
-        await fetch(`/api/entries/${entryId}`, {
-          method: "DELETE",
-          headers: { "Authorization": `Bearer ${token}` },
-        })
+        await entryService.deleteEntry(entryId)
       }
       setCheckedEntries([])
       reloadEntries()
