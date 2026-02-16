@@ -4,12 +4,11 @@ import "../App.css"
 
 const Footer = ({ reloadEntries }) => {
   const [newEntryField, setNewEntryField] = useState("")
+
   const addEntry = async (event) => {
     event.preventDefault()
-    if (newEntryField === "") {
-      return
-    }
-    await entryService.addEntry(newEntryField)
+    if (newEntryField.trim() === "") return
+    await entryService.addEntry(newEntryField.trim())
     setNewEntryField("")
     reloadEntries()
   }
