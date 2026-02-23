@@ -1,7 +1,9 @@
 html,
 body {
   background: #1c262f;
-  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family:
+    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0;
   height: 100%;
   color: white;
@@ -33,7 +35,7 @@ body {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .edit-button {
@@ -49,8 +51,8 @@ body {
 }
 
 .edit-button.active {
-  background: #59558B;
-  border-color: #9C9AC1;
+  background: #59558b;
+  border-color: #9c9ac1;
   border-width: 1px;
   border-style: solid;
 }
@@ -60,8 +62,8 @@ body {
 }
 
 .delete-button {
-  background: #C83E4D;
-  border-color: #D2606D;
+  background: #c83e4d;
+  border-color: #d2606d;
   border-width: 1px;
   border-style: solid;
   color: white;
@@ -141,17 +143,11 @@ body {
 
 .entry-text-edit input {
   flex: 1;
-  background: #263440;
+  background: #1c262f;
   border: none;
   font-size: 16px;
   color: white;
-  box-sizing: border-box;
   min-width: 0;
-}
-
-.entry-text-edit input:focus {
-  outline: none;
-  box-shadow: 0 0 10px #364959;
 }
 
 .edit-container {
@@ -275,12 +271,12 @@ body {
 }
 
 .password-field:focus {
-  border-color: #59558B;
-  box-shadow: 0 0 10px #59558B;
+  border-color: #59558b;
+  box-shadow: 0 0 10px #59558b;
 }
 
 .login-button {
-  background: #59558B;
+  background: #59558b;
   color: white;
   border: none;
   padding: 12px;

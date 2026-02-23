@@ -1,9 +1,5 @@
 import { useState } from "react"
-import {
-  LiaChevronDownSolid,
-  LiaChevronUpSolid,
-  LiaEditSolid,
-} from "react-icons/lia"
+import { LiaChevronDownSolid, LiaChevronUpSolid } from "react-icons/lia"
 import entryService from "../services/entryService"
 
 const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
@@ -33,7 +29,10 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
   }
 
   return (
-    <div className="entry-container" onClick={handleCheck}>
+    <div
+      className="entry-container"
+      onClick={editMode ? () => setIsEditing(true) : handleCheck}
+    >
       {isEditing ? (
         <div className="entry-text-edit">
           <form
@@ -43,6 +42,7 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
             <input
               value={editField}
               onChange={(e) => setEditField(e.target.value)}
+              onBlur={handleCancelEdit}
               autoFocus
             />
             <button type="submit" hidden />
@@ -56,14 +56,6 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
 
       {editMode && (
         <div className="edit-container" onClick={(e) => e.stopPropagation()}>
-          <button
-            type="button"
-            className="entry-edit-button"
-            onClick={isEditing ? handleCancelEdit : () => setIsEditing(true)}
-          >
-            <LiaEditSolid />
-          </button>
-
           <button
             type="button"
             className="entry-edit-button"
