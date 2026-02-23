@@ -1,10 +1,16 @@
 import { useState } from "react"
 import { LiaChevronDownSolid, LiaChevronUpSolid } from "react-icons/lia"
+import { useSortable } from "@dnd-kit/react/sortable"
 import entryService from "../services/entryService"
 
 const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editField, setEditField] = useState(entry.content)
+
+  const { ref } = useSortable({
+    id: entry.id,
+    index: entry.position - 1,
+  })
 
   const handleCheck = async () => {
     await entryService.checkEntry(entry)
@@ -32,6 +38,7 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
     <div
       className="entry-container"
       onClick={editMode ? () => setIsEditing(true) : handleCheck}
+      ref={ref}
     >
       {isEditing ? (
         <div className="entry-text-edit">
