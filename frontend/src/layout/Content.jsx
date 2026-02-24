@@ -27,7 +27,6 @@ const Content = ({ entries, editMode, reloadEntries }) => {
             <EntryItem
               key={entry.id}
               entry={entry}
-              entriesLength={entries.length}
               editMode={editMode}
               reloadEntries={reloadEntries}
             />

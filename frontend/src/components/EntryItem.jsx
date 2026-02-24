@@ -1,9 +1,13 @@
 import { useState } from "react"
-import { LiaChevronDownSolid, LiaChevronUpSolid } from "react-icons/lia"
+import { RxDragHandleHorizontal } from "react-icons/rx"
+import {
+  MdOutlineCheckBox,
+  MdOutlineCheckBoxOutlineBlank,
+} from "react-icons/md"
 import { useSortable } from "@dnd-kit/react/sortable"
 import entryService from "../services/entryService"
 
-const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
+const EntryItem = ({ entry, editMode, reloadEntries }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editField, setEditField] = useState(entry.content)
 
@@ -38,8 +42,13 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
     <div
       className="entry-container"
       onClick={editMode ? () => setIsEditing(true) : handleCheck}
-      ref={ref}
+      ref={editMode ? ref : null}
     >
+      {editMode && (
+        <div className="drag-handle">
+          <RxDragHandleHorizontal />
+        </div>
+      )}
       {isEditing ? (
         <div className="entry-text-edit">
           <form
@@ -57,29 +66,16 @@ const EntryItem = ({ entry, entriesLength, editMode, reloadEntries }) => {
         </div>
       ) : (
         <div className={`entry-text ${entry.checked ? "checked" : ""}`}>
+          {!editMode && (
+            <span className="checkbox-icon">
+              {entry.checked ? (
+                <MdOutlineCheckBox />
+              ) : (
+                <MdOutlineCheckBoxOutlineBlank />
+              )}
+            </span>
+          )}
           {entry.content}
-        </div>
-      )}
-
-      {editMode && (
-        <div className="edit-container" onClick={(e) => e.stopPropagation()}>
-          <button
-            type="button"
-            className="entry-edit-button"
-            disabled={entry.position <= 1}
-            onClick={() => handleMove(-1)}
-          >
-            <LiaChevronUpSolid />
-          </button>
-
-          <button
-            type="button"
-            className="entry-edit-button"
-            disabled={entry.position >= entriesLength}
-            onClick={() => handleMove(1)}
-          >
-            <LiaChevronDownSolid />
-          </button>
         </div>
       )}
     </div>

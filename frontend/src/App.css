@@ -125,12 +125,29 @@ body {
   align-items: center;
   white-space: nowrap;
   overflow-x: auto;
-  max-width: calc(100% - 96px);
+  max-width: 100%;
 }
 
 .entry-text.checked {
   text-decoration: line-through;
   color: #cfcaca;
+}
+
+.checkbox-icon,
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  flex-shrink: 0;
+  height: 100%;
+  width: 24px;
+}
+
+.checkbox-icon svg,
+.drag-handle svg {
+  display: block;
+  font-size: 19px;
 }
 
 .entry-text-edit form {
@@ -148,41 +165,6 @@ body {
   font-size: 16px;
   color: white;
   min-width: 0;
-}
-
-.edit-container {
-  display: flex;
-  gap: 6px;
-  margin-left: auto;
-  width: 96px;
-  flex-shrink: 0;
-}
-
-.entry-edit-button {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: white;
-  cursor: pointer;
-  line-height: 1;
-}
-
-.entry-edit-button:active:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 25%;
-}
-
-.entry-edit-button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-.entry-edit-button svg {
-  font-size: 16px;
 }
 
 .footer {
