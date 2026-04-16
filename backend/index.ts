@@ -77,6 +77,12 @@ app.get('/', (req, res) => {
 
 app.post('/login', async (req, res) => {
   const ipAddr = req.ip
+  if (ipAddr === undefined) {
+    console.error('ERROR: IP address not set in the request')
+    res.status(500).send('Internal server error')
+    return
+  }
+
   const rlResIp = await limiterConsecutiveFailsByIp.get(ipAddr)
 
   if (rlResIp !== null && rlResIp.consumedPoints > MAX_CONSECUTIVE_FAILS_BY_IP) {
