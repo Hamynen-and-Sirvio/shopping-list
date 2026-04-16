@@ -13,10 +13,10 @@ if (DATABASE_URI === undefined) {
   throw new Error('Environment variable DATABASE_URI not defined');
 }
 
-const PORT = process.env.PORT
-if (PORT === undefined) {
+if (process.env.PORT === undefined) {
   throw new Error('Environment variable PORT not defined');
 }
+const PORT = parseInt(process.env.PORT)
 
 const HOST = process.env.HOST
 if (HOST === undefined) {
