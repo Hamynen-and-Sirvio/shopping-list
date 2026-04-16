@@ -104,13 +104,13 @@ app.post('/login', async (req, res) => {
       await limiterConsecutiveFailsByIp.delete(ipAddr)
     }
 
-    res.json({ token: jwt.sign({}, process.env.SECRET) })
+    res.json({ token: jwt.sign({}, SECRET) })
   }
 })
 
 app.use((req, res, next) => {
   try {
-    jwt.verify(getTokenFrom(req), process.env.SECRET)
+    jwt.verify(getTokenFrom(req), SECRET)
   } catch {
     res.status(401).send('Not authorized to access this URL')
     return
