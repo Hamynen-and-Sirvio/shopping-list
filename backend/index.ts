@@ -4,7 +4,7 @@ import 'dotenv/config'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
-import { RateLimiterMemory } from 'rate-limiter-flexible'
+import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
@@ -115,12 +115,12 @@ app.post('/login', async (req, res) => {
         res.status(401).send('Incorrect password')
         return
       } catch (rlRejected) {
-        if (rlRejected instanceof Error) {
-          throw rlRejected
-        } else {
+        if (rlRejected instanceof RateLimiterRes) {
           res.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000) || 1))
           res.status(429).send('Too many login attempts')
           return
+        } else {
+          throw rlRejected
         }
       }
     }
