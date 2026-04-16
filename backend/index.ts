@@ -145,7 +145,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/entries', (req, res) => {
-  const rows = db.prepare('SELECT * FROM entries ORDER BY position').all()
+  const rows: any = db.prepare('SELECT * FROM entries ORDER BY position').all()
   const entries = rows.map(row => { return {
     id: row.id,
     position: row.position,
@@ -157,7 +157,7 @@ app.get('/entries', (req, res) => {
 
 app.post('/entries', (req, res) => {
   const entry = req.body
-  const row = db.prepare(
+  const row: any = db.prepare(
     'INSERT INTO entries (position, content) ' +
     'VALUES (COALESCE((SELECT MAX(position) + 1 FROM entries), 1), ?) ' +
     'RETURNING *'
@@ -167,7 +167,7 @@ app.post('/entries', (req, res) => {
 
 app.delete('/entries/:id', (req, res) => {
   const id = req.params.id
-  let row = null
+  let row: any = null
   db.prepare('BEGIN').run()
   try {
     row = db.prepare('DELETE FROM entries WHERE id = ? RETURNING *').get(id)
@@ -184,10 +184,10 @@ app.patch('/entries/:id', (req, res) => {
   const id = req.params.id
   const editedFields = req.body
 
-  const editStatements = []
-  const bindParams = []
+  const editStatements: string[] = []
+  const bindParams: any[] = []
 
-  let row = null
+  let row: any = null
 
   db.prepare('BEGIN').run()
 
@@ -209,14 +209,14 @@ app.patch('/entries/:id', (req, res) => {
         return
       }
 
-      const numOfEntries = db.prepare('SELECT COUNT(id) AS count FROM entries').get().count
+      const numOfEntries = (db.prepare('SELECT COUNT(id) AS count FROM entries').get() as any).count
       if (editedFields.position > numOfEntries) {
         res.status(400).send(`Position should be <= {numOfEntries}`)
         db.prepare('ROLLBACK').run()
         return
       }
 
-      const oldPos = db.prepare('SELECT position FROM entries WHERE id = ?').get(id).position
+      const oldPos = (db.prepare('SELECT position FROM entries WHERE id = ?').get(id) as any).position
       if (editedFields.position > oldPos) {
         db.prepare(
           'UPDATE entries SET position = position - 1 WHERE position > ? AND position <= ?'
