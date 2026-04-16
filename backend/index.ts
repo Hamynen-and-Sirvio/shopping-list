@@ -9,10 +9,29 @@ import { RateLimiterMemory } from 'rate-limiter-flexible'
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
 const DATABASE_URI = process.env.DATABASE_URI
+if (DATABASE_URI === undefined) {
+  throw new Error('Environment variable DATABASE_URI not defined');
+}
+
 const PORT = process.env.PORT
+if (PORT === undefined) {
+  throw new Error('Environment variable PORT not defined');
+}
+
 const HOST = process.env.HOST
+if (HOST === undefined) {
+  throw new Error('Environment variable HOST not defined');
+}
+
 const PASSWORD_HASH = process.env.PASSWORD_HASH
+if (PASSWORD_HASH === undefined) {
+  throw new Error('Environment variable PASSWORD_HASH not defined');
+}
+
 const SECRET = process.env.SECRET
+if (SECRET === undefined) {
+  throw new Error('Environment variable SECRET not defined');
+}
 
 const db = new Database(DATABASE_URI)
 db.pragma('journal_mode = WAL')
