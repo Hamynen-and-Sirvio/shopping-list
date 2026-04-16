@@ -2,9 +2,9 @@
   "name": "typic-lists-backend",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.ts"
   },
   "author": "Ville Sirviö",
   "license": "MIT",
