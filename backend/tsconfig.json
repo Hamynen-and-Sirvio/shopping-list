@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2023",
     "noEmit": true,
-    "module": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "strict" : true,
