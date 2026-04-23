@@ -28,8 +28,9 @@ body {
   flex-direction: row;
   justify-content: space-between;
   border-bottom: #f9f9f9 1px solid;
-  margin: 10px 20px;
+  margin: 24px;
   align-items: center;
+  background: #222222;
 }
 
 .header-title {
@@ -141,8 +142,7 @@ body {
   z-index: 10;
   display: flex;
   justify-content: center;
-  padding: 24px;
-  padding-bottom: 24px;
+  margin: 24px;
   flex: 0;
 }
 
@@ -150,6 +150,7 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
+  background-color: #222222;
 }
 
 .add-content-container form {
@@ -159,32 +160,17 @@ body {
 }
 
 .add-content-container input {
+  background: transparent;
+  min-height: 40px;
   flex: 1;
-  background: #263440;
-  border-color: #364959;
-  border-width: 1px;
-  border-style: solid;
-  font-size: 16px;
-  color: white;
-  padding: 12px;
-  padding-left: 24px;
-  border-radius: 25px;
-}
-
-.add-content-container input:focus {
+  font-size: 14px;
+  color: #f9f9f9;
+  font-weight: 200;
   outline: none;
-  border: 1px solid #364959;
-  box-shadow: 0 0 10px #364959;
-}
-
-.add-content-container button {
-  flex-shrink: 0;
-  background: #263440;
-  border: none;
-  padding: 0 24px;
-  font-size: 18px;
-  color: white;
-  cursor: pointer;
+  border: #f9f9f9 1px solid;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 5px 20px;
 }
 
 .login-container {
