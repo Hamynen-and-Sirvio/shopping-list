@@ -23,70 +23,25 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 24px;
   flex: 0;
-}
-
-.header-buttons {
   display: flex;
   flex-direction: row;
-  gap: 0.5em;
   justify-content: space-between;
+  border-bottom: #f9f9f9 1px solid;
+  margin: 10px 20px;
+  align-items: center;
 }
 
-.edit-button {
-  background: #263440;
-  border-color: #364959;
-  border-width: 1px;
-  border-style: solid;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 25px;
-  width: 80px;
-}
-
-.edit-button.active {
-  background: #59558b;
-  border-color: #9c9ac1;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.edit-button:active {
-  transform: scale(0.97);
-}
-
-.delete-button {
-  background: #c83e4d;
-  border-color: #d2606d;
-  border-width: 1px;
-  border-style: solid;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  border-radius: 25px;
-  width: 80px;
-}
-
-.delete-button:disabled {
-  background: #263440;
-  border-color: #364959;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.content {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.content-header {
-  font-size: 1em;
-  justify-content: center;
+.header-title {
   display: flex;
   flex: 1;
+  align-items: center;
+}
+
+.title {
+  font-weight: 300;
+  font-size: 24px;
+  margin: 20px;
 }
 
 .title-link {
@@ -97,6 +52,37 @@ body {
 
 .title-link:active {
   opacity: 0.7;
+}
+
+.header-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+}
+
+.delete-button {
+  color: #f9f9f9;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.delete-button:disabled {
+  background: transparent;
+  border: none;
+  opacity: 0;
+  cursor: not-allowed;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .content-list {

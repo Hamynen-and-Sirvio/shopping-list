@@ -1,7 +1,7 @@
-import EntryItem from "../components/EntryItem"
-import { DragDropProvider } from "@dnd-kit/react"
-import entryService from "../services/entryService"
-import "../App.css"
+import EntryItem from '../components/EntryItem'
+import { DragDropProvider } from '@dnd-kit/react'
+import entryService from '../services/entryService'
+import '../App.css'
 
 const Content = ({ entries, editMode, reloadEntries }) => {
   const handleDragEnd = (event) => {
@@ -14,13 +14,6 @@ const Content = ({ entries, editMode, reloadEntries }) => {
 
   return (
     <div className="content">
-      <div className="content-header">
-        <h1 className="title">
-          <a href="/" className="title-link">
-            Shopping list
-          </a>
-        </h1>
-      </div>
       <div className="content-list">
         <DragDropProvider onDragEnd={handleDragEnd}>
           {entries.map((entry) => (

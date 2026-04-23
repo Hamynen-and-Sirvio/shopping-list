@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react"
-import Header from "./layout/Header"
-import Content from "./layout/Content"
-import Footer from "./layout/Footer"
-import Login from "./layout/Login"
-import entryService from "./services/entryService"
-import tokenService from "./services/tokenService"
-import "./App.css"
+import { useEffect, useState } from 'react'
+import Header from './layout/Header'
+import Content from './layout/Content'
+import Footer from './layout/Footer'
+import Login from './layout/Login'
+import entryService from './services/entryService'
+import tokenService from './services/tokenService'
+import './App.css'
 
 const App = () => {
   const [entries, setEntries] = useState([])
   const [checkedEntries, setCheckedEntries] = useState([])
   const [editMode, setEditMode] = useState(false)
-  const [token, setToken] = useState(tokenService.fetchToken() || "")
+  const [token, setToken] = useState(tokenService.fetchToken() || '')
 
   const reloadEntries = async () => {
     const fetchedEntries = await entryService.getEntries()
@@ -33,8 +33,6 @@ const App = () => {
         <Header
           checkedEntries={checkedEntries}
           setCheckedEntries={setCheckedEntries}
-          editMode={editMode}
-          setEditMode={setEditMode}
           reloadEntries={reloadEntries}
         />
         <Content
