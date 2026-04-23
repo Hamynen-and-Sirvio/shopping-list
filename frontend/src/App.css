@@ -1,12 +1,10 @@
 html,
 body {
-  background: #1c262f;
-  font-family:
-    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background: #222222;
+  font-family: 'Roboto Mono', monospace;
   margin: 0;
   height: 100%;
-  color: white;
+  color: #f9f9f9;
   overscroll-behavior: none;
 }
 
@@ -14,7 +12,6 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: #1c262f;
 }
 
 .app-container {
@@ -28,7 +25,6 @@ body {
   z-index: 10;
   padding: 24px;
   flex: 0;
-  background: #1c262f;
 }
 
 .header-buttons {
@@ -176,7 +172,6 @@ body {
   padding: 24px;
   padding-bottom: 24px;
   flex: 0;
-  background: #1c262f;
 }
 
 .add-content-container {
