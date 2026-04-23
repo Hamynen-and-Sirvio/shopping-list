@@ -3,7 +3,7 @@ import { DragDropProvider } from '@dnd-kit/react'
 import entryService from '../services/entryService'
 import '../App.css'
 
-const Content = ({ entries, editMode, reloadEntries }) => {
+const Content = ({ entries, reloadEntries }) => {
   const handleDragEnd = (event) => {
     if (event.canceled) return
     const { source } = event.operation
@@ -20,7 +20,6 @@ const Content = ({ entries, editMode, reloadEntries }) => {
             <EntryItem
               key={entry.id}
               entry={entry}
-              editMode={editMode}
               reloadEntries={reloadEntries}
             />
           ))}

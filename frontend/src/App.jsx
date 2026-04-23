@@ -10,7 +10,6 @@ import './App.css'
 const App = () => {
   const [entries, setEntries] = useState([])
   const [checkedEntries, setCheckedEntries] = useState([])
-  const [editMode, setEditMode] = useState(false)
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
   const reloadEntries = async () => {
@@ -35,11 +34,7 @@ const App = () => {
           setCheckedEntries={setCheckedEntries}
           reloadEntries={reloadEntries}
         />
-        <Content
-          entries={entries}
-          editMode={editMode}
-          reloadEntries={reloadEntries}
-        />
+        <Content entries={entries} reloadEntries={reloadEntries} />
         <Footer reloadEntries={reloadEntries} />
       </div>
     )
