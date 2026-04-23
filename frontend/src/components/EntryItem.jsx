@@ -21,8 +21,11 @@ const EntryItem = ({ entry, reloadEntries }) => {
 
   return (
     <div className="entry-container" ref={ref}>
-      <div className={`entry-text ${entry.checked ? 'checked' : ''}`}>
-        <span className="checkbox-icon" onClick={handleCheck}>
+      <div
+        className={`entry-text ${entry.checked ? 'checked' : ''}`}
+        onClick={handleCheck}
+      >
+        <span className="checkbox-icon">
           {entry.checked ? <CiSquareCheck /> : <CiStop1 />}
         </span>
         {entry.content}
