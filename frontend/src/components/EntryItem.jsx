@@ -1,11 +1,8 @@
-import { useState } from "react"
-import { RxDragHandleHorizontal } from "react-icons/rx"
-import {
-  MdOutlineCheckBox,
-  MdOutlineCheckBoxOutlineBlank,
-} from "react-icons/md"
-import { useSortable } from "@dnd-kit/react/sortable"
-import entryService from "../services/entryService"
+import { useState } from 'react'
+import { RxDragHandleHorizontal } from 'react-icons/rx'
+import { CiStop1, CiSquareCheck } from 'react-icons/ci'
+import { useSortable } from '@dnd-kit/react/sortable'
+import entryService from '../services/entryService'
 
 const EntryItem = ({ entry, editMode, reloadEntries }) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -65,14 +62,10 @@ const EntryItem = ({ entry, editMode, reloadEntries }) => {
           </form>
         </div>
       ) : (
-        <div className={`entry-text ${entry.checked ? "checked" : ""}`}>
+        <div className={`entry-text ${entry.checked ? 'checked' : ''}`}>
           {!editMode && (
             <span className="checkbox-icon">
-              {entry.checked ? (
-                <MdOutlineCheckBox />
-              ) : (
-                <MdOutlineCheckBoxOutlineBlank />
-              )}
+              {entry.checked ? <CiSquareCheck /> : <CiStop1 />}
             </span>
           )}
           {entry.content}
