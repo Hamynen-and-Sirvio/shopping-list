@@ -102,8 +102,7 @@ body {
   padding: 5px 10px;
 }
 
-.entry-text,
-.entry-text-edit {
+.entry-text {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -121,8 +120,7 @@ body {
   color: #cfcaca;
 }
 
-.checkbox-icon,
-.drag-handle {
+.checkbox-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,27 +130,9 @@ body {
   width: 30px;
 }
 
-.checkbox-icon svg,
-.drag-handle svg {
+.checkbox-icon svg {
   display: block;
   font-size: 19px;
-}
-
-.entry-text-edit form {
-  flex: 1;
-  align-items: center;
-  min-width: 0;
-  max-width: 100%;
-  display: flex;
-}
-
-.entry-text-edit input {
-  flex: 1;
-  background: #1c262f;
-  border: none;
-  font-size: 16px;
-  color: white;
-  min-width: 0;
 }
 
 .footer {
