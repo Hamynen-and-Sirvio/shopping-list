@@ -19,6 +19,10 @@ const EntryItem = ({ entry, reloadEntries, handleOpenModal }) => {
     reloadEntries()
   }
 
+  const handleModal = () => {
+    handleOpenModal(entry)
+  }
+
   return (
     <div className="entry-container" ref={ref}>
       <div
@@ -31,7 +35,7 @@ const EntryItem = ({ entry, reloadEntries, handleOpenModal }) => {
         {entry.content}
       </div>
       <div className="entry-actions">
-        <span className="entry-info" onClick={handleOpenModal}>
+        <span className="entry-info" onClick={handleModal}>
           <CiCircleMore size={20} />
         </span>
       </div>

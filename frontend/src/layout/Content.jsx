@@ -7,6 +7,7 @@ import '../App.css'
 
 const Content = ({ entries, reloadEntries }) => {
   const [openModal, setOpenModal] = useState(false)
+  const [currentEntry, setCurrentEntry] = useState(null)
 
   const handleDragEnd = (event) => {
     if (event.canceled) return
@@ -16,11 +17,13 @@ const Content = ({ entries, reloadEntries }) => {
     reloadEntries()
   }
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (entry) => {
+    setCurrentEntry(entry)
     setOpenModal(true)
   }
 
   const handleCloseModal = () => {
+    setCurrentEntry(null)
     setOpenModal(false)
   }
 
@@ -38,7 +41,11 @@ const Content = ({ entries, reloadEntries }) => {
           ))}
         </DragDropProvider>
       </div>
-      <Modal openModal={openModal} handleCloseModal={handleCloseModal} />
+      <Modal
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+        entry={currentEntry}
+      />
     </div>
   )
 }
