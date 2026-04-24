@@ -28,7 +28,6 @@ body {
   flex-direction: row;
   justify-content: space-between;
   border-bottom: #f9f9f9 1px solid;
-  margin: 24px;
   align-items: center;
   background: #222222;
 }
@@ -142,7 +141,7 @@ body {
   z-index: 10;
   display: flex;
   justify-content: center;
-  margin: 24px;
+  padding: 0 24px;
   flex: 0;
 }
 
@@ -157,6 +156,7 @@ body {
   display: flex;
   width: 100%;
   max-width: 1000px;
+  padding: 10px 0;
 }
 
 .add-content-container input {
