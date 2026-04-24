@@ -163,7 +163,7 @@ body {
   background: transparent;
   min-height: 40px;
   flex: 1;
-  font-size: 14px;
+  font-size: 16px;
   color: #f9f9f9;
   font-weight: 200;
   outline: none;
@@ -284,7 +284,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   flex: 1;
-  font-size: 14px;
+  font-size: 16px;
   color: #f9f9f9;
   font-weight: 200;
   outline: none;
