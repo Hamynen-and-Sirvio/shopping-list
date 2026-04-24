@@ -228,3 +228,25 @@ body {
 .login-button:active {
   transform: scale(0.97);
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #222222;
+  padding: 20px;
+  border: #f9f9f9 1px solid;
+  border-radius: 5px;
+  min-width: 300px;
+  max-width: 100%;
+}

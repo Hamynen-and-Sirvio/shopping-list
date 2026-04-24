@@ -1,15 +1,27 @@
+import { useState } from 'react'
 import EntryItem from '../components/EntryItem'
+import Modal from '../components/Modal'
 import { DragDropProvider } from '@dnd-kit/react'
 import entryService from '../services/entryService'
 import '../App.css'
 
 const Content = ({ entries, reloadEntries }) => {
+  const [openModal, setOpenModal] = useState(false)
+
   const handleDragEnd = (event) => {
     if (event.canceled) return
     const { source } = event.operation
     const { initialIndex, index } = source
     entryService.moveEntry(entries[initialIndex], index - initialIndex)
     reloadEntries()
+  }
+
+  const handleOpenModal = () => {
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
   }
 
   return (
@@ -21,10 +33,12 @@ const Content = ({ entries, reloadEntries }) => {
               key={entry.id}
               entry={entry}
               reloadEntries={reloadEntries}
+              handleOpenModal={handleOpenModal}
             />
           ))}
         </DragDropProvider>
       </div>
+      <Modal openModal={openModal} handleCloseModal={handleCloseModal} />
     </div>
   )
 }

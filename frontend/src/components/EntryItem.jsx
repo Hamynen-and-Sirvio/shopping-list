@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { CiStop1, CiSquareCheck } from 'react-icons/ci'
+import { CiCircleMore, CiStop1, CiSquareCheck } from 'react-icons/ci'
 import { useSortable } from '@dnd-kit/react/sortable'
 import entryService from '../services/entryService'
 
-const EntryItem = ({ entry, reloadEntries }) => {
+const EntryItem = ({ entry, reloadEntries, handleOpenModal }) => {
   const { ref } = useSortable({
     id: entry.id,
     index: entry.position - 1,
@@ -29,6 +29,11 @@ const EntryItem = ({ entry, reloadEntries }) => {
           {entry.checked ? <CiSquareCheck /> : <CiStop1 />}
         </span>
         {entry.content}
+      </div>
+      <div className="entry-actions">
+        <span className="entry-info" onClick={handleOpenModal}>
+          <CiCircleMore size={20} />
+        </span>
       </div>
     </div>
   )
