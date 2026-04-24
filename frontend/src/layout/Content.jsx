@@ -45,6 +45,7 @@ const Content = ({ entries, reloadEntries }) => {
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
+        reloadEntries={reloadEntries}
       />
     </div>
   )
