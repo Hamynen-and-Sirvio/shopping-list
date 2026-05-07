@@ -93,6 +93,7 @@ body {
 }
 
 .entry-container {
+  background-color: #222222;
   min-height: 40px;
   display: flex;
   align-items: center;
