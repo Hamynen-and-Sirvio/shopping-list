@@ -1,16 +1,20 @@
-import { useState } from "react"
-import entryService from "../services/entryService"
-import "../App.css"
+import { useState } from 'react'
+import entryService from '../services/entryService'
+import '../App.css'
 
 const Footer = ({ reloadEntries }) => {
-  const [newEntryField, setNewEntryField] = useState("")
+  const [newEntryField, setNewEntryField] = useState('')
 
   const addEntry = async (event) => {
     event.preventDefault()
-    if (newEntryField.trim() === "") return
-    await entryService.addEntry(newEntryField.trim())
-    setNewEntryField("")
-    reloadEntries()
+    if (newEntryField.trim() === '') return
+    try {
+      await entryService.addEntry(newEntryField.trim())
+      setNewEntryField('')
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
