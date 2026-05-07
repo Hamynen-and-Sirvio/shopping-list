@@ -13,11 +13,17 @@ const App = () => {
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
   const reloadEntries = async () => {
-    const fetchedEntries = await entryService.getEntries()
-    setEntries(fetchedEntries)
-    setCheckedEntries(
-      fetchedEntries.filter((entry) => entry.checked).map((entry) => entry.id),
-    )
+    try {
+      const fetchedEntries = await entryService.getEntries()
+      setEntries(fetchedEntries)
+      setCheckedEntries(
+        fetchedEntries
+          .filter((entry) => entry.checked)
+          .map((entry) => entry.id),
+      )
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {
