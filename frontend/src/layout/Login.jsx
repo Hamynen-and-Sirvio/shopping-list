@@ -1,17 +1,20 @@
-import { useState } from "react"
-import userService from "../services/userService"
-import tokenService from "../services/tokenService"
-import "../App.css"
+import { useState } from 'react'
+import userService from '../services/userService'
+import tokenService from '../services/tokenService'
+import '../App.css'
 
 const Login = ({ setToken }) => {
-  const [passwordField, setPasswordField] = useState("")
+  const [passwordField, setPasswordField] = useState('')
 
   const logIn = async (event) => {
     event.preventDefault()
-    const response = await userService.login(passwordField)
-    const loginData = await response.json()
-    tokenService.setToken(loginData.token)
-    setToken(loginData.token)
+    try {
+      const response = await userService.login(passwordField)
+      tokenService.setToken(response.token)
+      setToken(response.token)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
