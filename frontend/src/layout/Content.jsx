@@ -10,6 +10,28 @@ const Content = ({ entries, reloadEntries }) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
 
+  const handleDragEnd = async (event) => {
+    if (event.canceled) return
+
+    const { source } = event.operation
+
+    if (isSortable(source)) {
+      const { initialIndex, index } = source
+
+      if (initialIndex !== index) {
+        try {
+          await entryService.moveEntry(
+            entries[initialIndex],
+            index - initialIndex,
+          )
+          await reloadEntries()
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+  }
+
   const handleOpenModal = (entry) => {
     setCurrentEntry(entry)
     setOpenModal(true)
@@ -23,25 +45,7 @@ const Content = ({ entries, reloadEntries }) => {
   return (
     <div className="content">
       <div className="content-list">
-        <DragDropProvider
-          onDragEnd={async (event) => {
-            if (event.canceled) return
-
-            const { source } = event.operation
-
-            if (isSortable(source)) {
-              const { initialIndex, index } = source
-
-              if (initialIndex !== index) {
-                await entryService.moveEntry(
-                  entries[initialIndex],
-                  index - initialIndex,
-                )
-                reloadEntries()
-              }
-            }
-          }}
-        >
+        <DragDropProvider onDragEnd={handleDragEnd}>
           {entries.map((entry, index) => (
             <EntryItem
               key={entry.id}
