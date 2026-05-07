@@ -5,12 +5,16 @@ import '../App.css'
 const Header = ({ checkedEntries, setCheckedEntries, reloadEntries }) => {
   const deleteCheckedEntries = async (event) => {
     event.preventDefault()
-    if (confirm(`Delete ${checkedEntries.length} checked entries?`)) {
+    if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
+
+    try {
       for (const entryId of checkedEntries) {
         await entryService.deleteEntry(entryId)
+        setCheckedEntries([])
+        await reloadEntries()
       }
-      setCheckedEntries([])
-      reloadEntries()
+    } catch (error) {
+      console.error(error)
     }
   }
 
