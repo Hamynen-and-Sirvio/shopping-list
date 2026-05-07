@@ -1,66 +1,96 @@
-import tokenService from "./tokenService"
+import tokenService from './tokenService'
 
 const getEntries = async () => {
-  const response = await fetch("/api/entries", {
-    headers: { "Authorization": `Bearer ${tokenService.fetchToken()}` },
+  const response = await fetch('/api/entries', {
+    headers: { 'Authorization': `Bearer ${tokenService.fetchToken()}` },
   })
-  return response.json()
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 const deleteEntry = async (entryId) => {
   const response = await fetch(`/api/entries/${entryId}`, {
-    method: "DELETE",
-    headers: { "Authorization": `Bearer ${tokenService.fetchToken()}` },
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${tokenService.fetchToken()}` },
   })
-  return response
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 const checkEntry = async (entry) => {
   const response = await fetch(`/api/entries/${entry.id}`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenService.fetchToken()}`,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenService.fetchToken()}`,
     },
     body: JSON.stringify({ checked: !entry.checked }),
   })
-  return response
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 const moveEntry = async (entry, amount) => {
   const response = await fetch(`/api/entries/${entry.id}`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenService.fetchToken()}`,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenService.fetchToken()}`,
     },
     body: JSON.stringify({ position: entry.position + amount }),
   })
-  return response
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 const editEntry = async (entry, content) => {
   const response = await fetch(`/api/entries/${entry.id}`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenService.fetchToken()}`,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenService.fetchToken()}`,
     },
     body: JSON.stringify({ content: content }),
   })
-  return response
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 const addEntry = async (content) => {
-  const response = await fetch("/api/entries", {
-    method: "POST",
+  const response = await fetch('/api/entries', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenService.fetchToken()}`,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${tokenService.fetchToken()}`,
     },
     body: JSON.stringify({ content: content }),
   })
-  return response
+
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`)
+  }
+
+  return await response.json()
 }
 
 export default {
