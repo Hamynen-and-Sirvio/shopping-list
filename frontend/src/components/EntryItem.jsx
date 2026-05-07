@@ -3,19 +3,14 @@ import { CiCircleMore, CiStop1, CiSquareCheck } from 'react-icons/ci'
 import { useSortable } from '@dnd-kit/react/sortable'
 import entryService from '../services/entryService'
 
-const EntryItem = ({ entry, reloadEntries, handleOpenModal }) => {
+const EntryItem = ({ entry, index, reloadEntries, handleOpenModal }) => {
   const { ref } = useSortable({
     id: entry.id,
-    index: entry.position - 1,
+    index: index,
   })
 
   const handleCheck = async () => {
     await entryService.checkEntry(entry)
-    reloadEntries()
-  }
-
-  const handleMove = async (amount) => {
-    await entryService.moveEntry(entry, amount)
     reloadEntries()
   }
 
