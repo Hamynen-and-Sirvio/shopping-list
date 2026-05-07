@@ -19,18 +19,21 @@ const Login = ({ setToken }) => {
 
   return (
     <div className="login-container">
-      <form onSubmit={logIn}>
+      <form onSubmit={logIn} className="login-form">
+        <div className="login-title">Login</div>
+
         <input
           type="password"
           placeholder="Password"
           minLength="5"
           maxLength="50"
           value={passwordField}
-          onChange={(event) => setPasswordField(event.target.value)}
-          className="password-field"
+          onChange={(e) => setPasswordField(e.target.value)}
+          className="login-input"
         />
+
         <button type="submit" className="login-button">
-          Login
+          Enter
         </button>
       </form>
     </div>
