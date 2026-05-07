@@ -10,8 +10,12 @@ const EntryItem = ({ entry, index, reloadEntries, handleOpenModal }) => {
   })
 
   const handleCheck = async () => {
-    await entryService.checkEntry(entry)
-    reloadEntries()
+    try {
+      await entryService.checkEntry(entry)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleModal = () => {
