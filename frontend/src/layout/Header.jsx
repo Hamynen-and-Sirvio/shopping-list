@@ -8,11 +8,13 @@ const Header = ({ checkedEntries, setCheckedEntries, reloadEntries }) => {
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
 
     try {
-      for (const entryId of checkedEntries) {
-        await entryService.deleteEntry(entryId)
-        setCheckedEntries([])
-        await reloadEntries()
-      }
+      await Promise.all(
+        checkedEntries.map(async (entryId) => {
+          await entryService.deleteEntry(entryId)
+        }),
+      )
+      setCheckedEntries([])
+      await reloadEntries()
     } catch (error) {
       console.error(error)
     }
