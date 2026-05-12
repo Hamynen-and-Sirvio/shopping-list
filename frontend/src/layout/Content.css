@@ -1,0 +1,12 @@
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  flex: 5;
+}

@@ -4,7 +4,7 @@ import Modal from '../components/Modal'
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import entryService from '../services/entryService'
-import '../App.css'
+import '../layout/Content.css'
 
 const Content = ({ entries, reloadEntries }) => {
   const [openModal, setOpenModal] = useState(false)

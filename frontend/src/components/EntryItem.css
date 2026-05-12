@@ -1,0 +1,43 @@
+.entry-container {
+  background-color: #222222;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  border: #f9f9f9 1px solid;
+  border-radius: 5px;
+  margin: 5px 5px;
+  padding: 5px 10px;
+}
+
+.entry-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+  color: #f9f9f9;
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.entry-text.checked {
+  text-decoration: line-through;
+  color: #cfcaca;
+}
+
+.checkbox-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+  height: 100%;
+  width: 30px;
+}
+
+.checkbox-icon svg {
+  display: block;
+  font-size: 19px;
+}
