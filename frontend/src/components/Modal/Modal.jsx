@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import entryService from '../services/entryService'
-import '../components/Modal.css'
+import entryService from '../../services/entryService'
+import './Modal.css'
 
 const Modal = ({ openModal, handleCloseModal, entry, reloadEntries }) => {
   const [editField, setEditField] = useState('')

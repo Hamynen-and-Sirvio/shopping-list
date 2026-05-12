@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import userService from '../services/userService'
-import tokenService from '../services/tokenService'
-import '../layout/Login.css'
+import userService from '../../services/userService'
+import tokenService from '../../services/tokenService'
+import './Login.css'
 
 const Login = ({ setToken }) => {
   const [passwordField, setPasswordField] = useState('')

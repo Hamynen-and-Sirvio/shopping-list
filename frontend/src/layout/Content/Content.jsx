@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import EntryItem from '../components/EntryItem'
-import Modal from '../components/Modal'
+import EntryItem from '../../components/EntryItem/EntryItem'
+import Modal from '../../components/Modal/Modal'
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
-import entryService from '../services/entryService'
-import '../layout/Content.css'
+import entryService from '../../services/entryService'
+import './Content.css'
 
 const Content = ({ entries, reloadEntries }) => {
   const [openModal, setOpenModal] = useState(false)

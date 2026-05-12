@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import entryService from '../services/entryService'
-import '../layout/Footer.css'
+import entryService from '../../services/entryService'
+import './Footer.css'
 
 const Footer = ({ reloadEntries }) => {
   const [newEntryField, setNewEntryField] = useState('')
