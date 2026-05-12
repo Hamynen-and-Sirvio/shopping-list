@@ -2,7 +2,7 @@ services:
   backend:
     image: typic-lists-backend
     build: backend
-    command: npx node index.ts
+    command: /bin/sh -c 'npx prisma db push && npx node index.ts'
     volumes:
       - ./backend:/app
       - node_modules_backend:/app/node_modules

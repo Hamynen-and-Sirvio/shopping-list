@@ -1,10 +1,10 @@
 import crypto from 'crypto'
-import Database from 'better-sqlite3'
 import 'dotenv/config'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
+import { prisma } from './lib/prisma.ts'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
@@ -33,22 +33,6 @@ if (SECRET === undefined) {
   throw new Error('Environment variable SECRET not defined');
 }
 
-const db = new Database(DATABASE_URI)
-db.pragma('journal_mode = WAL')
-db.prepare(
-  'CREATE TABLE IF NOT EXISTS entries (' +
-  'id INTEGER PRIMARY KEY, ' +
-  'position INTEGER NOT NULL CHECK (position >= 1), ' +
-  'content TEXT NOT NULL, ' +
-  'checked BOOLEAN NOT NULL DEFAULT 0 CHECK (checked IN (0, 1))' +
-  ')'
-).run()
-
-process.on('exit', () => {
-  if (db) {
-    db.close()
-  }
-})
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
@@ -144,110 +128,116 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/entries', (req, res) => {
-  const rows: any = db.prepare('SELECT * FROM entries ORDER BY position').all()
-  const entries = rows.map(row => { return {
-    id: row.id,
-    position: row.position,
-    content: row.content,
-    checked: row.checked === 1,
-  }})
+app.get('/entries', async (req, res) => {
+  const entries = await prisma.entries.findMany({ orderBy: { position: 'asc' } })
   res.json(entries)
 })
 
-app.post('/entries', (req, res) => {
+app.post('/entries', async (req, res) => {
   const entry = req.body
-  const row: any = db.prepare(
-    'INSERT INTO entries (position, content) ' +
-    'VALUES (COALESCE((SELECT MAX(position) + 1 FROM entries), 1), ?) ' +
-    'RETURNING *'
-  ).get(entry.content)
-  res.status(201).json({ id: row.id, position: row.position, content: row.content, checked: row.checked === 1 })
+
+  const addedEntry = await prisma.$transaction(async (tx) => {
+    const entryCount = await tx.entries.count()
+
+    return tx.entries.create({
+      data: {
+        position: entryCount + 1,
+        content: entry.content,
+      },
+    })
+  })
+
+  res.status(201).json(addedEntry)
 })
 
-app.delete('/entries/:id', (req, res) => {
-  const id = req.params.id
-  let row: any = null
-  db.prepare('BEGIN').run()
-  try {
-    row = db.prepare('DELETE FROM entries WHERE id = ? RETURNING *').get(id)
-    db.prepare('UPDATE entries SET position = position - 1 WHERE position > ?').run(row.position)
-  } catch (e) {
-    db.prepare('ROLLBACK').run()
-    throw e
-  }
-  db.prepare('COMMIT').run()
-  res.status(200).json({ id: row.id, position: row.position, content: row.content, checked: row.checked === 1 })
+app.delete('/entries/:id', async (req, res) => {
+  const id = parseInt(req.params.id)
+
+  const deletedEntry = await prisma.$transaction(async (tx) => {
+    const deletedEntry = await tx.entries.delete({
+      where: {
+        id: id,
+      },
+    })
+
+    await tx.entries.updateMany({
+      where: { position: { gt: deletedEntry.position } },
+      data: { position: { decrement: 1 } },
+    })
+
+    return deletedEntry
+  })
+
+  res.status(200).json(deletedEntry)
 })
 
-app.patch('/entries/:id', (req, res) => {
-  const id = req.params.id
+app.patch('/entries/:id', async (req, res) => {
+  const id = parseInt(req.params.id)
   const editedFields = req.body
 
-  const editStatements: string[] = []
-  const bindParams: any[] = []
-
-  let row: any = null
-
-  db.prepare('BEGIN').run()
-
-  try {
-    if (editedFields.hasOwnProperty('checked')) {
-      editStatements.push('checked = ?')
-      bindParams.push(editedFields.checked ? 1 : 0)
-    }
-
-    if (editedFields.hasOwnProperty('content')) {
-      editStatements.push('content = ?')
-      bindParams.push(editedFields.content)
-    }
-
-    if (editedFields.hasOwnProperty('position')) {
-      if (editedFields.position < 1) {
-        res.status(400).send('Position should be >= 1')
-        db.prepare('ROLLBACK').run()
-        return
-      }
-
-      const numOfEntries = (db.prepare('SELECT COUNT(id) AS count FROM entries').get() as any).count
-      if (editedFields.position > numOfEntries) {
-        res.status(400).send(`Position should be <= {numOfEntries}`)
-        db.prepare('ROLLBACK').run()
-        return
-      }
-
-      const oldPos = (db.prepare('SELECT position FROM entries WHERE id = ?').get(id) as any).position
-      if (editedFields.position > oldPos) {
-        db.prepare(
-          'UPDATE entries SET position = position - 1 WHERE position > ? AND position <= ?'
-        ).run(oldPos, editedFields.position)
-      } else {
-        db.prepare(
-          'UPDATE entries SET position = position + 1 WHERE position >= ? AND position < ?'
-        ).run(editedFields.position, oldPos)
-      }
-
-      editStatements.push('position = ?')
-      bindParams.push(editedFields.position)
-    }
-
-    if (editStatements.length === 0) {
-      res.status(400).send('Should edit "content" and/or "position" fields')
-      db.prepare('ROLLBACK').run()
-      return
-    }
-
-    row = db.prepare(
-      `UPDATE entries SET ${editStatements.join(', ')} WHERE id = ? RETURNING *`
-    ).get(...bindParams, id)
-  } catch (e) {
-    db.prepare('ROLLBACK').run()
-    throw e
+  if (!editedFields.hasOwnProperty('content') &&
+      !editedFields.hasOwnProperty('position') &&
+      !editedFields.hasOwnProperty('checked')) {
+    res.status(400).send('Should edit at least one of the fields')
+    return
   }
 
-  db.prepare('COMMIT').run()
+  if (editedFields.hasOwnProperty('position') && editedFields.position < 1) {
+      res.status(400).send('Position should be >= 1')
+      return
+  }
 
-  res.json({ id: row.id, position: row.position, content: row.content, checked: row.checked === 1 })
+  try {
+    const editedEntry = await prisma.$transaction(async (tx) => {
+      const oldEntry = await tx.entries.findUnique({ where: { id: id } })
+      if (!oldEntry) {
+        res.status(404).send('Entry not found')
+        throw ''
+      }
+
+      if (editedFields.hasOwnProperty('position')) {
+        const numOfEntries = await tx.entries.count()
+        if (editedFields.position > numOfEntries) {
+          res.status(400).send(`Position should be <= ${numOfEntries}`)
+          throw ''
+        }
+
+        const oldPos = oldEntry.position
+        if (editedFields.position > oldPos) {
+          await tx.entries.updateMany({
+            where: {
+              AND: [
+                { position: { gt: oldPos } },
+                { position: { lte: editedFields.position } },
+              ],
+            },
+            data: { position: { decrement: 1 } },
+          })
+        } else {
+          await tx.entries.updateMany({
+            where: {
+              AND: [
+                { position: { gte: editedFields.position } },
+                { position: { lt: oldPos } },
+              ],
+            },
+            data: { position: { increment: 1 } },
+          })
+        }
+      }
+
+      return tx.entries.update({
+        where: { id: id },
+        data: editedFields,
+      })
+    })
+
+    res.json(editedEntry)
+  } catch (error) {
+    if (error !== '') {
+      throw error
+    }
+  }
 })
 
 app.listen(PORT, HOST, () => {
