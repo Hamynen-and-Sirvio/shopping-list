@@ -9,18 +9,16 @@ import './App.css'
 
 const App = () => {
   const [entries, setEntries] = useState([])
-  const [checkedEntries, setCheckedEntries] = useState([])
   const [token, setToken] = useState(tokenService.fetchToken() || '')
+
+  const checkedEntries = entries
+    .filter((entry) => entry.checked)
+    .map((entry) => entry.id)
 
   const reloadEntries = async () => {
     try {
       const fetchedEntries = await entryService.getEntries()
       setEntries(fetchedEntries)
-      setCheckedEntries(
-        fetchedEntries
-          .filter((entry) => entry.checked)
-          .map((entry) => entry.id),
-      )
     } catch (error) {
       console.error(error)
     }
@@ -35,11 +33,7 @@ const App = () => {
   if (token) {
     return (
       <div className="app-container">
-        <Header
-          checkedEntries={checkedEntries}
-          setCheckedEntries={setCheckedEntries}
-          reloadEntries={reloadEntries}
-        />
+        <Header checkedEntries={checkedEntries} reloadEntries={reloadEntries} />
         <Content entries={entries} reloadEntries={reloadEntries} />
         <Footer reloadEntries={reloadEntries} />
       </div>
