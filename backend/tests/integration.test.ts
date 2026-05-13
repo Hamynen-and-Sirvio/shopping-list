@@ -15,6 +15,14 @@ const login = async (apiUrl: string, password: string) => {
   return responseBody
 }
 
+const fetchEntries = async (apiUrl: string, token: string) => {
+  const response = await fetch(`${apiUrl}/entries`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  })
+  const entries = await response.json()
+  return entries
+};
+
 const createEntry = async (apiUrl: string, token: string, newEntryData: { content: string }) => {
   const response = await fetch(`${apiUrl}/entries`, {
     method: 'POST',
@@ -57,5 +65,21 @@ describe('Entries', () => {
     expect(createdEntry.position).toBeTypeOf('number')
     expect(createdEntry.position).toSatisfy(Number.isInteger)
     expect(createdEntry.position).toBeGreaterThan(0)
+  })
+
+  test('can be fetched', async () => {
+    const entry = { content: 'Something' }
+
+    const createdEntry = await createEntry(API_URL, token, entry)
+    const fetchedEntries = await fetchEntries(API_URL, token)
+    const originalEntry = fetchedEntries.find(entry => entry.id === createdEntry.id)
+
+    expect(Object.keys(originalEntry)).toStrictEqual(
+      ['id', 'position', 'content', 'checked'],
+    )
+
+    expect(originalEntry.content).toBe(entry.content)
+    expect(originalEntry.checked).toBe(false)
+    expect(originalEntry.position).toBe(fetchedEntries.length)
   })
 })
