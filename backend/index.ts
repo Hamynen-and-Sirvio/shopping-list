@@ -8,9 +8,9 @@ import { prisma } from './lib/prisma.ts'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
-const DATABASE_URI = process.env.DATABASE_URI
-if (DATABASE_URI === undefined) {
-  throw new Error('Environment variable DATABASE_URI not defined');
+const DATABASE_URL = process.env.DATABASE_URL
+if (DATABASE_URL === undefined) {
+  throw new Error('Environment variable DATABASE_URL not defined');
 }
 
 if (process.env.PORT === undefined) {

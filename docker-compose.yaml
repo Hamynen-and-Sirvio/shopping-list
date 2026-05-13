@@ -1,4 +1,15 @@
 services:
+  database:
+    image: postgres:17-alpine
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d postgres"]
+      start_period: 30s
+      start_interval: 1s
+
   backend:
     image: typic-lists-backend
     build: backend
@@ -6,14 +17,16 @@ services:
     volumes:
       - ./backend:/app
       - node_modules_backend:/app/node_modules
-      - database:/database
     environment:
-      DATABASE_URI: /database/typic-lists.db
+      DATABASE_URL: postgres://postgres:postgres@database
       PORT: 3000
       HOST: 0.0.0.0
       PASSWORD_HASH: aecd9cd7f5ca210c4dd6a265c4844b4d:a29854c8bdc20fd9bca1884fb6f8c4b5f3dde7fd81884afdc383946f873e28a32b77fff6af3bcba72e69c6a33d5936ecdb78f47a53cc66b83c1439ba96bfe887
       SECRET: secret
     pull_policy: never
+    depends_on:
+      database:
+        condition: service_healthy
 
   frontend:
     image: typic-lists-frontend
