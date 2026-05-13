@@ -42,13 +42,8 @@ describe('Entries', () => {
     const fetchedEntries = await fetchEntries(API_URL, token)
     const originalEntry = fetchedEntries.find(entry => entry.id === createdEntry.id)
 
-    expect(Object.keys(originalEntry)).toStrictEqual(
-      ['id', 'position', 'content', 'checked'],
-    )
-
-    expect(originalEntry.content).toBe(entry.content)
-    expect(originalEntry.checked).toBe(false)
     expect(originalEntry.position).toBe(fetchedEntries.length)
+    expect(originalEntry).toStrictEqual(createdEntry)
   })
 
   test('can be deleted', async () => {
