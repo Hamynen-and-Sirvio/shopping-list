@@ -7,7 +7,9 @@ const PASSWORD = 'password'
 describe('Login', () => {
   test('can log in', async () => {
     const loginResponse = await login(API_URL, PASSWORD)
+
     expect(Object.keys(loginResponse)).toStrictEqual(['token'])
+
     expect(loginResponse.token).toBeTypeOf('string')
   })
 })
@@ -29,8 +31,9 @@ describe('Entries', () => {
     )
 
     expect(createdEntry.content).toBe(entry.content)
+
     expect(createdEntry.checked).toBe(false)
-    expect(createdEntry.position).toBeTypeOf('number')
+
     expect(createdEntry.position).toSatisfy(Number.isInteger)
     expect(createdEntry.position).toBeGreaterThan(0)
   })
