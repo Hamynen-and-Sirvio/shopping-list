@@ -1,5 +1,12 @@
 import { beforeAll, describe, expect, test } from 'vitest'
-import { createEntry, deleteEntry, fetchEntries, login } from './apiUtils.ts'
+
+import {
+  createEntry,
+  deleteEntry,
+  editEntry,
+  fetchEntries,
+  login,
+} from './apiUtils.ts'
 
 const API_URL = 'http://localhost:3000'
 const PASSWORD = 'password'
@@ -60,5 +67,26 @@ describe('Entries', () => {
     const fetchedEntries = await fetchEntries(API_URL, token)
 
     expect(fetchedEntries).not.toContainEqual(deletedEntry)
+  })
+
+  test('can be edited', async () => {
+    const entry = { content: 'Something' }
+    const editedFields = {
+      content: 'Something else',
+      checked: true,
+      position: 1,
+    }
+
+    const createdEntry = await createEntry(API_URL, token, entry)
+    const id = createdEntry.id
+
+    const editedEntry = await editEntry(API_URL, token, id, editedFields)
+
+    expect(editedEntry).toStrictEqual({ ...createdEntry, ...editedFields })
+
+    const fetchedEntries = await fetchEntries(API_URL, token)
+    const fetchedEntry = fetchedEntries.find(entry => entry.id === id)
+
+    expect(fetchedEntry).toStrictEqual({ ...createdEntry, ...editedFields })
   })
 })

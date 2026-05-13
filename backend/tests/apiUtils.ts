@@ -39,3 +39,16 @@ export const deleteEntry = async (apiUrl: string, token: string, id: number) => 
   const deletedEntry = await response.json()
   return deletedEntry
 }
+
+export const editEntry = async (apiUrl: string, token: string, id: number, editedFields) => {
+  const response = await fetch(`${apiUrl}/entries/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(editedFields),
+  })
+  const editedEntry = await response.json()
+  return editedEntry
+}
