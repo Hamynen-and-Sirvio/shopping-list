@@ -4,6 +4,7 @@ services:
     volumes:
       - database:/var/lib/postgresql/data
     environment:
+      PGUSER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d postgres"]
