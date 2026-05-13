@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, test } from 'vitest'
-import { createEntry, fetchEntries, login } from './apiUtils.ts'
+import { createEntry, deleteEntry, fetchEntries, login } from './apiUtils.ts'
 
 const API_URL = 'http://localhost:3000'
 const PASSWORD = 'password'
@@ -49,5 +49,18 @@ describe('Entries', () => {
     expect(originalEntry.content).toBe(entry.content)
     expect(originalEntry.checked).toBe(false)
     expect(originalEntry.position).toBe(fetchedEntries.length)
+  })
+
+  test('can be deleted', async () => {
+    const entry = { content: 'Something' }
+
+    const createdEntry = await createEntry(API_URL, token, entry)
+    const deletedEntry = await deleteEntry(API_URL, token, createdEntry.id)
+
+    expect(deletedEntry).toStrictEqual(createdEntry)
+
+    const fetchedEntries = await fetchEntries(API_URL, token)
+
+    expect(fetchedEntries).not.toContainEqual(deletedEntry)
   })
 })

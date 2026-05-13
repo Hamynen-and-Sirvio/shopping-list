@@ -30,3 +30,12 @@ export const createEntry = async (apiUrl: string, token: string, newEntryData: {
   const createdEntry = await response.json()
   return createdEntry
 }
+
+export const deleteEntry = async (apiUrl: string, token: string, id: number) => {
+  const response = await fetch(`${apiUrl}/entries/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  })
+  const deletedEntry = await response.json()
+  return deletedEntry
+}
