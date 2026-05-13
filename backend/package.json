@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "node index.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "autotest": "vitest watch"
   },
   "author": "Ville Sirviö",
   "license": "MIT",
