@@ -12,7 +12,9 @@ services:
 
   backend:
     image: typic-lists-backend
-    build: backend
+    build:
+      context: backend
+      dockerfile: dev.Dockerfile
     command: /bin/sh -c 'npx prisma db push && npx node index.ts'
     volumes:
       - ./backend:/app
@@ -30,7 +32,9 @@ services:
 
   frontend:
     image: typic-lists-frontend
-    build: frontend
+    build:
+      context: frontend
+      dockerfile: dev.Dockerfile
     command: npx vite --host 0.0.0.0
     ports:
       - 127.0.0.1:5173:5173

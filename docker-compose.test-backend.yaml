@@ -10,7 +10,9 @@ services:
 
   test-backend:
     image: typic-lists-backend
-    build: backend
+    build:
+      context: backend
+      dockerfile: dev.Dockerfile
     command: /bin/sh -c 'npx prisma db push && npx node index.ts'
     ports:
       - 127.0.0.1:3000:3000
