@@ -1,40 +1,8 @@
 import { beforeAll, describe, expect, test } from 'vitest'
+import { createEntry, fetchEntries, login } from './apiUtils.ts'
 
 const API_URL = 'http://localhost:3000'
 const PASSWORD = 'password'
-
-const login = async (apiUrl: string, password: string) => {
-  const response = await fetch(`${apiUrl}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: password }),
-  })
-
-  const responseBody = await response.json()
-
-  return responseBody
-}
-
-const fetchEntries = async (apiUrl: string, token: string) => {
-  const response = await fetch(`${apiUrl}/entries`, {
-    headers: { 'Authorization': `Bearer ${token}` },
-  })
-  const entries = await response.json()
-  return entries
-};
-
-const createEntry = async (apiUrl: string, token: string, newEntryData: { content: string }) => {
-  const response = await fetch(`${apiUrl}/entries`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newEntryData),
-  })
-  const createdEntry = await response.json()
-  return createdEntry
-}
 
 describe('Login', () => {
   test('can log in', async () => {
