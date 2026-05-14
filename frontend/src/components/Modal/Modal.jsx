@@ -37,11 +37,15 @@ const Modal = ({ openModal, handleCloseModal, entry, reloadEntries }) => {
               autoFocus
             />
             <div className="modal-actions">
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                className="cancel-button"
+              >
+                Cancel
+              </button>
               <button type="submit" className="save-button">
                 Save
-              </button>
-              <button onClick={handleCloseModal} className="cancel-button">
-                Cancel
               </button>
             </div>
           </form>
