@@ -34,5 +34,5 @@ jobs:
           context: "{{defaultContext}}:backend"
           push: true
           tags:
-            - ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:${{ github.sha }}
-            - ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
+            - "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:${{ github.sha }}"
+            - "${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest"
