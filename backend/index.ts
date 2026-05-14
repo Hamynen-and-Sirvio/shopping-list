@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
 import { prisma } from './lib/prisma.ts'
 
+
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
 const DATABASE_URL = process.env.DATABASE_URL
