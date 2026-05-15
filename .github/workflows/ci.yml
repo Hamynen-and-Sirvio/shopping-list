@@ -36,3 +36,10 @@ jobs:
           tags: >
             ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:${{ github.sha }},
             ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
+
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          service: typic-lists
+          region: ${{ vars.GCP_REGION }}
+          image: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
