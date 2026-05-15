@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [prisma]
+    branches: [main]
 
 jobs:
   deployment_pipeline:
