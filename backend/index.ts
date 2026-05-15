@@ -25,7 +25,7 @@ if (HOST === undefined) {
   throw new Error('Environment variable HOST not defined');
 }
 
-const CORS_ORIGINS = process.env.CORS_ORIGINS || false
+const CORS_ORIGINS = process.env.CORS_ORIGINS?.split(',') || false
 
 const PASSWORD_HASH = process.env.PASSWORD_HASH
 if (PASSWORD_HASH === undefined) {
