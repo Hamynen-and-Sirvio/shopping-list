@@ -1,15 +1,21 @@
-const login = async (password) => {
-  const response = await fetch(`/api/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: password }),
-  })
+export class UserService {
+  #loginUrl
 
-  if (!response.ok) {
-    throw new Error(`Response status: ${response.status}`)
+  constructor(loginUrl) {
+    this.#loginUrl = loginUrl
   }
 
-  return await response.json()
-}
+  async login(password) {
+    const response = await fetch(this.#loginUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: password }),
+    })
 
-export default { login }
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+
+    return await response.json()
+  }
+}

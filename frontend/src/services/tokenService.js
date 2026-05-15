@@ -1,9 +1,9 @@
-const fetchToken = () => {
-  return localStorage.getItem("token")
-}
+export class TokenService {
+  fetchToken() {
+    return localStorage.getItem('token')
+  }
 
-const setToken = (token) => {
-  localStorage.setItem("token", token)
+  setToken(token) {
+    localStorage.setItem('token', token)
+  }
 }
-
-export default { fetchToken, setToken }

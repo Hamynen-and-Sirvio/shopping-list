@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { CiCircleMore, CiStop1, CiSquareCheck } from 'react-icons/ci'
 import { useSortable } from '@dnd-kit/react/sortable'
-import entryService from '../../services/entryService'
 import './EntryItem.css'
 
-const EntryItem = ({ entry, index, reloadEntries, handleOpenModal }) => {
+const EntryItem = ({
+  entry,
+  index,
+  entryService,
+  reloadEntries,
+  handleOpenModal,
+}) => {
   const { ref } = useSortable({
     id: entry.id,
     index: index,

@@ -1,9 +1,20 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
+import { EntryService } from './services/entryService.js'
+import { TokenService } from './services/tokenService.js'
+import { UserService } from './services/userService.js'
+
+const tokenService = new TokenService()
+const userService = new UserService('/api/login')
+const entryService = new EntryService('/api/entries', tokenService)
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <App
+      entryService={entryService}
+      tokenService={tokenService}
+      userService={userService}
+    />
   </StrictMode>,
 )

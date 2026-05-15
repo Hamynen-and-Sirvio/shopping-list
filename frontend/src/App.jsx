@@ -3,11 +3,9 @@ import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
 import Login from './layout/Login/Login'
-import entryService from './services/entryService'
-import tokenService from './services/tokenService'
 import './App.css'
 
-const App = () => {
+const App = ({ entryService, tokenService, userService }) => {
   const [entries, setEntries] = useState([])
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
@@ -33,13 +31,27 @@ const App = () => {
   if (token) {
     return (
       <div className="app-container">
-        <Header checkedEntries={checkedEntries} reloadEntries={reloadEntries} />
-        <Content entries={entries} reloadEntries={reloadEntries} />
-        <Footer reloadEntries={reloadEntries} />
+        <Header
+          entryService={entryService}
+          checkedEntries={checkedEntries}
+          reloadEntries={reloadEntries}
+        />
+        <Content
+          entryService={entryService}
+          entries={entries}
+          reloadEntries={reloadEntries}
+        />
+        <Footer entryService={entryService} reloadEntries={reloadEntries} />
       </div>
     )
   } else {
-    return <Login setToken={setToken} />
+    return (
+      <Login
+        userService={userService}
+        tokenService={tokenService}
+        setToken={setToken}
+      />
+    )
   }
 }
 

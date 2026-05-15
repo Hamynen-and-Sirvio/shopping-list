@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import userService from '../../services/userService'
-import tokenService from '../../services/tokenService'
 import './Login.css'
 
-const Login = ({ setToken }) => {
+const Login = ({ userService, tokenService, setToken }) => {
   const [passwordField, setPasswordField] = useState('')
 
   const logIn = async (event) => {

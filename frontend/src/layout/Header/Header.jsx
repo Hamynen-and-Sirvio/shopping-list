@@ -1,8 +1,7 @@
-import entryService from '../../services/entryService'
 import { LuTrash } from 'react-icons/lu'
 import './Header.css'
 
-const Header = ({ checkedEntries, reloadEntries }) => {
+const Header = ({ entryService, checkedEntries, reloadEntries }) => {
   const deleteCheckedEntries = async (event) => {
     event.preventDefault()
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return

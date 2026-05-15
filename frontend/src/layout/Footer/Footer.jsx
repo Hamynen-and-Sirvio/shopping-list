@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import entryService from '../../services/entryService'
 import './Footer.css'
 
-const Footer = ({ reloadEntries }) => {
+const Footer = ({ entryService, reloadEntries }) => {
   const [newEntryField, setNewEntryField] = useState('')
 
   const addEntry = async (event) => {
