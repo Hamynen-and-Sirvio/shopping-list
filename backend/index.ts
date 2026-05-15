@@ -1,3 +1,4 @@
+import cors from 'cors';
 import crypto from 'crypto'
 import 'dotenv/config'
 import express from 'express'
@@ -24,6 +25,8 @@ if (HOST === undefined) {
   throw new Error('Environment variable HOST not defined');
 }
 
+const CORS_ORIGINS = process.env.CORS_ORIGINS || false
+
 const PASSWORD_HASH = process.env.PASSWORD_HASH
 if (PASSWORD_HASH === undefined) {
   throw new Error('Environment variable PASSWORD_HASH not defined');
@@ -40,6 +43,7 @@ process.on('SIGTERM', () => process.exit())
 const app = express()
 
 app.use(morgan('combined'))
+app.use(cors({ origin: CORS_ORIGINS }))
 app.use(express.json())
 
 const getTokenFrom = req => {
