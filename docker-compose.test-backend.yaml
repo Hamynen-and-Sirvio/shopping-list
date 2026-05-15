@@ -1,8 +1,6 @@
 services:
-  database:
+  test-database:
     image: postgres:17-alpine
-    volumes:
-      - database:/var/lib/postgresql/data
     environment:
       PGUSER: postgres
       POSTGRES_PASSWORD: postgres
@@ -11,40 +9,27 @@ services:
       start_period: 30s
       start_interval: 1s
 
-  backend:
+  test-backend:
     image: typic-lists-backend
     build:
       context: backend
       dockerfile: dev.Dockerfile
     command: /bin/sh -c 'npx prisma db push && npx node index.ts'
+    ports:
+      - 127.0.0.1:3000:3000
     volumes:
       - ./backend:/app
-      - node_modules_backend:/app/node_modules
+      - node_modules_test_backend:/app/node_modules
     environment:
-      DATABASE_URL: postgres://postgres:postgres@database
+      DATABASE_URL: postgres://postgres:postgres@test-database
       PORT: 3000
       HOST: 0.0.0.0
       PASSWORD_HASH: aecd9cd7f5ca210c4dd6a265c4844b4d:a29854c8bdc20fd9bca1884fb6f8c4b5f3dde7fd81884afdc383946f873e28a32b77fff6af3bcba72e69c6a33d5936ecdb78f47a53cc66b83c1439ba96bfe887
       SECRET: secret
     pull_policy: never
     depends_on:
-      database:
+      test-database:
         condition: service_healthy
 
-  frontend:
-    image: typic-lists-frontend
-    build:
-      context: frontend
-      dockerfile: dev.Dockerfile
-    command: npx vite --host 0.0.0.0
-    ports:
-      - 127.0.0.1:5173:5173
-    volumes:
-      - ./frontend:/app
-      - node_modules_frontend:/app/node_modules
-    pull_policy: never
-
 volumes:
-  node_modules_backend:
-  node_modules_frontend:
-  database:
+  node_modules_test_backend:
