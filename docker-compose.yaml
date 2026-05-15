@@ -16,7 +16,7 @@ services:
     build:
       context: backend
       dockerfile: dev.Dockerfile
-    command: /bin/sh -c 'npx prisma db push && npx node index.ts'
+    command: /bin/sh -c 'npx prisma db push && npx node src/index.ts'
     volumes:
       - ./backend:/app
       - node_modules_backend:/app/node_modules

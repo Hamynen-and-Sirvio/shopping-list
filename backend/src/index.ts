@@ -5,7 +5,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
-import { prisma } from './lib/prisma.ts'
+import { prisma } from '../lib/prisma.ts'
 
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5

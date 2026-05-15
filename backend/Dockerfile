@@ -12,4 +12,4 @@ COPY . .
 
 RUN npx prisma generate
 
-CMD ["node", "index.ts"]
+CMD ["node", "src/index.ts"]
