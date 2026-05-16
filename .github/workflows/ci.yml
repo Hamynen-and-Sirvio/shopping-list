@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [main]
+    paths: ['backend/**', '.github/workflows/**']
 
 jobs:
   deployment_pipeline:
