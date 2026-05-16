@@ -40,6 +40,8 @@ jobs:
           tags: >
             ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:${{ github.sha }},
             ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
