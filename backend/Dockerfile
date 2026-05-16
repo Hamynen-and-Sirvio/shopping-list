@@ -23,4 +23,7 @@ COPY . .
 COPY --from=build-stage /build/node_modules/ node_modules/
 COPY --from=build-stage /build/generated/ generated/
 
+RUN adduser -D appuser
+USER appuser
+
 CMD ["node", "src/index.ts"]
