@@ -3,9 +3,11 @@ import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
 import Login from './layout/Login/Login'
+import Loading from './components/Loading/Loading'
 import './App.css'
 
 const App = ({ entryService, tokenService, userService }) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [entries, setEntries] = useState([])
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
@@ -23,9 +25,16 @@ const App = ({ entryService, tokenService, userService }) => {
   }
 
   useEffect(() => {
-    if (token) {
-      reloadEntries()
+    const load = async () => {
+      if (!token) return
+      try {
+        setIsLoading(true)
+        await reloadEntries()
+      } finally {
+        setIsLoading(false)
+      }
     }
+    load()
   }, [token])
 
   if (token) {
@@ -36,6 +45,7 @@ const App = ({ entryService, tokenService, userService }) => {
           checkedEntries={checkedEntries}
           reloadEntries={reloadEntries}
         />
+        {isLoading && <Loading />}
         <Content
           entryService={entryService}
           entries={entries}
