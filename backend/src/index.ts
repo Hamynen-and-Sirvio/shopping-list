@@ -5,7 +5,7 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
-import { prisma } from '../lib/prisma.ts'
+import { Prisma, prisma } from '../lib/prisma.ts'
 
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
@@ -141,16 +141,19 @@ app.get('/entries', async (req, res) => {
 app.post('/entries', async (req, res) => {
   const entry = req.body
 
-  const addedEntry = await prisma.$transaction(async (tx) => {
-    const entryCount = await tx.entries.count()
+  const addedEntry = await prisma.$transaction(
+    async (tx) => {
+      const entryCount = await tx.entries.count()
 
-    return tx.entries.create({
-      data: {
-        position: entryCount + 1,
-        content: entry.content,
-      },
-    })
-  })
+      return tx.entries.create({
+        data: {
+          position: entryCount + 1,
+          content: entry.content,
+        },
+      })
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+  )
 
   res.status(201).json(addedEntry)
 })
@@ -158,20 +161,23 @@ app.post('/entries', async (req, res) => {
 app.delete('/entries/:id', async (req, res) => {
   const id = parseInt(req.params.id)
 
-  const deletedEntry = await prisma.$transaction(async (tx) => {
-    const deletedEntry = await tx.entries.delete({
-      where: {
-        id: id,
-      },
-    })
+  const deletedEntry = await prisma.$transaction(
+    async (tx) => {
+      const deletedEntry = await tx.entries.delete({
+        where: {
+          id: id,
+        },
+      })
 
-    await tx.entries.updateMany({
-      where: { position: { gt: deletedEntry.position } },
-      data: { position: { decrement: 1 } },
-    })
+      await tx.entries.updateMany({
+        where: { position: { gt: deletedEntry.position } },
+        data: { position: { decrement: 1 } },
+      })
 
-    return deletedEntry
-  })
+      return deletedEntry
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+  )
 
   res.status(200).json(deletedEntry)
 })
@@ -193,49 +199,52 @@ app.patch('/entries/:id', async (req, res) => {
   }
 
   try {
-    const editedEntry = await prisma.$transaction(async (tx) => {
-      const oldEntry = await tx.entries.findUnique({ where: { id: id } })
-      if (!oldEntry) {
-        res.status(404).send('Entry not found')
-        throw ''
-      }
-
-      if (editedFields.hasOwnProperty('position')) {
-        const numOfEntries = await tx.entries.count()
-        if (editedFields.position > numOfEntries) {
-          res.status(400).send(`Position should be <= ${numOfEntries}`)
+    const editedEntry = await prisma.$transaction(
+      async (tx) => {
+        const oldEntry = await tx.entries.findUnique({ where: { id: id } })
+        if (!oldEntry) {
+          res.status(404).send('Entry not found')
           throw ''
         }
 
-        const oldPos = oldEntry.position
-        if (editedFields.position > oldPos) {
-          await tx.entries.updateMany({
-            where: {
-              AND: [
-                { position: { gt: oldPos } },
-                { position: { lte: editedFields.position } },
-              ],
-            },
-            data: { position: { decrement: 1 } },
-          })
-        } else {
-          await tx.entries.updateMany({
-            where: {
-              AND: [
-                { position: { gte: editedFields.position } },
-                { position: { lt: oldPos } },
-              ],
-            },
-            data: { position: { increment: 1 } },
-          })
-        }
-      }
+        if (editedFields.hasOwnProperty('position')) {
+          const numOfEntries = await tx.entries.count()
+          if (editedFields.position > numOfEntries) {
+            res.status(400).send(`Position should be <= ${numOfEntries}`)
+            throw ''
+          }
 
-      return tx.entries.update({
-        where: { id: id },
-        data: editedFields,
-      })
-    })
+          const oldPos = oldEntry.position
+          if (editedFields.position > oldPos) {
+            await tx.entries.updateMany({
+              where: {
+                AND: [
+                  { position: { gt: oldPos } },
+                  { position: { lte: editedFields.position } },
+                ],
+              },
+              data: { position: { decrement: 1 } },
+            })
+          } else {
+            await tx.entries.updateMany({
+              where: {
+                AND: [
+                  { position: { gte: editedFields.position } },
+                  { position: { lt: oldPos } },
+                ],
+              },
+              data: { position: { increment: 1 } },
+            })
+          }
+        }
+
+        return tx.entries.update({
+          where: { id: id },
+          data: editedFields,
+        })
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    )
 
     res.json(editedEntry)
   } catch (error) {
