@@ -20,6 +20,7 @@ services:
     volumes:
       - ./backend:/app
       - node_modules_test_backend:/app/node_modules
+      - test_prisma_generated:/app/generated
     environment:
       DATABASE_URL: postgres://postgres:postgres@test-database
       PORT: 3000
@@ -33,3 +34,4 @@ services:
 
 volumes:
   node_modules_test_backend:
+  test_prisma_generated:
