@@ -121,9 +121,8 @@ app.post('/login', async (req, res) => {
       return
     }
 
-    const password = Uint8Array.from(Buffer.from(req.body.password, 'base64').toString('binary'), c => c.charCodeAt(0))
     const [salt, key] = PASSWORD_HASH.split(':')
-    const hash = crypto.scryptSync(password, salt, 64).toString('hex')
+    const hash = crypto.scryptSync(req.body.password, salt, 64).toString('hex')
     if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
       try {
         await limiterConsecutiveFailsByIp.consume(ipAddr)
