@@ -11,6 +11,13 @@ services:
       start_period: 30s
       start_interval: 1s
 
+  limiter-data-store:
+    image: mongo:8
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand(\"ping\")'"]
+      start_period: 30s
+      start_interval: 1s
+
   backend:
     image: typic-lists-backend
     build:
@@ -23,6 +30,8 @@ services:
       - prisma_generated:/app/generated
     environment:
       DATABASE_URL: postgres://postgres:postgres@database
+      LIMITER_DB_URL: mongodb://limiter-data-store
+      LIMITER_DB_NAME: limiter-db
       PORT: 3000
       HOST: 0.0.0.0
       PASSWORD_HASH: aecd9cd7f5ca210c4dd6a265c4844b4d:a29854c8bdc20fd9bca1884fb6f8c4b5f3dde7fd81884afdc383946f873e28a32b77fff6af3bcba72e69c6a33d5936ecdb78f47a53cc66b83c1439ba96bfe887
@@ -30,6 +39,8 @@ services:
     pull_policy: never
     depends_on:
       database:
+        condition: service_healthy
+      limiter-data-store:
         condition: service_healthy
 
   frontend:

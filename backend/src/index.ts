@@ -3,8 +3,15 @@ import crypto from 'crypto'
 import 'dotenv/config'
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
-import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible'
+
+import {
+  RateLimiterMemory,
+  RateLimiterMongo,
+  RateLimiterRes,
+} from 'rate-limiter-flexible'
+
 import { Prisma, prisma } from '../lib/prisma.ts'
 
 
@@ -13,6 +20,16 @@ const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 const DATABASE_URL = process.env.DATABASE_URL
 if (DATABASE_URL === undefined) {
   throw new Error('Environment variable DATABASE_URL not defined');
+}
+
+const LIMITER_DB_URL = process.env.LIMITER_DB_URL
+if (LIMITER_DB_URL === undefined) {
+  throw new Error('Environment variable LIMITER_DB_URL not defined');
+}
+
+const LIMITER_DB_NAME = process.env.LIMITER_DB_NAME
+if (LIMITER_DB_NAME === undefined) {
+  throw new Error('Environment variable LIMITER_DB_NAME not defined');
 }
 
 if (process.env.PORT === undefined) {
@@ -54,10 +71,19 @@ const getTokenFrom = req => {
   return null
 }
 
-const limiterConsecutiveFailsByIp = new RateLimiterMemory({
+const insuranceLimiter = new RateLimiterMemory({
   points: MAX_CONSECUTIVE_FAILS_BY_IP,
   duration: 60 * 60 * 3,
   blockDuration: 60 * 15,
+})
+
+const limiterConsecutiveFailsByIp = new RateLimiterMongo({
+  storeClient: MongoClient.connect(LIMITER_DB_URL),
+  dbName: LIMITER_DB_NAME,
+  points: MAX_CONSECUTIVE_FAILS_BY_IP,
+  duration: 60 * 60 * 3,
+  blockDuration: 60 * 15,
+  insuranceLimiter: insuranceLimiter,
 })
 
 app.get('/', (req, res) => {
