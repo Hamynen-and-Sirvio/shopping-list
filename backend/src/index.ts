@@ -14,6 +14,8 @@ import {
 
 import { Prisma, prisma } from '../lib/prisma.ts'
 
+import EntryRepository from './EntryRepository.ts'
+
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
@@ -56,6 +58,8 @@ if (SECRET === undefined) {
 
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
+
+const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
@@ -159,7 +163,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/entries', async (req, res) => {
-  const entries = await prisma.entries.findMany({ orderBy: { position: 'asc' } })
+  const entries = await entryRepository.fetchAll()
   res.json(entries)
 })
 
