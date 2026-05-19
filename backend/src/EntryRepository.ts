@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma/client.ts'
+import { Prisma, PrismaClient } from '../generated/prisma/client.ts'
 
 export default class EntryRepository {
   #prismaClient: PrismaClient
@@ -13,5 +13,23 @@ export default class EntryRepository {
     })
 
     return fetchedEntries
+  }
+
+  async create(entry: { content: string }) {
+    const addedEntry = await this.#prismaClient.$transaction(
+      async (tx) => {
+        const entryCount = await tx.entries.count()
+
+        return tx.entries.create({
+          data: {
+            position: entryCount + 1,
+            content: entry.content,
+          },
+        })
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    )
+
+    return addedEntry
   }
 }

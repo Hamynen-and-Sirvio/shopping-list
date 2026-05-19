@@ -170,19 +170,7 @@ app.get('/entries', async (req, res) => {
 app.post('/entries', async (req, res) => {
   const entry = req.body
 
-  const addedEntry = await prisma.$transaction(
-    async (tx) => {
-      const entryCount = await tx.entries.count()
-
-      return tx.entries.create({
-        data: {
-          position: entryCount + 1,
-          content: entry.content,
-        },
-      })
-    },
-    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-  )
+  const addedEntry = await entryRepository.create(entry)
 
   res.status(201).json(addedEntry)
 })
