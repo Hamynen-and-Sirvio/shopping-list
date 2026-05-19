@@ -11,6 +11,16 @@ import {
 const API_URL = 'http://localhost:3000'
 const PASSWORD = 'password'
 
+beforeAll(async () => {
+  for (let i = 0; i < 50; i++) {
+    try {
+      await fetch(API_URL)
+      break
+    } catch {}
+    await new Promise(r => setTimeout(r, 100))
+  }
+})
+
 describe('Login', () => {
   test('can log in', async () => {
     const loginResponse = await login(API_URL, PASSWORD)
