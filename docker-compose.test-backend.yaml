@@ -5,14 +5,14 @@ services:
       PGUSER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d postgres"]
+      test: pg_isready -d postgres
       start_period: 30s
       start_interval: 1s
 
   test-limiter-data-store:
     image: mongo:8
     healthcheck:
-      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand(\"ping\")'"]
+      test: mongosh --eval 'db.runCommand("ping")'
       start_period: 30s
       start_interval: 1s
 
