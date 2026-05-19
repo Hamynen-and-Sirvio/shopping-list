@@ -21,7 +21,7 @@ services:
     build:
       context: backend
       dockerfile: dev.Dockerfile
-    command: /bin/sh -c 'npx prisma db push && npx node src/index.ts'
+    command: /bin/sh -c 'npx prisma db push && npx node --watch src/index.ts'
     ports:
       - 127.0.0.1:3000:3000
     volumes:
