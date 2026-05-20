@@ -54,19 +54,55 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
   })
 
   entriesRouter.patch('/:id', async (req, res) => {
-    const id = parseInt(req.params.id)
-    const editedFields = req.body
-
-    if (!editedFields.hasOwnProperty('content') &&
-        !editedFields.hasOwnProperty('position') &&
-        !editedFields.hasOwnProperty('checked')) {
-      res.status(400).send('Should edit at least one of the fields')
+    if (req.params.id.length > 6 || !/^[1-9]\d*$/.test(req.params.id)) {
+      res.status(400).send('Invalid ID')
       return
     }
 
-    if (editedFields.hasOwnProperty('position') && editedFields.position < 1) {
-        res.status(400).send('Position should be >= 1')
+    const id = parseInt(req.params.id)
+
+    if (typeof req.body !== 'object') {
+      res.status(400).send('Request body should be a JSON object')
+      return
+    }
+
+    const editedFields: any = {}
+
+    if (req.body.hasOwnProperty('content')) {
+      if (typeof req.body.content !== 'string') {
+        res.status(400).send('Content should be string')
         return
+      }
+
+      if (req.body.content.length < 1 || req.body.content.length > 1000) {
+        res.status(400).send('Content should be 1-1000 characters long')
+        return
+      }
+
+      editedFields.content = req.body.content
+    }
+
+    if (req.body.hasOwnProperty('position')) {
+      if (!Number.isInteger(req.body.position) || req.body.position < 1) {
+        res.status(400).send('Position should be a positive integer')
+        return
+      }
+
+      editedFields.position = req.body.position
+    }
+
+    if (req.body.hasOwnProperty('checked')) {
+      if (typeof req.body.checked !== 'boolean') {
+        res.status(400).send('"Checked" field should have a boolean value')
+        return
+      }
+
+      editedFields.checked = req.body.checked
+    }
+
+    if (Object.keys(editedFields).length === 0) {
+      res.status(400).send('Should edit at least one of the fields')
+      return
     }
 
     try {
