@@ -54,4 +54,53 @@ export default class EntryRepository {
 
     return deletedEntry
   }
+
+  async update(id: number, editedFields) {
+    const editedEntry = await this.#prismaClient.$transaction(
+      async (tx) => {
+        const oldEntry = await tx.entries.findUnique({ where: { id: id } })
+        if (!oldEntry) {
+          return null
+        }
+
+        if (editedFields.hasOwnProperty('position')) {
+          const numOfEntries = await tx.entries.count()
+          if (editedFields.position > numOfEntries) {
+            throw numOfEntries
+          }
+
+          const oldPos = oldEntry.position
+          if (editedFields.position > oldPos) {
+            await tx.entries.updateMany({
+              where: {
+                AND: [
+                  { position: { gt: oldPos } },
+                  { position: { lte: editedFields.position } },
+                ],
+              },
+              data: { position: { decrement: 1 } },
+            })
+          } else {
+            await tx.entries.updateMany({
+              where: {
+                AND: [
+                  { position: { gte: editedFields.position } },
+                  { position: { lt: oldPos } },
+                ],
+              },
+              data: { position: { increment: 1 } },
+            })
+          }
+        }
+
+        return tx.entries.update({
+          where: { id: id },
+          data: editedFields,
+        })
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    )
+
+    return editedEntry
+  }
 }

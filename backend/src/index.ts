@@ -12,7 +12,7 @@ import {
   RateLimiterRes,
 } from 'rate-limiter-flexible'
 
-import { Prisma, prisma } from '../lib/prisma.ts'
+import { prisma } from '../lib/prisma.ts'
 
 import EntryRepository from './EntryRepository.ts'
 
@@ -200,56 +200,18 @@ app.patch('/entries/:id', async (req, res) => {
   }
 
   try {
-    const editedEntry = await prisma.$transaction(
-      async (tx) => {
-        const oldEntry = await tx.entries.findUnique({ where: { id: id } })
-        if (!oldEntry) {
-          res.status(404).send('Entry not found')
-          throw ''
-        }
+    const editedEntry = await entryRepository.update(id, editedFields)
 
-        if (editedFields.hasOwnProperty('position')) {
-          const numOfEntries = await tx.entries.count()
-          if (editedFields.position > numOfEntries) {
-            res.status(400).send(`Position should be <= ${numOfEntries}`)
-            throw ''
-          }
-
-          const oldPos = oldEntry.position
-          if (editedFields.position > oldPos) {
-            await tx.entries.updateMany({
-              where: {
-                AND: [
-                  { position: { gt: oldPos } },
-                  { position: { lte: editedFields.position } },
-                ],
-              },
-              data: { position: { decrement: 1 } },
-            })
-          } else {
-            await tx.entries.updateMany({
-              where: {
-                AND: [
-                  { position: { gte: editedFields.position } },
-                  { position: { lt: oldPos } },
-                ],
-              },
-              data: { position: { increment: 1 } },
-            })
-          }
-        }
-
-        return tx.entries.update({
-          where: { id: id },
-          data: editedFields,
-        })
-      },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    )
+    if (editedEntry === null) {
+      res.status(404).send('Entry not found')
+      return
+    }
 
     res.json(editedEntry)
   } catch (error) {
-    if (error !== '') {
+    if (typeof error === 'number') {
+      res.status(400).send(`Position should be <= ${error}`)
+    } else {
       throw error
     }
   }
