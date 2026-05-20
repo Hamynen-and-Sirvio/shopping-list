@@ -2,12 +2,7 @@ import cors from 'cors';
 import express from 'express'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
-
-import {
-  RateLimiterMemory,
-  RateLimiterMongo,
-} from 'rate-limiter-flexible'
-
+import { RateLimiterMemory, RateLimiterMongo } from 'rate-limiter-flexible'
 import { prisma } from '../lib/prisma.ts'
 
 import * as config from './config.ts'
