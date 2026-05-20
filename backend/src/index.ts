@@ -1,21 +1,19 @@
 import cors from 'cors';
-import crypto from 'crypto'
 import 'dotenv/config'
 import express from 'express'
-import jwt from 'jsonwebtoken'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
 
 import {
   RateLimiterMemory,
   RateLimiterMongo,
-  RateLimiterRes,
 } from 'rate-limiter-flexible'
 
 import { prisma } from '../lib/prisma.ts'
 
 import EntryRepository from './EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
+import { createLoginRouter, isLoggedIn } from './routers/login.ts'
 
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
@@ -68,14 +66,6 @@ app.use(morgan('combined'))
 app.use(cors({ origin: CORS_ORIGINS }))
 app.use(express.json())
 
-const getTokenFrom = req => {
-  const authorization = req.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 const insuranceLimiter = new RateLimiterMemory({
   points: MAX_CONSECUTIVE_FAILS_BY_IP,
   duration: 60 * 60 * 3,
@@ -95,67 +85,16 @@ app.get('/', (req, res) => {
   res.send('DO NOT USE ROOT PATH')
 })
 
-app.post('/login', async (req, res) => {
-  const ipAddr = req.ip
-  if (ipAddr === undefined) {
-    console.error('ERROR: IP address not set in the request')
-    res.status(500).send('Internal server error')
-    return
-  }
-
-  const rlResIp = await limiterConsecutiveFailsByIp.get(ipAddr)
-
-  if (rlResIp !== null && rlResIp.consumedPoints > MAX_CONSECUTIVE_FAILS_BY_IP) {
-    const retrySecs = Math.round(rlResIp.msBeforeNext / 1000) || 1
-    res.set('Retry-After', String(retrySecs))
-    res.status(429).send('Too many login attempts')
-    return
-  } else {
-    if (typeof req.body !== 'object') {
-      res.status(400).send('Request body should be JSON object')
-      return
-    }
-
-    if (typeof req.body.password !== 'string') {
-      res.status(400).send('Request body should contain "password" field of string type')
-      return
-    }
-
-    if (req.body.password.length < 5 || req.body.password.length > 50) {
-      res.status(400).send('Password should be 5-50 characters')
-      return
-    }
-
-    const [salt, key] = PASSWORD_HASH.split(':')
-    const hash = crypto.scryptSync(req.body.password, salt, 64).toString('hex')
-    if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
-      try {
-        await limiterConsecutiveFailsByIp.consume(ipAddr)
-        res.status(401).send('Incorrect password')
-        return
-      } catch (rlRejected) {
-        if (rlRejected instanceof RateLimiterRes) {
-          res.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000) || 1))
-          res.status(429).send('Too many login attempts')
-          return
-        } else {
-          throw rlRejected
-        }
-      }
-    }
-
-    if (rlResIp !== null && rlResIp.consumedPoints > 0) {
-      await limiterConsecutiveFailsByIp.delete(ipAddr)
-    }
-
-    res.json({ token: jwt.sign({}, SECRET) })
-  }
-})
+const loginRouter = createLoginRouter(
+  SECRET,
+  PASSWORD_HASH,
+  MAX_CONSECUTIVE_FAILS_BY_IP,
+  limiterConsecutiveFailsByIp,
+)
+app.use('/login', loginRouter)
 
 app.use((req, res, next) => {
-  try {
-    jwt.verify(getTokenFrom(req), SECRET)
-  } catch {
+  if (!isLoggedIn(req, SECRET)) {
     res.status(401).send('Not authorized to access this URL')
     return
   }
