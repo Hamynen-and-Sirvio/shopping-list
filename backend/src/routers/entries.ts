@@ -12,9 +12,25 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
   })
 
   entriesRouter.post('/', async (req, res) => {
+    if (typeof req.body !== 'object') {
+      res.status(400).send('Request body should be a JSON object')
+      return
+    }
+
     const entry = req.body
 
-    const addedEntry = await entryRepository.create(entry)
+    if (typeof entry.content !== 'string') {
+      res.status(400)
+        .send('Request body should contain "content" field of string type')
+      return
+    }
+
+    if (entry.content.length < 1 || entry.content.length > 1000) {
+      res.status(400).send('Content should be 1-1000 characters long')
+      return
+    }
+
+    const addedEntry = await entryRepository.create({ content: entry.content })
 
     res.status(201).json(addedEntry)
   })
