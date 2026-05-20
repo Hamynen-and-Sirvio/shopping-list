@@ -178,23 +178,7 @@ app.post('/entries', async (req, res) => {
 app.delete('/entries/:id', async (req, res) => {
   const id = parseInt(req.params.id)
 
-  const deletedEntry = await prisma.$transaction(
-    async (tx) => {
-      const deletedEntry = await tx.entries.delete({
-        where: {
-          id: id,
-        },
-      })
-
-      await tx.entries.updateMany({
-        where: { position: { gt: deletedEntry.position } },
-        data: { position: { decrement: 1 } },
-      })
-
-      return deletedEntry
-    },
-    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-  )
+  const deletedEntry = await entryRepository.delete(id)
 
   res.status(200).json(deletedEntry)
 })

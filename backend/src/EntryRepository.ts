@@ -32,4 +32,26 @@ export default class EntryRepository {
 
     return addedEntry
   }
+
+  async delete(id: number) {
+    const deletedEntry = await this.#prismaClient.$transaction(
+      async (tx) => {
+        const deletedEntry = await tx.entries.delete({
+          where: {
+            id: id,
+          },
+        })
+
+        await tx.entries.updateMany({
+          where: { position: { gt: deletedEntry.position } },
+          data: { position: { decrement: 1 } },
+        })
+
+        return deletedEntry
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    )
+
+    return deletedEntry
+  }
 }
