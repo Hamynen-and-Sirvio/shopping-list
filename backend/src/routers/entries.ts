@@ -36,9 +36,19 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
   })
 
   entriesRouter.delete('/:id', async (req, res) => {
+    if (req.params.id.length > 6 || !/^[1-9]\d*$/.test(req.params.id)) {
+      res.status(400).send('Invalid ID')
+      return
+    }
+
     const id = parseInt(req.params.id)
 
     const deletedEntry = await entryRepository.delete(id)
+
+    if (deletedEntry === null) {
+      res.status(404).send('Entry not found')
+      return
+    }
 
     res.status(200).json(deletedEntry)
   })

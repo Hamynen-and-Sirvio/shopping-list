@@ -36,11 +36,24 @@ export default class EntryRepository {
   async delete(id: number) {
     const deletedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
-        const deletedEntry = await tx.entries.delete({
-          where: {
-            id: id,
-          },
-        })
+        let deletedEntry: any = null
+
+        try {
+          deletedEntry = await tx.entries.delete({
+            where: {
+              id: id,
+            },
+          })
+        } catch (error) {
+          if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === 'P2025'
+          ) {
+            return null
+          }
+
+          throw error
+        }
 
         await tx.entries.updateMany({
           where: { position: { gt: deletedEntry.position } },
