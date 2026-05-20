@@ -39,10 +39,6 @@ const limiterConsecutiveFailsByIp = new RateLimiterMongo({
   insuranceLimiter: insuranceLimiter,
 })
 
-app.get('/', (req, res) => {
-  res.send('DO NOT USE ROOT PATH')
-})
-
 const loginRouter = createLoginRouter(
   config.SECRET,
   config.PASSWORD_HASH,
