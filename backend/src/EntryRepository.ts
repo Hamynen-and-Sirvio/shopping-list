@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '../generated/prisma/client.ts'
+import type { EntryUpdate } from './types.ts'
 
 export default class EntryRepository {
   #prismaClient: PrismaClient
@@ -68,7 +69,7 @@ export default class EntryRepository {
     return deletedEntry
   }
 
-  async update(id: number, editedFields) {
+  async update(id: number, editedFields: EntryUpdate) {
     const editedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
         const oldEntry = await tx.entries.findUnique({ where: { id: id } })
@@ -76,7 +77,7 @@ export default class EntryRepository {
           return null
         }
 
-        if (editedFields.hasOwnProperty('position')) {
+        if (editedFields.position !== undefined) {
           const numOfEntries = await tx.entries.count()
           if (editedFields.position > numOfEntries) {
             throw numOfEntries

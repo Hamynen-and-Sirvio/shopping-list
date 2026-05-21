@@ -6,7 +6,7 @@ import EntryRepository from '../EntryRepository.ts'
 export const createEntriesRouter = (entryRepository: EntryRepository) => {
   const entriesRouter = express.Router()
 
-  entriesRouter.get('/', async (req, res) => {
+  entriesRouter.get('/', async (_, res) => {
     const entries = await entryRepository.fetchAll()
     res.json(entries)
   })

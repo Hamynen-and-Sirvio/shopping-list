@@ -4,13 +4,14 @@ import express from 'express'
 import type { Request } from 'express'
 import jwt from 'jsonwebtoken'
 import { RateLimiterRes } from 'rate-limiter-flexible'
+import type { RateLimiterAbstract} from 'rate-limiter-flexible'
 
 
 export const createLoginRouter = (
   secret: string,
   passwordHash: string,
   maxConsecutiveFailsByIp: number,
-  limiterConsecutiveFailsByIp,
+  limiterConsecutiveFailsByIp: RateLimiterAbstract,
 ) => {
   const loginRouter = express.Router()
 
@@ -74,7 +75,7 @@ export const createLoginRouter = (
   return loginRouter
 }
 
-const getTokenFrom = req => {
+const getTokenFrom = (req: Request) => {
   const authorization = req.get('authorization')
   if (authorization && authorization.startsWith('Bearer ')) {
     return authorization.replace('Bearer ', '')
@@ -83,8 +84,13 @@ const getTokenFrom = req => {
 }
 
 export const isLoggedIn = (req: Request, secret: string) => {
+  const token = getTokenFrom(req)
+  if (!token) {
+    return false
+  }
+
   try {
-    jwt.verify(getTokenFrom(req), secret)
+    jwt.verify(token, secret)
   } catch {
     return false
   }
