@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.ts",
     "test": "vitest run",
-    "autotest": "vitest watch"
+    "autotest": "vitest watch",
+    "tsc": "tsc"
   },
   "author": "Ville Sirviö",
   "license": "MIT",
