@@ -6,7 +6,30 @@ on:
     paths: ['backend/**', '.github/workflows/**']
 
 jobs:
+  migration_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm clean-install
+        working-directory: backend
+
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
   deployment_pipeline:
+    needs: migration_pipeline
     runs-on: ubuntu-latest
 
     permissions:
