@@ -9,7 +9,7 @@ export default class EntryRepository {
   }
 
   async fetchAll() {
-    const fetchedEntries = await this.#prismaClient.entries.findMany({
+    const fetchedEntries = await this.#prismaClient.entry.findMany({
       orderBy: { position: 'asc' },
     })
 
@@ -19,9 +19,9 @@ export default class EntryRepository {
   async create(entry: { content: string }) {
     const addedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
-        const entryCount = await tx.entries.count()
+        const entryCount = await tx.entry.count()
 
-        return tx.entries.create({
+        return tx.entry.create({
           data: {
             position: entryCount + 1,
             content: entry.content,
@@ -40,7 +40,7 @@ export default class EntryRepository {
         let deletedEntry: any = null
 
         try {
-          deletedEntry = await tx.entries.delete({
+          deletedEntry = await tx.entry.delete({
             where: {
               id: id,
             },
@@ -56,7 +56,7 @@ export default class EntryRepository {
           throw error
         }
 
-        await tx.entries.updateMany({
+        await tx.entry.updateMany({
           where: { position: { gt: deletedEntry.position } },
           data: { position: { decrement: 1 } },
         })
@@ -72,20 +72,20 @@ export default class EntryRepository {
   async update(id: number, editedFields: EntryUpdate) {
     const editedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
-        const oldEntry = await tx.entries.findUnique({ where: { id: id } })
+        const oldEntry = await tx.entry.findUnique({ where: { id: id } })
         if (!oldEntry) {
           return null
         }
 
         if (editedFields.position !== undefined) {
-          const numOfEntries = await tx.entries.count()
+          const numOfEntries = await tx.entry.count()
           if (editedFields.position > numOfEntries) {
             throw numOfEntries
           }
 
           const oldPos = oldEntry.position
           if (editedFields.position > oldPos) {
-            await tx.entries.updateMany({
+            await tx.entry.updateMany({
               where: {
                 AND: [
                   { position: { gt: oldPos } },
@@ -95,7 +95,7 @@ export default class EntryRepository {
               data: { position: { decrement: 1 } },
             })
           } else {
-            await tx.entries.updateMany({
+            await tx.entry.updateMany({
               where: {
                 AND: [
                   { position: { gte: editedFields.position } },
@@ -107,7 +107,7 @@ export default class EntryRepository {
           }
         }
 
-        return tx.entries.update({
+        return tx.entry.update({
           where: { id: id },
           data: editedFields,
         })

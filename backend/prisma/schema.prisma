@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model entries {
+model Entry {
   id       Int     @id @default(autoincrement())
   position Int
   content  String
