@@ -18,14 +18,14 @@ export const LIMITER_DB_NAME = process.env['LIMITER_DB_NAME']
 if (process.env['PORT'] === undefined) {
   throw new Error('Environment variable PORT not defined');
 }
-export const PORT = parseInt(process.env['PORT'])
+export const PORT = process.env['PORT']
 
 if (process.env['HOST'] === undefined) {
   throw new Error('Environment variable HOST not defined');
 }
 export const HOST = process.env['HOST']
 
-export const CORS_ORIGINS = process.env['CORS_ORIGINS']?.split(',') || false
+export const CORS_ORIGINS = process.env['CORS_ORIGINS']?.split(',') ?? false
 
 if (process.env['PASSWORD_HASH'] === undefined) {
   throw new Error('Environment variable PASSWORD_HASH not defined');

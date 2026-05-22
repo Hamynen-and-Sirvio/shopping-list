@@ -59,6 +59,6 @@ app.use((req, res, next) => {
 const entriesRouter = createEntriesRouter(entryRepository)
 app.use('/entries', entriesRouter)
 
-app.listen(config.PORT, config.HOST, () => {
+app.listen(parseInt(config.PORT), config.HOST, () => {
   console.log(`Server running on 'http://${config.HOST}:${config.PORT}'`)
 })
