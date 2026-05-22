@@ -7,11 +7,7 @@ const Header = ({ entryService, checkedEntries, reloadEntries }) => {
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
 
     try {
-      await Promise.all(
-        checkedEntries.map(async (entryId) => {
-          await entryService.deleteEntry(entryId)
-        }),
-      )
+      await entryService.deleteEntries(checkedEntries)
       await reloadEntries()
     } catch (error) {
       console.error(error)

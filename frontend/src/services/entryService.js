@@ -19,17 +19,19 @@ export class EntryService {
     return await response.json()
   }
 
-  async deleteEntry(entryId) {
-    const response = await fetch(`${this.#apiUrl}/${entryId}`, {
+  async deleteEntries(entryIds) {
+    const response = await fetch(`${this.#apiUrl}`, {
       method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${this.#tokenService.fetchToken()}` },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.#tokenService.fetchToken()}`,
+      },
+      body: JSON.stringify({ ids: entryIds }),
     })
 
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`)
     }
-
-    return await response.json()
   }
 
   async checkEntry(entry) {
