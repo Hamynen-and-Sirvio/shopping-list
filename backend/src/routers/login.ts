@@ -47,6 +47,12 @@ export const createLoginRouter = (
       }
 
       const [salt, key] = passwordHash.split(':')
+      if (salt === undefined || key === undefined) {
+        console.error('ERROR: Invalid password hash')
+        res.status(500).send('Internal server error')
+        return
+      }
+
       const hash = crypto.scryptSync(req.body.password, salt, 64).toString('hex')
       if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
         try {

@@ -1,14 +1,11 @@
 {
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "target": "es2023",
     "noEmit": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "strict" : true,
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "allowImportingTsExtensions": true
   }
 }
