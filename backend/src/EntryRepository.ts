@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '../generated/prisma/client.ts'
 import type { Entry } from '../generated/prisma/client.ts'
 import type { EntryUpdate } from './types.ts'
+import ArgumentError from './errors/ArgumentError.ts'
 
 export default class EntryRepository {
   #prismaClient: PrismaClient
@@ -81,7 +82,11 @@ export default class EntryRepository {
         if (editedFields.position !== undefined) {
           const numOfEntries = await tx.entry.count()
           if (editedFields.position > numOfEntries) {
-            throw numOfEntries
+            throw new ArgumentError(
+              'position',
+              `<= ${String(numOfEntries)}`,
+              String(editedFields.position),
+            )
           }
 
           const oldPos = oldEntry.position

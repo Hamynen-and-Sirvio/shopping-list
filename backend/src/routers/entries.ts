@@ -2,6 +2,7 @@ import express from 'express'
 
 import EntryRepository from '../EntryRepository.ts'
 import type { EntryUpdate } from '../types.ts'
+import ArgumentError from '../errors/ArgumentError.ts'
 
 
 export const createEntriesRouter = (entryRepository: EntryRepository) => {
@@ -143,8 +144,8 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
 
       res.json(editedEntry)
     } catch (error) {
-      if (typeof error === 'number') {
-        res.status(400).send(`Position should be <= ${error}`)
+      if (error instanceof ArgumentError) {
+        res.status(400).send(`Position should be ${error.expectedValue}`)
       } else {
         throw error
       }
