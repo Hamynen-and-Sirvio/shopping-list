@@ -4,6 +4,7 @@ import { Entry } from '../generated/prisma/client.ts'
 import {
   createEntry,
   deleteEntry,
+  deleteManyEntries,
   editEntry,
   fetchEntries,
   login,
@@ -81,6 +82,22 @@ describe('Entries', () => {
     const fetchedEntries = await fetchEntries(API_URL, token)
 
     expect(fetchedEntries).not.toContainEqual(deletedEntry)
+  })
+
+  test('can be deleted multiple at a time', async () => {
+    const entry = { content: 'Something' }
+    const entry2 = { content: 'Something else' }
+
+    const createdEntry = await createEntry(API_URL, token, entry)
+    const createdEntry2 = await createEntry(API_URL, token, entry2)
+
+    const ids = [ createdEntry.id, createdEntry2.id ]
+    await deleteManyEntries(API_URL, token, ids)
+
+    const fetchedEntries = await fetchEntries(API_URL, token)
+
+    expect(fetchedEntries).not.toContainEqual(createdEntry)
+    expect(fetchedEntries).not.toContainEqual(createdEntry2)
   })
 
   test('can be edited', async () => {

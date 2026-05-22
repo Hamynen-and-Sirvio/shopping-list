@@ -54,6 +54,33 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
     res.status(200).json(deletedEntry)
   })
 
+  entriesRouter.delete('/', async (req, res) => {
+    if (typeof req.body !== 'object') {
+      res.status(400).send('Request body should be a JSON object')
+      return
+    }
+
+    if (!Array.isArray(req.body.ids)) {
+      res.status(400).send('Request body should contain "ids" field of array type')
+      return
+    }
+
+    const ids = req.body.ids
+
+    for (const id of ids) {
+      if (!Number.isInteger(id) || id < 1) {
+        res.status(400).send('At least one ID is invalid')
+        return
+      }
+    }
+
+    for (const id of ids) {
+      await entryRepository.delete(id)
+    }
+
+    res.status(204).end()
+  })
+
   entriesRouter.patch('/:id', async (req, res) => {
     if (req.params.id.length > 6 || !/^[1-9]\d*$/.test(req.params.id)) {
       res.status(400).send('Invalid ID')

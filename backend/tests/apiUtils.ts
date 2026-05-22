@@ -43,6 +43,17 @@ export const deleteEntry = async (apiUrl: string, token: string, id: number) => 
   return deletedEntry
 }
 
+export const deleteManyEntries = async (apiUrl: string, token: string, ids: number[]) => {
+  await fetch(`${apiUrl}/entries`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids }),
+  })
+}
+
 export const editEntry = async (
   apiUrl: string,
   token: string,
