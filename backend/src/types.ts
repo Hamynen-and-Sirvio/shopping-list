@@ -1,5 +1,4 @@
-export interface EntryUpdate {
-  content?: string
-  position?: number
-  checked?: boolean
-}
+import { Entry } from '../generated/prisma/client.ts'
+
+
+export type EntryUpdate = Partial<Omit<Entry, 'id'>>

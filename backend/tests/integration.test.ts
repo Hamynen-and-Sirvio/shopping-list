@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, test } from 'vitest'
+import { Entry } from '../generated/prisma/client.ts'
 
 import {
   createEntry,
@@ -60,7 +61,9 @@ describe('Entries', () => {
 
     const createdEntry = await createEntry(API_URL, token, entry)
     const fetchedEntries = await fetchEntries(API_URL, token)
-    const originalEntry = fetchedEntries.find(entry => entry.id === createdEntry.id)
+    const originalEntry = fetchedEntries.find((entry: Entry) =>
+      entry.id === createdEntry.id
+    )
 
     expect(originalEntry.position).toBe(fetchedEntries.length)
     expect(originalEntry).toStrictEqual(createdEntry)
@@ -95,7 +98,7 @@ describe('Entries', () => {
     expect(editedEntry).toStrictEqual({ ...createdEntry, ...editedFields })
 
     const fetchedEntries = await fetchEntries(API_URL, token)
-    const fetchedEntry = fetchedEntries.find(entry => entry.id === id)
+    const fetchedEntry = fetchedEntries.find((entry: Entry) => entry.id === id)
 
     expect(fetchedEntry).toStrictEqual({ ...createdEntry, ...editedFields })
   })

@@ -1,3 +1,6 @@
+import { EntryUpdate } from '../src/types.ts'
+
+
 export const login = async (apiUrl: string, password: string) => {
   const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
@@ -40,7 +43,12 @@ export const deleteEntry = async (apiUrl: string, token: string, id: number) => 
   return deletedEntry
 }
 
-export const editEntry = async (apiUrl: string, token: string, id: number, editedFields) => {
+export const editEntry = async (
+  apiUrl: string,
+  token: string,
+  id: number,
+  editedFields: EntryUpdate,
+) => {
   const response = await fetch(`${apiUrl}/entries/${id}`, {
     method: 'PATCH',
     headers: {
