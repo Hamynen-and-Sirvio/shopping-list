@@ -17,8 +17,9 @@ beforeAll(async () => {
     try {
       await fetch(API_URL)
       break
-    } catch {}
-    await new Promise(r => setTimeout(r, 100))
+    } catch {
+      await new Promise(r => setTimeout(r, 100))
+    }
   }
 })
 

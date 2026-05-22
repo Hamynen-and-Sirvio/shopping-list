@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '../generated/prisma/client.ts'
+import type { Entry } from '../generated/prisma/client.ts'
 import type { EntryUpdate } from './types.ts'
 
 export default class EntryRepository {
@@ -37,7 +38,7 @@ export default class EntryRepository {
   async delete(id: number) {
     const deletedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
-        let deletedEntry: any = null
+        let deletedEntry: Entry
 
         try {
           deletedEntry = await tx.entry.delete({

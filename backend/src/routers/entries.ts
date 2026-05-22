@@ -1,6 +1,7 @@
 import express from 'express'
 
 import EntryRepository from '../EntryRepository.ts'
+import type { EntryUpdate } from '../types.ts'
 
 
 export const createEntriesRouter = (entryRepository: EntryRepository) => {
@@ -66,9 +67,9 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
       return
     }
 
-    const editedFields: any = {}
+    const editedFields: EntryUpdate = {}
 
-    if (req.body.hasOwnProperty('content')) {
+    if (req.body.content !== undefined) {
       if (typeof req.body.content !== 'string') {
         res.status(400).send('Content should be string')
         return
@@ -82,7 +83,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
       editedFields.content = req.body.content
     }
 
-    if (req.body.hasOwnProperty('position')) {
+    if (req.body.position !== undefined) {
       if (!Number.isInteger(req.body.position) || req.body.position < 1) {
         res.status(400).send('Position should be a positive integer')
         return
@@ -91,7 +92,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
       editedFields.position = req.body.position
     }
 
-    if (req.body.hasOwnProperty('checked')) {
+    if (req.body.checked !== undefined) {
       if (typeof req.body.checked !== 'boolean') {
         res.status(400).send('"Checked" field should have a boolean value')
         return
