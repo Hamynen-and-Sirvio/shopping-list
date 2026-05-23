@@ -75,7 +75,7 @@ jobs:
           node src/index.ts &> backend.log & BACKEND_PID=$!
           npm test && TESTS_RESULT=success || TESTS_RESULT=failure
           kill $BACKEND_PID && wait $BACKEND_PID
-          echo && echo "Backend output:" && echo && cat backend.log
+          echo "### Backend output below ###" && cat backend.log
           [[ $TESTS_RESULT == success ]]
         working-directory: backend
         env:
