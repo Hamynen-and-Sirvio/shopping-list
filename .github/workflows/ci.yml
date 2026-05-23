@@ -64,8 +64,19 @@ jobs:
         run: npm run lint
         working-directory: backend
 
+      - name: Initialize test database
+        run: npx prisma db push
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost
+
       - name: Integration tests
-        run: npx prisma db push && node src/index.ts & npm test
+        run: |
+          node src/index.ts &> backend.log & BACKEND_PID=$!
+          npm test && TESTS_RESULT=success || TESTS_RESULT=failure
+          kill $BACKEND_PID && wait $BACKEND_PID
+          echo && echo "Backend output:" && echo && cat backend.log
+          [[ $TESTS_RESULT == success ]]
         working-directory: backend
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost
