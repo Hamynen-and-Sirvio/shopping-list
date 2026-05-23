@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken'
 import { RateLimiterRes } from 'rate-limiter-flexible'
 import type { RateLimiterAbstract} from 'rate-limiter-flexible'
 
+import { LoginPassword } from '../validation.ts'
+
 
 export const createLoginRouter = (
   secret: string,
@@ -19,7 +21,7 @@ export const createLoginRouter = (
     const ipAddr = req.ip
     if (ipAddr === undefined) {
       console.error('ERROR: IP address not set in the request')
-      res.status(500).send('Internal server error')
+      res.status(500).json({ error: 'Internal server error' })
       return
     }
 
@@ -28,41 +30,39 @@ export const createLoginRouter = (
     if (rlResIp !== null && rlResIp.consumedPoints > maxConsecutiveFailsByIp) {
       const retrySecs = Math.round(rlResIp.msBeforeNext / 1000) || 1
       res.set('Retry-After', String(retrySecs))
-      res.status(429).send('Too many login attempts')
+      res.status(429).json({ error: 'Too many login attempts' })
       return
     } else {
-      if (typeof req.body !== 'object') {
-        res.status(400).send('Request body should be JSON object')
-        return
-      }
+      const validatedBody = LoginPassword.safeParse(req.body)
 
-      if (typeof req.body.password !== 'string') {
-        res.status(400).send('Request body should contain "password" field of string type')
-        return
-      }
-
-      if (req.body.password.length < 5 || req.body.password.length > 50) {
-        res.status(400).send('Password should be 5-50 characters')
+      if (!validatedBody.success) {
+        res.status(400).json({
+          error: 'Invalid request body',
+          details: validatedBody.error.issues.map(issue => ({
+            field: ['body', ...issue.path].join('.'),
+            message: issue.message,
+          })),
+        })
         return
       }
 
       const [salt, key] = passwordHash.split(':')
       if (salt === undefined || key === undefined) {
         console.error('ERROR: Invalid password hash')
-        res.status(500).send('Internal server error')
+        res.status(500).json({ error: 'Internal server error' })
         return
       }
 
-      const hash = crypto.scryptSync(req.body.password, salt, 64).toString('hex')
+      const hash = crypto.scryptSync(validatedBody.data.password, salt, 64).toString('hex')
       if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
         try {
           await limiterConsecutiveFailsByIp.consume(ipAddr)
-          res.status(401).send('Incorrect password')
+          res.status(401).json({ error: 'Incorrect password' })
           return
         } catch (rlRejected) {
           if (rlRejected instanceof RateLimiterRes) {
             res.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000) || 1))
-            res.status(429).send('Too many login attempts')
+            res.status(429).json({ error: 'Too many login attempts' })
             return
           } else {
             throw rlRejected
@@ -83,7 +83,7 @@ export const createLoginRouter = (
 
 const getTokenFrom = (req: Request) => {
   const authorization = req.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
+  if (authorization?.startsWith('Bearer ')) {
     return authorization.replace('Bearer ', '')
   }
   return null

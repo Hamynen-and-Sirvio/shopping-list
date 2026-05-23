@@ -1,4 +1,5 @@
 import { EntryUpdate } from '../src/types.ts'
+import { Entries, Entry, LoginToken } from '../src/validation.ts'
 
 
 export const login = async (apiUrl: string, password: string) => {
@@ -8,7 +9,7 @@ export const login = async (apiUrl: string, password: string) => {
     body: JSON.stringify({ password: password }),
   })
 
-  const responseBody = await response.json()
+  const responseBody = LoginToken.parse(await response.json())
 
   return responseBody
 }
@@ -17,7 +18,7 @@ export const fetchEntries = async (apiUrl: string, token: string) => {
   const response = await fetch(`${apiUrl}/entries`, {
     headers: { 'Authorization': `Bearer ${token}` },
   })
-  const entries = await response.json()
+  const entries = Entries.parse(await response.json())
   return entries
 }
 
@@ -30,16 +31,16 @@ export const createEntry = async (apiUrl: string, token: string, newEntryData: {
     },
     body: JSON.stringify(newEntryData),
   })
-  const createdEntry = await response.json()
+  const createdEntry = Entry.parse(await response.json())
   return createdEntry
 }
 
 export const deleteEntry = async (apiUrl: string, token: string, id: number) => {
-  const response = await fetch(`${apiUrl}/entries/${id}`, {
+  const response = await fetch(`${apiUrl}/entries/${String(id)}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` },
   })
-  const deletedEntry = await response.json()
+  const deletedEntry = Entry.parse(await response.json())
   return deletedEntry
 }
 
@@ -60,7 +61,7 @@ export const editEntry = async (
   id: number,
   editedFields: EntryUpdate,
 ) => {
-  const response = await fetch(`${apiUrl}/entries/${id}`, {
+  const response = await fetch(`${apiUrl}/entries/${String(id)}`, {
     method: 'PATCH',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -68,6 +69,6 @@ export const editEntry = async (
     },
     body: JSON.stringify(editedFields),
   })
-  const editedEntry = await response.json()
+  const editedEntry = Entry.parse(await response.json())
   return editedEntry
 }

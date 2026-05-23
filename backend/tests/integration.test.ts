@@ -67,6 +67,7 @@ describe('Entries', () => {
       entry.id === createdEntry.id
     )
 
+    expect.assert.isDefined(originalEntry)
     expect(originalEntry.position).toBe(fetchedEntries.length)
     expect(originalEntry).toStrictEqual(createdEntry)
   })
