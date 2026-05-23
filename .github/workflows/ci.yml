@@ -6,7 +6,7 @@ on:
     paths: ['backend/**', '.github/workflows/**']
 
 jobs:
-  migration_pipeline:
+  preparation_pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +30,10 @@ jobs:
         run: npm clean-install
         working-directory: backend
 
+      - name: Tsc
+        run: npm run tsc
+        working-directory: backend
+
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
         working-directory: backend
@@ -37,7 +41,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   deployment_pipeline:
-    needs: migration_pipeline
+    needs: preparation_pipeline
     runs-on: ubuntu-latest
 
     permissions:
