@@ -9,6 +9,28 @@ jobs:
   preparation_pipeline:
     runs-on: ubuntu-latest
 
+    services:
+      test-database:
+        image: postgres:17-alpine
+        env:
+          PGUSER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 127.0.0.1:5432:5432
+        options: >-
+          --health-cmd "pg_isready -d postgres"
+          --health-start-period 30s
+          --health-start-interval 1s
+
+      test-limiter-data-store:
+        image: mongo:8
+        ports:
+          - 127.0.0.1:27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand(\"ping\")'"
+          --health-start-period 30s
+          --health-start-interval 1s
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -41,6 +63,18 @@ jobs:
       - name: ESLint
         run: npm run lint
         working-directory: backend
+
+      - name: Integration tests
+        run: npx prisma db push && node src/index.ts & npm test
+        working-directory: backend
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost
+          LIMITER_DB_URL: mongodb://localhost
+          LIMITER_DB_NAME: test-limiter-db
+          PORT: 3000
+          HOST: 127.0.0.1
+          PASSWORD_HASH: 27d3964aeb1e2b6e741889d3aa67a47f:fb1cc049dfa97f080f7282ee125f08d00a3293c4e25d72e8504f73411469cde28b884e372dec728e6dc383393269b83e7071636af3bae4773f4872aba6dd5b0d
+          SECRET: secret
 
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
