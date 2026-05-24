@@ -1,8 +1,8 @@
-import { randomBytes, scryptSync } from 'crypto'
+import { randomBytes, scryptSync } from 'node:crypto'
 
 const PASSWORD = 'password'
 
-const salt = randomBytes(16).toString('hex')
-const hash = scryptSync(PASSWORD, salt, 64).toString('hex')
+const salt = randomBytes(16)
+const hash = scryptSync(PASSWORD, salt, 64)
 
-console.log(`${salt}:${hash}`)
+console.log(`${salt.toString('hex')}:${hash.toString('hex')}`)

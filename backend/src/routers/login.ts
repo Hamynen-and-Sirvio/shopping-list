@@ -53,7 +53,9 @@ export const createLoginRouter = (
         return
       }
 
-      const hash = crypto.scryptSync(validatedBody.data.password, salt, 64).toString('hex')
+      const hash = crypto
+        .scryptSync(validatedBody.data.password, Buffer.from(salt, 'hex'), 64)
+        .toString('hex')
       if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
         try {
           await limiterConsecutiveFailsByIp.consume(ipAddr)
