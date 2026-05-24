@@ -126,14 +126,14 @@ jobs:
           context: "{{defaultContext}}:backend"
           push: true
           tags: >
-            ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:${{ github.sha }},
-            ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
+            ${{ secrets.BACKEND_IMAGE_URL }}:${{ github.sha }},
+            ${{ secrets.BACKEND_IMAGE_URL }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: typic-lists
+          service: ${{ secrets.CLOUD_RUN_SERVICE_NAME }}
           region: ${{ vars.GCP_REGION }}
-          image: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/typic-lists-backend/typic-lists-backend:latest
+          image: ${{ secrets.BACKEND_IMAGE_URL }}:latest
