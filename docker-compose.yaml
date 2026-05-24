@@ -19,7 +19,7 @@ services:
       start_interval: 1s
 
   backend:
-    image: typic-lists-backend
+    image: shopping-list-backend
     build:
       context: backend
       dockerfile: dev.Dockerfile
@@ -44,7 +44,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: typic-lists-frontend
+    image: shopping-list-frontend
     build:
       context: frontend
       dockerfile: dev.Dockerfile

@@ -17,7 +17,7 @@ services:
       start_interval: 1s
 
   test-backend:
-    image: typic-lists-backend
+    image: shopping-list-backend
     build:
       context: backend
       dockerfile: dev.Dockerfile
