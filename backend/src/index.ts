@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import type { ErrorRequestHandler } from 'express'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
 import { RateLimiterMemory, RateLimiterMongo } from 'rate-limiter-flexible'
@@ -53,7 +54,7 @@ app.use('/login', loginRouter)
 
 app.use((req, res, next) => {
   if (!isLoggedIn(req, config.SECRET)) {
-    res.status(401).send('Not authorized to access this URL')
+    res.status(401).json({ error: 'Not authorized to access this URL' })
     return
   }
 
@@ -62,6 +63,22 @@ app.use((req, res, next) => {
 
 const entriesRouter = createEntriesRouter(entryRepository)
 app.use('/entries', entriesRouter)
+
+app.all('{*splat}', (_, res) => {
+  res.status(404).json({ error: 'Resource not found' })
+})
+
+const errorHandler: ErrorRequestHandler = (err, _, res, next) => {
+  if (res.headersSent) {
+    next(err)
+    return
+  }
+  if (err instanceof Error) {
+    console.error(err.stack)
+  }
+  res.status(500).json({ error: 'Internal server error' })
+}
+app.use(errorHandler)
 
 app.listen(parseInt(config.PORT), config.HOST, () => {
   console.log(`Server running on 'http://${config.HOST}:${config.PORT}'`)
