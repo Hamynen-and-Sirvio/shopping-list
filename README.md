@@ -29,9 +29,7 @@ Then the app will be running at [http://localhost:5173](http://localhost:5173). 
 
 ## Running the backend in production
 
-1. Generate an scrypt hash and salt for the password you want to use for logging in (set the hash parameters to keylen=64, N=16384, r=8, p=1; the salt is recommended to be random and at least 16 bytes long). Then your value for the environment variable `PASSWORD_HASH` will be of the form `your_salt_in_hex_format:your_hash_in_hex_format`. For example, for the password `12345` and the salt `6d06f0352d9fb97abd8c0bb04de949d1` (which is already in the hex format) it should be
-
-       6d06f0352d9fb97abd8c0bb04de949d1:7503bb11ac76a4d7c8b85befbec76c71da80aae298f55a6e0ff041c2a55c2b4ac7b23cbbe18bbf27bd2905c0ac5cf8e40f859b7e3c5eb09a2e5ff48894a05074
+1. In `utils/generate_password_hash.mjs` set the constant `PASSWORD` to the password you want to use for logging in. Then run `node utils/generate_password_hash.mjs` to get its hash.
 
 2. Go to `backend/` directory
 
