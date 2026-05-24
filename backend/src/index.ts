@@ -1,4 +1,4 @@
-import cors from 'cors';
+import cors from 'cors'
 import express from 'express'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
@@ -9,7 +9,7 @@ import * as config from './config.ts'
 import EntryRepository from './EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter, isLoggedIn } from './routers/login.ts'
-
+import { limiter } from './middleware/rateLimiter.ts'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
@@ -20,6 +20,7 @@ const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
+app.use(limiter)
 app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
 app.use(express.json())
@@ -37,6 +38,7 @@ const limiterConsecutiveFailsByIp = new RateLimiterMongo({
   duration: 60 * 60 * 3,
   blockDuration: 60 * 15,
   insuranceLimiter: insuranceLimiter,
+  keyPrefix: 'limiterConsecutiveFailsByIp',
 })
 
 const loginRouter = createLoginRouter(
