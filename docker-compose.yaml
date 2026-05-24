@@ -13,6 +13,9 @@ services:
 
   limiter-data-store:
     image: mongo:8
+    volumes:
+      - mongo_db:/data/db
+      - mongo_configdb:/data/configdb
     healthcheck:
       test: mongosh --eval 'db.runCommand("ping")'
       start_period: 30s
@@ -61,3 +64,5 @@ volumes:
   prisma_generated:
   node_modules_frontend:
   database:
+  mongo_db:
+  mongo_configdb:

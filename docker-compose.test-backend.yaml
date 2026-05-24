@@ -1,6 +1,8 @@
 services:
   test-database:
     image: postgres:17-alpine
+    volumes:
+      - test_database:/var/lib/postgresql/data
     environment:
       PGUSER: postgres
       POSTGRES_PASSWORD: postgres
@@ -11,6 +13,9 @@ services:
 
   test-limiter-data-store:
     image: mongo:8
+    volumes:
+      - test_mongo_db:/data/db
+      - test_mongo_configdb:/data/configdb
     healthcheck:
       test: mongosh --eval 'db.runCommand("ping")'
       start_period: 30s
@@ -47,3 +52,6 @@ services:
 volumes:
   node_modules_test_backend:
   test_prisma_generated:
+  test_database:
+  test_mongo_db:
+  test_mongo_configdb:
