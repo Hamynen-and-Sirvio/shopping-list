@@ -20,7 +20,9 @@ const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
-app.use(limiter)
+if (config.RATE_LIMITER !== 'off') {
+  app.use(limiter)
+}
 app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
 app.use(express.json())

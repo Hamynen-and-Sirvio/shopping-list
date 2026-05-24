@@ -86,6 +86,7 @@ jobs:
           HOST: 127.0.0.1
           PASSWORD_HASH: 27d3964aeb1e2b6e741889d3aa67a47f:fb1cc049dfa97f080f7282ee125f08d00a3293c4e25d72e8504f73411469cde28b884e372dec728e6dc383393269b83e7071636af3bae4773f4872aba6dd5b0d
           SECRET: secret
+          RATE_LIMITER: off
 
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
@@ -124,7 +125,7 @@ jobs:
       - name: Build, tag and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:backend"
+          context: '{{defaultContext}}:backend'
           push: true
           tags: >
             ${{ secrets.BACKEND_IMAGE_URL }}:${{ github.sha }},
