@@ -41,10 +41,11 @@ Then the app will be running at [http://localhost:5173](http://localhost:5173). 
        LIMITER_DB_NAME=your_mongodb_database_name
        PORT=some_port_number
        HOST=0.0.0.0
+       CORS_ORIGINS=your_frontend_url
        PASSWORD_HASH=your_password_hash
        SECRET=a_good_secret_key_here
 
-    where `your_postgresql_database_url`, `your_mongodb_database_url`, `your_mongodb_database_name`, `some_port_number`, `your_password_hash`, and `a_good_secret_key_here` have been replaced with your own values (`HOST` can be also changed if necessary).
+    where `your_postgresql_database_url`, `your_mongodb_database_url`, `your_mongodb_database_name`, `some_port_number`, `your_frontend_url`, `your_password_hash`, and `a_good_secret_key_here` have been replaced with your own values (`HOST` can be also changed if necessary).
 
 4. Install dependencies with `npm ci`
 
