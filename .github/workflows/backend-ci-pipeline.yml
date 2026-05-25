@@ -130,8 +130,8 @@ jobs:
           tags: >
             ${{ secrets.BACKEND_IMAGE_URL }}:${{ github.sha }},
             ${{ secrets.BACKEND_IMAGE_URL }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ secrets.BACKEND_IMAGE_URL }}:latest
+          cache-to: type=inline
 
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v3
