@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import EntryItem from '../../components/EntryItem/EntryItem'
 import Modal from '../../components/Modal/Modal'
+import Loading from '../../components/Loading/Loading'
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
 
-const Content = ({ entryService, entries, reloadEntries }) => {
+const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
 
@@ -40,6 +41,8 @@ const Content = ({ entryService, entries, reloadEntries }) => {
     setCurrentEntry(null)
     setOpenModal(false)
   }
+
+  if (isLoading) return <Loading />
 
   return (
     <div className="content">
