@@ -1,6 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useServices } from '../contexts/ServiceContext.jsx'
 
-export const useEntries = (entryService, token) => {
+export const useEntries = (token) => {
+  const { entryService } = useServices()
+
   const queryClient = useQueryClient()
 
   const query = useQuery({

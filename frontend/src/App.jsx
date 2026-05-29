@@ -1,37 +1,21 @@
 import { useState } from 'react'
 import { useEntries } from './hooks/useEntries'
+import { useServices } from './contexts/ServiceContext.jsx'
 import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
 import Login from './layout/Login/Login'
 import './App.css'
 
-const App = ({ entryService, tokenService, userService }) => {
+const App = () => {
+  const { tokenService } = useServices()
+
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
-  const {
-    entries,
-    isLoading,
-    error,
-    addEntry,
-    editEntry,
-    deleteEntries,
-    checkEntry,
-    moveEntry,
-  } = useEntries(entryService, token)
-
-  const checkedEntries = entries
-    .filter((entry) => entry.checked)
-    .map((entry) => entry.id)
+  const { error } = useEntries(token)
 
   if (!token) {
-    return (
-      <Login
-        userService={userService}
-        tokenService={tokenService}
-        setToken={setToken}
-      />
-    )
+    return <Login setToken={setToken} />
   }
 
   if (error) {
@@ -40,15 +24,9 @@ const App = ({ entryService, tokenService, userService }) => {
 
   return (
     <div className="app-container">
-      <Header checkedEntries={checkedEntries} deleteEntries={deleteEntries} />
-      <Content
-        entries={entries}
-        editEntry={editEntry}
-        checkEntry={checkEntry}
-        moveEntry={moveEntry}
-        isLoading={isLoading}
-      />
-      <Footer addEntry={addEntry} />
+      <Header />
+      <Content />
+      <Footer />
     </div>
   )
 }

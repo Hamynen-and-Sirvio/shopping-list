@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useServices } from '../../contexts/ServiceContext.jsx'
 import './Login.css'
 
-const Login = ({ userService, tokenService, setToken }) => {
+const Login = ({ setToken }) => {
   const [passwordField, setPasswordField] = useState('')
+
+  const { userService, tokenService } = useServices()
 
   const logIn = async (event) => {
     event.preventDefault()

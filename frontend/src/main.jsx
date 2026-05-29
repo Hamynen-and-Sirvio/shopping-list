@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.jsx'
+import { ServiceProvider } from './contexts/ServiceContext.jsx'
 import { EntryService } from './services/entryService.js'
 import { TokenService } from './services/tokenService.js'
 import { UserService } from './services/userService.js'
@@ -16,11 +17,15 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App
-        entryService={entryService}
-        tokenService={tokenService}
-        userService={userService}
-      />
+      <ServiceProvider
+        services={{
+          entryService,
+          tokenService,
+          userService,
+        }}
+      >
+        <App />
+      </ServiceProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

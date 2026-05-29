@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEntries } from '../../hooks/useEntries'
 import EntryItem from '../../components/EntryItem/EntryItem'
 import Modal from '../../components/Modal/Modal'
 import Loading from '../../components/Loading/Loading'
@@ -7,9 +7,11 @@ import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
 
-const Content = ({ entries, editEntry, checkEntry, moveEntry, isLoading }) => {
+const Content = () => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
+
+  const { entries, moveEntry, isLoading } = useEntries()
 
   const handleDragEnd = (event) => {
     if (event.canceled) return
@@ -46,7 +48,6 @@ const Content = ({ entries, editEntry, checkEntry, moveEntry, isLoading }) => {
               key={entry.id}
               index={index}
               entry={entry}
-              checkEntry={checkEntry}
               handleOpenModal={handleOpenModal}
             />
           ))}
@@ -56,7 +57,6 @@ const Content = ({ entries, editEntry, checkEntry, moveEntry, isLoading }) => {
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
-        editEntry={editEntry}
       />
     </div>
   )

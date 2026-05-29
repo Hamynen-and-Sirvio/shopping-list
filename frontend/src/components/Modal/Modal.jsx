@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEntries } from '../../hooks/useEntries'
 import './Modal.css'
 
-const Modal = ({ openModal, handleCloseModal, entry, editEntry }) => {
+const Modal = ({ openModal, handleCloseModal, entry }) => {
   const [editField, setEditField] = useState('')
+
+  const { editEntry } = useEntries()
 
   useEffect(() => {
     if (entry) {

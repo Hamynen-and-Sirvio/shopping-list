@@ -1,7 +1,14 @@
+import { useEntries } from '../../hooks/useEntries'
 import { LuTrash } from 'react-icons/lu'
 import './Header.css'
 
-const Header = ({ checkedEntries, deleteEntries }) => {
+const Header = () => {
+  const { entries, deleteEntries } = useEntries()
+
+  const checkedEntries = entries
+    .filter((entry) => entry.checked)
+    .map((entry) => entry.id)
+
   const deleteCheckedEntries = (event) => {
     event.preventDefault()
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) {

@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useEntries } from '../../hooks/useEntries'
 import './Footer.css'
 
-const Footer = ({ addEntry }) => {
+const Footer = () => {
   const [newEntryField, setNewEntryField] = useState('')
+
+  const { addEntry } = useEntries()
 
   const handleAddEntry = (event) => {
     event.preventDefault()
