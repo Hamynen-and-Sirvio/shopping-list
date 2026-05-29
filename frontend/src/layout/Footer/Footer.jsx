@@ -1,34 +1,20 @@
 import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import './Footer.css'
 
-const Footer = ({ entryService }) => {
+const Footer = ({ addEntry }) => {
   const [newEntryField, setNewEntryField] = useState('')
 
-  const queryClient = useQueryClient()
-
-  const addEntryMutation = useMutation({
-    mutationFn: (content) => entryService.addEntry(content),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['entries'],
-      })
-
-      setNewEntryField('')
-    },
-  })
-
-  const addEntry = (event) => {
+  const handleAddEntry = (event) => {
     event.preventDefault()
     if (newEntryField.trim() === '') return
-    addEntryMutation.mutate(newEntryField.trim())
+    addEntry(newEntryField.trim())
+    setNewEntryField('')
   }
 
   return (
     <div className="footer">
       <div className="add-content-container">
-        <form onSubmit={addEntry}>
+        <form onSubmit={handleAddEntry}>
           <input
             value={newEntryField}
             onChange={(event) => setNewEntryField(event.target.value)}

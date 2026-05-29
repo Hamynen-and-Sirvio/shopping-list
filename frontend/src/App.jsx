@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useEntries } from './hooks/useEntries'
 import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
@@ -10,14 +10,15 @@ const App = ({ entryService, tokenService, userService }) => {
   const [token, setToken] = useState(tokenService.fetchToken() || '')
 
   const {
-    data: entries = [],
+    entries,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ['entries'],
-    queryFn: () => entryService.getEntries(),
-    enabled: !!token,
-  })
+    addEntry,
+    editEntry,
+    deleteEntries,
+    checkEntry,
+    moveEntry,
+  } = useEntries(entryService, token)
 
   const checkedEntries = entries
     .filter((entry) => entry.checked)
@@ -39,13 +40,15 @@ const App = ({ entryService, tokenService, userService }) => {
 
   return (
     <div className="app-container">
-      <Header entryService={entryService} checkedEntries={checkedEntries} />
+      <Header checkedEntries={checkedEntries} deleteEntries={deleteEntries} />
       <Content
-        entryService={entryService}
         entries={entries}
+        editEntry={editEntry}
+        checkEntry={checkEntry}
+        moveEntry={moveEntry}
         isLoading={isLoading}
       />
-      <Footer entryService={entryService} />
+      <Footer addEntry={addEntry} />
     </div>
   )
 }

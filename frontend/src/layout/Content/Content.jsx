@@ -7,21 +7,9 @@ import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
 
-const Content = ({ entryService, entries, isLoading }) => {
+const Content = ({ entries, editEntry, checkEntry, moveEntry, isLoading }) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
-
-  const queryClient = useQueryClient()
-
-  const moveEntryMutation = useMutation({
-    mutationFn: ({ entry, offset }) => entryService.moveEntry(entry, offset),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['entries'],
-      })
-    },
-  })
 
   const handleDragEnd = (event) => {
     if (event.canceled) return
@@ -32,10 +20,7 @@ const Content = ({ entryService, entries, isLoading }) => {
       const { initialIndex, index } = source
 
       if (initialIndex !== index) {
-        moveEntryMutation.mutate({
-          entry: entries[initialIndex],
-          offset: index - initialIndex,
-        })
+        moveEntry(entries[initialIndex], index - initialIndex)
       }
     }
   }
@@ -61,17 +46,17 @@ const Content = ({ entryService, entries, isLoading }) => {
               key={entry.id}
               index={index}
               entry={entry}
-              entryService={entryService}
+              checkEntry={checkEntry}
               handleOpenModal={handleOpenModal}
             />
           ))}
         </DragDropProvider>
       </div>
       <Modal
-        entryService={entryService}
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
+        editEntry={editEntry}
       />
     </div>
   )

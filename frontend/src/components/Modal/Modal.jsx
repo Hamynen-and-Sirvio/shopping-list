@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import './Modal.css'
 
-const Modal = ({ entryService, openModal, handleCloseModal, entry }) => {
+const Modal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   const [editField, setEditField] = useState('')
-
-  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (entry) {
@@ -13,24 +11,10 @@ const Modal = ({ entryService, openModal, handleCloseModal, entry }) => {
     }
   }, [entry])
 
-  const editEntryMutation = useMutation({
-    mutationFn: ({ entry, content }) => entryService.editEntry(entry, content),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['entries'],
-      })
-
-      handleCloseModal()
-    },
-  })
-
   const handleSave = (e) => {
     e.preventDefault()
-    editEntryMutation.mutate({
-      entry,
-      content: editField,
-    })
+    editEntry(entry, editField)
+    handleCloseModal()
   }
 
   if (!openModal || !entry) return null
