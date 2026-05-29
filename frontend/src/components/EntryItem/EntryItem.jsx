@@ -1,27 +1,28 @@
-import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CiCircleMore, CiStop1, CiSquareCheck } from 'react-icons/ci'
 import { useSortable } from '@dnd-kit/react/sortable'
 import './EntryItem.css'
 
-const EntryItem = ({
-  entry,
-  index,
-  entryService,
-  reloadEntries,
-  handleOpenModal,
-}) => {
+const EntryItem = ({ entry, index, entryService, handleOpenModal }) => {
+  const queryClient = useQueryClient()
+
   const { ref } = useSortable({
     id: entry.id,
     index: index,
   })
 
-  const handleCheck = async () => {
-    try {
-      await entryService.checkEntry(entry)
-      await reloadEntries()
-    } catch (error) {
-      console.error(error)
-    }
+  const checkEntryMutation = useMutation({
+    mutationFn: () => entryService.checkEntry(entry),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      })
+    },
+  })
+
+  const handleCheck = () => {
+    checkEntryMutation.mutate()
   }
 
   const handleModal = () => {

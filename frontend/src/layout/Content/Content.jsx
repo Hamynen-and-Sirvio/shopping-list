@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import EntryItem from '../../components/EntryItem/EntryItem'
 import Modal from '../../components/Modal/Modal'
 import Loading from '../../components/Loading/Loading'
@@ -6,11 +7,23 @@ import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
 
-const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
+const Content = ({ entryService, entries, isLoading }) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
 
-  const handleDragEnd = async (event) => {
+  const queryClient = useQueryClient()
+
+  const moveEntryMutation = useMutation({
+    mutationFn: ({ entry, offset }) => entryService.moveEntry(entry, offset),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      })
+    },
+  })
+
+  const handleDragEnd = (event) => {
     if (event.canceled) return
 
     const { source } = event.operation
@@ -19,15 +32,10 @@ const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
       const { initialIndex, index } = source
 
       if (initialIndex !== index) {
-        try {
-          await entryService.moveEntry(
-            entries[initialIndex],
-            index - initialIndex,
-          )
-          await reloadEntries()
-        } catch (error) {
-          console.error(error)
-        }
+        moveEntryMutation.mutate({
+          entry: entries[initialIndex],
+          offset: index - initialIndex,
+        })
       }
     }
   }
@@ -54,7 +62,6 @@ const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
               index={index}
               entry={entry}
               entryService={entryService}
-              reloadEntries={reloadEntries}
               handleOpenModal={handleOpenModal}
             />
           ))}
@@ -65,7 +72,6 @@ const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
-        reloadEntries={reloadEntries}
       />
     </div>
   )

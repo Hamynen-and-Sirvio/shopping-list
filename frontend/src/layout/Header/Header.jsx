@@ -1,17 +1,27 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { LuTrash } from 'react-icons/lu'
 import './Header.css'
 
-const Header = ({ entryService, checkedEntries, reloadEntries }) => {
-  const deleteCheckedEntries = async (event) => {
-    event.preventDefault()
-    if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
+const Header = ({ entryService, checkedEntries }) => {
+  const queryClient = useQueryClient()
 
-    try {
-      await entryService.deleteEntries(checkedEntries)
-      await reloadEntries()
-    } catch (error) {
-      console.error(error)
+  const deleteEntriesMutation = useMutation({
+    mutationFn: (entriesToDelete) =>
+      entryService.deleteEntries(entriesToDelete),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      })
+    },
+  })
+
+  const deleteCheckedEntries = (event) => {
+    event.preventDefault()
+    if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) {
+      return
     }
+    deleteEntriesMutation.mutate(checkedEntries)
   }
 
   return (

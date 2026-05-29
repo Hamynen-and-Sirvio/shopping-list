@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
@@ -6,54 +7,23 @@ import Login from './layout/Login/Login'
 import './App.css'
 
 const App = ({ entryService, tokenService, userService }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [entries, setEntries] = useState([])
   const [token, setToken] = useState(tokenService.fetchToken() || '')
+
+  const {
+    data: entries = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['entries'],
+    queryFn: () => entryService.getEntries(),
+    enabled: !!token,
+  })
 
   const checkedEntries = entries
     .filter((entry) => entry.checked)
     .map((entry) => entry.id)
 
-  const reloadEntries = async () => {
-    try {
-      const fetchedEntries = await entryService.getEntries()
-      setEntries(fetchedEntries)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    const load = async () => {
-      if (!token) return
-      try {
-        setIsLoading(true)
-        await reloadEntries()
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    load()
-  }, [token])
-
-  if (token) {
-    return (
-      <div className="app-container">
-        <Header
-          entryService={entryService}
-          checkedEntries={checkedEntries}
-          reloadEntries={reloadEntries}
-        />
-        <Content
-          entryService={entryService}
-          entries={entries}
-          reloadEntries={reloadEntries}
-          isLoading={isLoading}
-        />
-        <Footer entryService={entryService} reloadEntries={reloadEntries} />
-      </div>
-    )
-  } else {
+  if (!token) {
     return (
       <Login
         userService={userService}
@@ -62,6 +32,22 @@ const App = ({ entryService, tokenService, userService }) => {
       />
     )
   }
+
+  if (error) {
+    return <div>Error loading entries</div>
+  }
+
+  return (
+    <div className="app-container">
+      <Header entryService={entryService} checkedEntries={checkedEntries} />
+      <Content
+        entryService={entryService}
+        entries={entries}
+        isLoading={isLoading}
+      />
+      <Footer entryService={entryService} />
+    </div>
+  )
 }
 
 export default App
