@@ -1,19 +1,7 @@
 import { LuTrash } from 'react-icons/lu'
 import './Header.css'
 
-const Header = ({ entryService, checkedEntries, reloadEntries }) => {
-  const deleteCheckedEntries = async (event) => {
-    event.preventDefault()
-    if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
-
-    try {
-      await entryService.deleteEntries(checkedEntries)
-      await reloadEntries()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
+const Header = ({ deleteEntries, checkedEntries }) => {
   return (
     <div className="header">
       <div className="header-title">
@@ -26,7 +14,7 @@ const Header = ({ entryService, checkedEntries, reloadEntries }) => {
       <div className="header-buttons">
         <button
           className={`delete-button ${checkedEntries.length === 0 ? 'disabled' : ''}`}
-          onClick={deleteCheckedEntries}
+          onClick={deleteEntries}
           disabled={checkedEntries.length === 0}
         >
           <LuTrash size={18} />
