@@ -33,7 +33,7 @@ const Modal = ({
         </div>
         <div className="modal-edit-entry">
           <form onSubmit={handleSave}>
-            <label for="edit-field">Content</label>
+            <label htmlFor="edit-field">Content</label>
             <input
               type="text"
               className="edit-field"
