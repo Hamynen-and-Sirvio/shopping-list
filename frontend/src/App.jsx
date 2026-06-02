@@ -14,6 +14,15 @@ const App = ({ entryService, tokenService, userService }) => {
     .filter((entry) => entry.checked)
     .map((entry) => entry.id)
 
+  const addEntry = async (entry) => {
+    try {
+      await entryService.addEntry(entry)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const deleteEntries = async () => {
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
     try {
@@ -56,7 +65,7 @@ const App = ({ entryService, tokenService, userService }) => {
           reloadEntries={reloadEntries}
           isLoading={isLoading}
         />
-        <Footer entryService={entryService} reloadEntries={reloadEntries} />
+        <Footer addEntry={addEntry} />
       </div>
     )
   } else {

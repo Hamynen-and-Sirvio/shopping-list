@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import './Footer.css'
 
-const Footer = ({ entryService, reloadEntries }) => {
+const Footer = ({ addEntry }) => {
   const [newEntryField, setNewEntryField] = useState('')
 
-  const addEntry = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     if (newEntryField.trim() === '') return
     try {
-      await entryService.addEntry(newEntryField.trim())
+      addEntry(newEntryField.trim())
       setNewEntryField('')
-      await reloadEntries()
     } catch (error) {
       console.error(error)
     }
@@ -19,7 +18,7 @@ const Footer = ({ entryService, reloadEntries }) => {
   return (
     <div className="footer">
       <div className="add-content-container">
-        <form onSubmit={addEntry}>
+        <form onSubmit={handleSubmit}>
           <input
             value={newEntryField}
             onChange={(event) => setNewEntryField(event.target.value)}
