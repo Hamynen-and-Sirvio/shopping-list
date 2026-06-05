@@ -9,20 +9,12 @@ const EntryItem = ({
   entryService,
   reloadEntries,
   handleOpenModal,
+  checkEntry,
 }) => {
   const { ref } = useSortable({
     id: entry.id,
     index: index,
   })
-
-  const handleCheck = async () => {
-    try {
-      await entryService.checkEntry(entry)
-      await reloadEntries()
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const handleModal = () => {
     handleOpenModal(entry)
@@ -32,7 +24,7 @@ const EntryItem = ({
     <div className="entry-container" ref={ref}>
       <div
         className={`entry-text ${entry.checked ? 'checked' : ''}`}
-        onClick={handleCheck}
+        onClick={() => checkEntry(entry)}
       >
         <span className="checkbox-icon">
           {entry.checked ? <CiSquareCheck /> : <CiStop1 />}

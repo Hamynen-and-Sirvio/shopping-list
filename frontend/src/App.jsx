@@ -23,6 +23,15 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
+  const checkEntry = async (entry) => {
+    try {
+      await entryService.checkEntry(entry)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const deleteEntries = async () => {
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
     try {
@@ -64,6 +73,7 @@ const App = ({ entryService, tokenService, userService }) => {
           entries={entries}
           reloadEntries={reloadEntries}
           isLoading={isLoading}
+          checkEntry={checkEntry}
         />
         <Footer addEntry={addEntry} />
       </div>

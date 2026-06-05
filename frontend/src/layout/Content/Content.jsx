@@ -6,7 +6,13 @@ import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
 
-const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
+const Content = ({
+  entryService,
+  entries,
+  reloadEntries,
+  isLoading,
+  checkEntry,
+}) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
 
@@ -56,6 +62,7 @@ const Content = ({ entryService, entries, reloadEntries, isLoading }) => {
               entryService={entryService}
               reloadEntries={reloadEntries}
               handleOpenModal={handleOpenModal}
+              checkEntry={checkEntry}
             />
           ))}
         </DragDropProvider>
