@@ -59,8 +59,6 @@ const Content = ({
               key={entry.id}
               index={index}
               entry={entry}
-              entryService={entryService}
-              reloadEntries={reloadEntries}
               handleOpenModal={handleOpenModal}
               checkEntry={checkEntry}
             />
