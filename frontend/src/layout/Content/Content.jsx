@@ -11,6 +11,7 @@ const Content = ({
   entries,
   reloadEntries,
   isLoading,
+  moveEntry,
   checkEntry,
 }) => {
   const [openModal, setOpenModal] = useState(false)
@@ -25,15 +26,7 @@ const Content = ({
       const { initialIndex, index } = source
 
       if (initialIndex !== index) {
-        try {
-          await entryService.moveEntry(
-            entries[initialIndex],
-            index - initialIndex,
-          )
-          await reloadEntries()
-        } catch (error) {
-          console.error(error)
-        }
+        moveEntry(entries[initialIndex], index - initialIndex)
       }
     }
   }

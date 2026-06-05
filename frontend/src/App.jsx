@@ -42,6 +42,15 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
+  const moveEntry = async (entry, amount) => {
+    try {
+      await entryService.moveEntry(entry, amount)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const reloadEntries = async () => {
     try {
       const fetchedEntries = await entryService.getEntries()
@@ -73,6 +82,7 @@ const App = ({ entryService, tokenService, userService }) => {
           entries={entries}
           reloadEntries={reloadEntries}
           isLoading={isLoading}
+          moveEntry={moveEntry}
           checkEntry={checkEntry}
         />
         <Footer addEntry={addEntry} />
