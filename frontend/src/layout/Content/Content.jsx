@@ -11,6 +11,7 @@ const Content = ({
   entries,
   reloadEntries,
   isLoading,
+  editEntry,
   moveEntry,
   checkEntry,
 }) => {
@@ -64,6 +65,7 @@ const Content = ({
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
         reloadEntries={reloadEntries}
+        editEntry={editEntry}
       />
     </div>
   )

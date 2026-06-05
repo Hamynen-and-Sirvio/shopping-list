@@ -42,6 +42,15 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
+  const editEntry = async (entry, content) => {
+    try {
+      await entryService.editEntry(entry, content)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const moveEntry = async (entry, amount) => {
     try {
       await entryService.moveEntry(entry, amount)
@@ -82,6 +91,7 @@ const App = ({ entryService, tokenService, userService }) => {
           entries={entries}
           reloadEntries={reloadEntries}
           isLoading={isLoading}
+          editEntry={editEntry}
           moveEntry={moveEntry}
           checkEntry={checkEntry}
         />

@@ -7,6 +7,7 @@ const Modal = ({
   handleCloseModal,
   entry,
   reloadEntries,
+  editEntry,
 }) => {
   const [editField, setEditField] = useState('')
 
@@ -18,9 +19,8 @@ const Modal = ({
 
   const handleSave = async (e) => {
     e.preventDefault()
-    await entryService.editEntry(entry, editField)
+    editEntry(entry, editField)
     handleCloseModal()
-    reloadEntries()
   }
 
   if (!openModal || !entry) return null
