@@ -16,8 +16,8 @@ const App = ({ entryService, tokenService, userService }) => {
 
   const addEntry = async (entry) => {
     try {
-      await entryService.addEntry(entry)
-      await reloadEntries()
+      const addedEntry = await entryService.addEntry(entry)
+      setEntries((prevEntries) => [...prevEntries, addedEntry])
     } catch (error) {
       console.error(error)
     }
