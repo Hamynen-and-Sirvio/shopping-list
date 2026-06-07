@@ -68,7 +68,12 @@ const App = ({ entryService, tokenService, userService }) => {
   const moveEntry = async (entry, amount) => {
     try {
       const movedEntry = await entryService.moveEntry(entry, amount)
-      const sortedEntries = [...entries]
+      const sortedEntries = entries.map((entry) => {
+        if (entry.id === movedEntry.id) {
+          return movedEntry
+        }
+        return entry
+      })
       sortedEntrier.sort((a, b) => a.position - b.position)
       setEntries(sortedEntries)
     } catch (error) {
