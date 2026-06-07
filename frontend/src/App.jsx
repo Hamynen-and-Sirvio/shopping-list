@@ -67,8 +67,10 @@ const App = ({ entryService, tokenService, userService }) => {
 
   const moveEntry = async (entry, amount) => {
     try {
-      await entryService.moveEntry(entry, amount)
-      await reloadEntries()
+      const movedEntry = await entryService.moveEntry(entry, amount)
+      const sortedEntries = [...entries]
+      sortedEntrier.sort((a, b) => a.position - b.position)
+      setEntries(sortedEntries)
     } catch (error) {
       console.error(error)
     }
