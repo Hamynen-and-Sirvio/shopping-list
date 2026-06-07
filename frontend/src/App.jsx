@@ -51,8 +51,15 @@ const App = ({ entryService, tokenService, userService }) => {
 
   const editEntry = async (entry, content) => {
     try {
-      await entryService.editEntry(entry, content)
-      await reloadEntries()
+      const editedEntry = await entryService.editEntry(entry, content)
+      setEntries((prevEntries) =>
+        prevEntries.map((prevEntry) => {
+          if (prevEntry.id === entry.id) {
+            return { ...prevEntry, content: editedEntry.content }
+          }
+          return prevEntry
+        }),
+      )
     } catch (error) {
       console.error(error)
     }
