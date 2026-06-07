@@ -87,9 +87,7 @@ const App = ({ entryService, tokenService, userService }) => {
       <div className="app-container">
         <Header deleteEntries={deleteEntries} checkedEntries={checkedEntries} />
         <Content
-          entryService={entryService}
           entries={entries}
-          reloadEntries={reloadEntries}
           isLoading={isLoading}
           editEntry={editEntry}
           moveEntry={moveEntry}
