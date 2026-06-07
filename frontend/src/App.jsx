@@ -26,7 +26,14 @@ const App = ({ entryService, tokenService, userService }) => {
   const checkEntry = async (entry) => {
     try {
       await entryService.checkEntry(entry)
-      await reloadEntries()
+      setEntries((prevEntries) =>
+        prevEntries.map((prevEntry) => {
+          if (prevEntry.id === entry.id) {
+            return { ...prevEntry, checked: !prevEntry.checked }
+          }
+          return prevEntry
+        }),
+      )
     } catch (error) {
       console.error(error)
     }
