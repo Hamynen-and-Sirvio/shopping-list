@@ -23,9 +23,9 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
-  const checkEntry = async (entry) => {
+  const checkEntry = (entry) => {
     try {
-      await entryService.checkEntry(entry)
+      entryService.checkEntry(entry)
       setEntries((prevEntries) =>
         prevEntries.map((prevEntry) => {
           if (prevEntry.id === entry.id) {
