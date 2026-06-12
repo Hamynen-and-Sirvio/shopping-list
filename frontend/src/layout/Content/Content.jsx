@@ -34,8 +34,6 @@ const Content = ({ entries, isLoading, editEntry, moveEntry, checkEntry }) => {
     setOpenModal(false)
   }
 
-  if (isLoading) return <Loading />
-
   return (
     <div className="content">
       <div className="content-list">
@@ -51,6 +49,7 @@ const Content = ({ entries, isLoading, editEntry, moveEntry, checkEntry }) => {
           ))}
         </DragDropProvider>
       </div>
+      {isLoading && <Loading />}
       <Modal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
