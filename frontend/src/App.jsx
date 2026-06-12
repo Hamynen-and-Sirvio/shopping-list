@@ -7,8 +7,11 @@ import './App.css'
 
 const App = ({ entryService, tokenService, userService }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [entries, setEntries] = useState([])
   const [token, setToken] = useState(tokenService.fetchToken() || '')
+  const [entries, setEntries] = useState(() => {
+    const saved = localStorage.getItem('entries')
+    return saved ? JSON.parse(saved) : []
+  })
 
   const checkedEntries = entries
     .filter((entry) => entry.checked)
@@ -78,17 +81,26 @@ const App = ({ entryService, tokenService, userService }) => {
     try {
       const fetchedEntries = await entryService.getEntries()
       setEntries(fetchedEntries)
+      localStorage.setItem('entries', JSON.stringify(fetchedEntries))
     } catch (error) {
       console.error(error)
     }
   }
 
   useEffect(() => {
+    localStorage.setItem('entries', JSON.stringify(entries))
+  }, [entries])
+
+  useEffect(() => {
     const load = async () => {
       if (!token) return
       try {
         setIsLoading(true)
-        await reloadEntries()
+        const fetchedEntries = await entryService.getEntries()
+        setEntries(fetchedEntries)
+        localStorage.setItem('entries', JSON.stringify(fetchedEntries))
+      } catch (error) {
+        console.error(error)
       } finally {
         setIsLoading(false)
       }
