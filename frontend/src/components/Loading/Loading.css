@@ -1,6 +1,10 @@
 .loading-container {
   display: flex;
-  flex: 1;
   justify-content: center;
   align-items: center;
+  padding: 16px 0;
+}
+
+.loading-spinner {
+  transform: rotate(90deg);
 }
