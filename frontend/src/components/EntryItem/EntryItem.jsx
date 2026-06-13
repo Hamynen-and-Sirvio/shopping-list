@@ -22,7 +22,7 @@ const EntryItem = ({ index, entry, handleOpenModal, checkEntry }) => {
         <span className="checkbox-icon">
           {entry.checked ? <CiSquareCheck /> : <CiStop1 />}
         </span>
-        {entry.content}
+        <span className="entry-content">{entry.content}</span>
       </div>
       <div className="entry-actions">
         <span className="entry-info" onClick={handleModal}>
