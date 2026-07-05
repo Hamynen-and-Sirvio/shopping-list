@@ -1,12 +1,20 @@
 .entry-container {
-  background-color: #222222;
+  background-color: #f9f9f9;
   min-height: 40px;
   display: flex;
   align-items: center;
   border: #f9f9f9 1px solid;
   border-radius: 5px;
-  margin: 5px 5px;
   padding: 5px 10px;
+  margin: 5px 10px;
+}
+
+.entry-container:hover {
+  background-color: #ebebeb;
+}
+
+.entry-container:dragging {
+  opacity: 0.5;
 }
 
 .entry-text {
@@ -15,16 +23,16 @@
   display: flex;
   align-items: center;
   max-width: 100%;
-  color: #f9f9f9;
-  font-size: 14px;
-  font-weight: 200;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 400;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .entry-text.checked {
   text-decoration: line-through;
-  color: #cfcaca;
+  color: #999999;
 }
 
 .checkbox-icon {
@@ -52,4 +60,10 @@
     rgba(0, 0, 0, 1) 90%,
     rgba(0, 0, 0, 0)
   );
+}
+
+.entry-info svg {
+  font-size: 30px;
+  display: block;
+  color: #333333;
 }

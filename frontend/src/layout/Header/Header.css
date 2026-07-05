@@ -6,9 +6,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-bottom: #f9f9f9 1px solid;
   align-items: center;
-  background: #222222;
+  background: #333333;
 }
 
 .header-title {
@@ -18,8 +17,8 @@
 }
 
 .title {
-  font-weight: 400;
-  font-size: 24px;
+  font-weight: 600;
+  font-size: 28px;
   margin: 20px;
 }
 
