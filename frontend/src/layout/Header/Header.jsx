@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MdOutlineSettings } from 'react-icons/md'
+import { LuTrash } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
@@ -29,7 +30,7 @@ const Header = ({ deleteEntries, checkedEntries }) => {
           onClick={deleteEntries}
           disabled={checkedEntries.length === 0}
         >
-          Delete
+          <LuTrash size={20} />
         </button>
         <button className="settings-button" onClick={handleOpenModal}>
           <MdOutlineSettings size={20} />
