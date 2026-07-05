@@ -44,10 +44,14 @@
 .delete-button {
   color: #f9f9f9;
   cursor: pointer;
-  background: transparent;
+  background: #fc5f67;
   border: none;
   display: flex;
   align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .delete-button:disabled {
@@ -55,4 +59,13 @@
   border: none;
   opacity: 0;
   cursor: not-allowed;
+}
+
+.settings-button {
+  color: #f9f9f9;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
 }

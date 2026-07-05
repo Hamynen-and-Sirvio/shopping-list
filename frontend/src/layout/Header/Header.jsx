@@ -1,4 +1,4 @@
-import { LuTrash } from 'react-icons/lu'
+import { MdOutlineSettings } from 'react-icons/md'
 import './Header.css'
 
 const Header = ({ deleteEntries, checkedEntries }) => {
@@ -17,7 +17,10 @@ const Header = ({ deleteEntries, checkedEntries }) => {
           onClick={deleteEntries}
           disabled={checkedEntries.length === 0}
         >
-          <LuTrash size={18} />
+          Delete
+        </button>
+        <button className="settings-button">
+          <MdOutlineSettings size={20} />
         </button>
       </div>
     </div>
