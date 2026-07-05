@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import EntryItem from '../../components/EntryItem/EntryItem'
-import Modal from '../../components/Modal/Modal'
+import EditModal from '../../components/Modal/EditModal'
 import Loading from '../../components/Loading/Loading'
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
@@ -50,7 +50,7 @@ const Content = ({ entries, isLoading, editEntry, moveEntry, checkEntry }) => {
         </DragDropProvider>
       </div>
       {isLoading && <Loading />}
-      <Modal
+      <EditModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         entry={currentEntry}

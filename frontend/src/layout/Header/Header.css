@@ -52,6 +52,7 @@
   border-radius: 5px;
   font-size: 16px;
   font-weight: 400;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .delete-button:disabled {

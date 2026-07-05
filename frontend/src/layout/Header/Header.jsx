@@ -1,7 +1,19 @@
+import { useState } from 'react'
 import { MdOutlineSettings } from 'react-icons/md'
+import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
 const Header = ({ deleteEntries, checkedEntries }) => {
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleOpenModal = () => {
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
+
   return (
     <div className="header">
       <div className="header-title">
@@ -19,10 +31,14 @@ const Header = ({ deleteEntries, checkedEntries }) => {
         >
           Delete
         </button>
-        <button className="settings-button">
+        <button className="settings-button" onClick={handleOpenModal}>
           <MdOutlineSettings size={20} />
         </button>
       </div>
+      <SettingsModal
+        openModal={openModal}
+        handleCloseModal={handleCloseModal}
+      />
     </div>
   )
 }

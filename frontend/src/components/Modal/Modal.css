@@ -60,6 +60,7 @@
   border: #f9f9f9 1px solid;
   border-radius: 5px;
   padding: 0px 10px;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .modal-actions {
@@ -79,6 +80,7 @@
   font-weight: 400;
   margin: 0;
   flex: 1;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .cancel-button {
@@ -92,4 +94,40 @@
   font-weight: 400;
   margin: 0;
   flex: 1;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.close-button {
+  background: #333333;
+  min-height: 40px;
+  color: #f9f9f9;
+  border: #f9f9f9 1px solid;
+  border-radius: 5px;
+  padding: 5px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  flex: 1;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.modal-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.settings-button {
+  background: #333333;
+  min-height: 40px;
+  color: #f9f9f9;
+  border: #f9f9f9 1px solid;
+  border-radius: 5px;
+  padding: 5px 0px;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
+  flex: 1;
+  font-family: 'Roboto Mono', monospace;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Modal.css'
 
-const Modal = ({ openModal, handleCloseModal, entry, editEntry }) => {
+const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   const [editField, setEditField] = useState('')
 
   useEffect(() => {
@@ -53,4 +53,4 @@ const Modal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   )
 }
 
-export default Modal
+export default EditModal
