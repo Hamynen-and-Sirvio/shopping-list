@@ -22,7 +22,7 @@ const Footer = ({ addEntry }) => {
           <input
             value={newEntryField}
             onChange={(event) => setNewEntryField(event.target.value)}
-            placeholder="Add new entry..."
+            placeholder="Add a new entry..."
           />
           <button type="submit" hidden>
             +
