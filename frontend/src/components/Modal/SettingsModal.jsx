@@ -1,7 +1,7 @@
 import { MdLogout, MdSort } from 'react-icons/md'
 import './Modal.css'
 
-const SettingsModal = ({ openModal, handleCloseModal }) => {
+const SettingsModal = ({ openModal, handleCloseModal, logout }) => {
   if (!openModal) return null
   return (
     <div className="modal">
@@ -13,7 +13,7 @@ const SettingsModal = ({ openModal, handleCloseModal }) => {
           <button className="settings-button">
             <MdSort size={20} /> Auto sort entries
           </button>
-          <button className="settings-button">
+          <button className="settings-button" onClick={logout}>
             <MdLogout size={20} /> Logout
           </button>
         </div>

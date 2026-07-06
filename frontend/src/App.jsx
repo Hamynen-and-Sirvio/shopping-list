@@ -87,6 +87,12 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
+  const logout = () => {
+    if (!confirm(`Do you want to log out?`)) return
+    tokenService.removeToken()
+    setToken('')
+  }
+
   useEffect(() => {
     localStorage.setItem('entries', JSON.stringify(entries))
   }, [entries])
@@ -111,7 +117,11 @@ const App = ({ entryService, tokenService, userService }) => {
   if (token) {
     return (
       <div className="app-container">
-        <Header deleteEntries={deleteEntries} checkedEntries={checkedEntries} />
+        <Header
+          deleteEntries={deleteEntries}
+          checkedEntries={checkedEntries}
+          logout={logout}
+        />
         <Content
           entries={entries}
           isLoading={isLoading}

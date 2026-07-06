@@ -4,7 +4,7 @@ import { LuTrash } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
-const Header = ({ deleteEntries, checkedEntries }) => {
+const Header = ({ deleteEntries, checkedEntries, logout }) => {
   const [openModal, setOpenModal] = useState(false)
 
   const handleOpenModal = () => {
@@ -39,6 +39,7 @@ const Header = ({ deleteEntries, checkedEntries }) => {
       <SettingsModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
+        logout={logout}
       />
     </div>
   )
