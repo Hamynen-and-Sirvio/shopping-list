@@ -48,6 +48,7 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
               className="edit-field"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              required
               autoFocus
             />
 
@@ -60,6 +61,7 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
                   type="number"
                   step="any"
                   value={quantity}
+                  required
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
@@ -70,6 +72,7 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
                   id="unit"
                   className="edit-field"
                   value={unit}
+                  required
                   onChange={(e) => setUnit(e.target.value)}
                 />
               </div>

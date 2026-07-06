@@ -142,3 +142,26 @@
   flex: 1;
   gap: 10px;
 }
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.success-message {
+  color: #c2d8c4;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(8px);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+  pointer-events: none;
+}
+
+.success-message.show {
+  opacity: 1;
+  transform: translateX(0);
+}

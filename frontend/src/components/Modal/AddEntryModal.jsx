@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './Modal.css'
 
 const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
@@ -6,6 +6,8 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
   const [quantity, setQuantity] = useState('1')
   const [unit, setUnit] = useState('kpl')
   const [additionalInfo, setAdditionalInfo] = useState('')
+  const [success, setSuccess] = useState(false)
+  const contentRef = useRef(null)
 
   const handleAdd = (e) => {
     e.preventDefault()
@@ -23,7 +25,17 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
     setQuantity('1')
     setUnit('kpl')
     setAdditionalInfo('')
-    // handleCloseModal()
+
+    setSuccess(true)
+
+    setTimeout(() => {
+      contentRef.current?.focus()
+    }, 0)
+
+    setTimeout(() => {
+      setSuccess(false)
+      contentRef.current?.focus()
+    }, 2000)
   }
 
   if (!openModal) return null
@@ -37,13 +49,21 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
 
         <div className="modal-edit-entry">
           <form onSubmit={handleAdd}>
-            <label htmlFor="content">Content</label>
+            <div className="label-row">
+              <label htmlFor="content">Content</label>
+
+              <span className={`success-message ${success ? 'show' : ''}`}>
+                Entry added successfully
+              </span>
+            </div>
             <input
               id="content"
               className="edit-field"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              required
               autoFocus
+              ref={contentRef}
             />
 
             <div className="quantity-row">
@@ -55,6 +75,8 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
                   type="number"
                   step="any"
                   value={quantity}
+                  required
+                  min="1"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
@@ -65,6 +87,7 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
                   id="unit"
                   className="edit-field"
                   value={unit}
+                  required
                   onChange={(e) => setUnit(e.target.value)}
                 />
               </div>
