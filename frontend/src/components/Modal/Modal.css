@@ -130,3 +130,15 @@
   flex: 1;
   font-family: 'Open Sans', sans-serif;
 }
+
+.quantity-row {
+  display: flex;
+  gap: 10px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+}

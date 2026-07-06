@@ -29,7 +29,13 @@ const EntryItem = ({ index, entry, handleOpenModal, checkEntry }) => {
             <MdOutlineCheckBoxOutlineBlank />
           )}
         </span>
-        <span className="entry-content">{entry.content}</span>
+        <div className="entry-content">
+          <span className="entry-title">{entry.content}</span>
+          <span className="entry-subtitle">
+            {`${entry.quantity} ${entry.unit}`}
+            {entry.additionalInfo ? ` - ${entry.additionalInfo}` : ''}
+          </span>
+        </div>
       </div>
       <div className="entry-actions">
         <span className="entry-info" onClick={handleModal}>

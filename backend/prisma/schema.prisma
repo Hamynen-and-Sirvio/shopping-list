@@ -8,8 +8,11 @@ datasource db {
 }
 
 model Entry {
-  id       Int     @id @default(autoincrement())
-  position Int
-  content  String
-  checked  Boolean @default(false)
+  id              Int     @id @default(autoincrement())
+  position        Int
+  content         String
+  quantity        Float
+  unit            String
+  additionalInfo  String
+  checked         Boolean @default(false)
 }

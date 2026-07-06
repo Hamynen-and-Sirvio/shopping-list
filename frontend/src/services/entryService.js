@@ -58,7 +58,7 @@ export class EntryService {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.#tokenService.fetchToken()}`,
       },
-      body: JSON.stringify({ position: entry.position + amount }),
+      body: JSON.stringify({ ...entry, position: entry.position + amount }),
     })
 
     if (!response.ok) {
@@ -68,14 +68,14 @@ export class EntryService {
     return await response.json()
   }
 
-  async editEntry(entry, content) {
+  async editEntry(entry, data) {
     const response = await fetch(`${this.#apiUrl}/${entry.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.#tokenService.fetchToken()}`,
       },
-      body: JSON.stringify({ content: content }),
+      body: JSON.stringify(data),
     })
 
     if (!response.ok) {
@@ -85,14 +85,14 @@ export class EntryService {
     return await response.json()
   }
 
-  async addEntry(content) {
+  async addEntry(entry) {
     const response = await fetch(this.#apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.#tokenService.fetchToken()}`,
+        Authorization: `Bearer ${this.#tokenService.fetchToken()}`,
       },
-      body: JSON.stringify({ content: content }),
+      body: JSON.stringify(entry),
     })
 
     if (!response.ok) {

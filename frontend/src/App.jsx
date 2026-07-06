@@ -63,6 +63,7 @@ const App = ({ entryService, tokenService, userService }) => {
           return prevEntry
         }),
       )
+      await reloadEntries()
     } catch (error) {
       console.error(error)
     }

@@ -11,25 +11,13 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: #333e46;
-  padding: 20px 10px;
+  background-color: transparent;
 }
 
-.add-content-container form {
-  display: flex;
-  width: 100%;
-}
-
-.add-content-container input {
-  font-family: 'Open Sans', sans-serif;
-  background: #ffffff;
-  min-height: 40px;
-  flex: 1;
-  font-size: 16px;
-  color: #1e2a32;
-  font-weight: 400;
-  outline: none;
-  border: #ffffff 1px solid;
-  border-radius: 8px;
-  padding: 5px 20px;
+.add-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  padding-bottom: 20px;
 }

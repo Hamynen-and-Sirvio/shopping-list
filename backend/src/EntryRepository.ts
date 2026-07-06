@@ -18,7 +18,12 @@ export default class EntryRepository {
     return fetchedEntries
   }
 
-  async create(entry: { content: string }) {
+  async create(entry: {
+    content: string
+    quantity: number
+    unit: string
+    additionalInfo: string
+  }) {
     const addedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
         const entryCount = await tx.entry.count()
@@ -27,6 +32,9 @@ export default class EntryRepository {
           data: {
             position: entryCount + 1,
             content: entry.content,
+            quantity: entry.quantity,
+            unit: entry.unit,
+            additionalInfo: entry.additionalInfo,
           },
         })
       },

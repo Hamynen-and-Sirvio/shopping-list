@@ -1,47 +1,42 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './Modal.css'
 
-const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
+const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
   const [content, setContent] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [unit, setUnit] = useState('')
+  const [quantity, setQuantity] = useState('1')
+  const [unit, setUnit] = useState('kpl')
   const [additionalInfo, setAdditionalInfo] = useState('')
 
-  useEffect(() => {
-    if (entry) {
-      setContent(entry.content ?? '')
-      setQuantity(entry.quantity ?? '')
-      setUnit(entry.unit ?? '')
-      setAdditionalInfo(entry.additionalInfo ?? '')
-    }
-  }, [entry])
-
-  const handleSave = (e) => {
+  const handleAdd = (e) => {
     e.preventDefault()
 
     if (!content.trim()) return
 
-    editEntry(entry, {
+    addEntry({
       content: content.trim(),
       quantity: parseFloat(quantity),
-      unit: unit,
+      unit,
       additionalInfo: additionalInfo.trim(),
     })
 
-    handleCloseModal()
+    setContent('')
+    setQuantity('1')
+    setUnit('kpl')
+    setAdditionalInfo('')
+    // handleCloseModal()
   }
 
-  if (!openModal || !entry) return null
+  if (!openModal) return null
 
   return (
     <div className="modal">
       <div className="modal-content">
         <div className="modal-title">
-          <h3>Edit Entry</h3>
+          <h3>Add Entry</h3>
         </div>
 
         <div className="modal-edit-entry">
-          <form onSubmit={handleSave}>
+          <form onSubmit={handleAdd}>
             <label htmlFor="content">Content</label>
             <input
               id="content"
@@ -94,7 +89,7 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
               </button>
 
               <button type="submit" className="save-button">
-                Save
+                Add
               </button>
             </div>
           </form>
@@ -104,4 +99,4 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   )
 }
 
-export default EditModal
+export default AddEntryModal

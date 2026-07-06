@@ -4,7 +4,6 @@ import EntryRepository from '../EntryRepository.ts'
 import { EntryId, EntryIds, EntryUpdate, NewEntry } from '../validation.ts'
 import ArgumentError from '../errors/ArgumentError.ts'
 
-
 export const createEntriesRouter = (entryRepository: EntryRepository) => {
   const entriesRouter = express.Router()
 
@@ -19,7 +18,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
     if (!validatedBody.success) {
       res.status(400).json({
         error: 'Invalid request body',
-        details: validatedBody.error.issues.map(issue => ({
+        details: validatedBody.error.issues.map((issue) => ({
           field: ['body', ...issue.path].join('.'),
           message: issue.message,
         })),
@@ -56,7 +55,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
     if (!validatedBody.success) {
       res.status(400).json({
         error: 'Invalid request body',
-        details: validatedBody.error.issues.map(issue => ({
+        details: validatedBody.error.issues.map((issue) => ({
           field: ['body', ...issue.path].join('.'),
           message: issue.message,
         })),
@@ -84,7 +83,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
     if (!validatedBody.success) {
       res.status(400).json({
         error: 'Invalid request body',
-        details: validatedBody.error.issues.map(issue => ({
+        details: validatedBody.error.issues.map((issue) => ({
           field: ['body', ...issue.path].join('.'),
           message: issue.message,
         })),
@@ -106,7 +105,9 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
       res.json(editedEntry)
     } catch (error) {
       if (error instanceof ArgumentError) {
-        res.status(400).send({ error: `Position should be ${error.expectedValue}` })
+        res
+          .status(400)
+          .send({ error: `Position should be ${error.expectedValue}` })
       } else {
         throw error
       }
