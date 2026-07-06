@@ -7,8 +7,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: #333e46;
   padding-top: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .header-title {
