@@ -33,7 +33,7 @@ const EntryItem = ({ index, entry, handleOpenModal, checkEntry }) => {
           <span className="entry-title">{entry.content}</span>
           <span className="entry-subtitle">
             {`${entry.quantity} ${entry.unit}`}
-            {entry.additionalInfo ? ` - ${entry.additionalInfo}` : ''}
+            {entry.additionalInfo ? `, ${entry.additionalInfo}` : ''}
           </span>
         </div>
       </div>
