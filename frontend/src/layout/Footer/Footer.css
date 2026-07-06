@@ -12,13 +12,12 @@
   justify-content: center;
   width: 100%;
   background-color: #333e46;
-  padding: 10px 10px;
+  padding: 20px 10px;
 }
 
 .add-content-container form {
   display: flex;
   width: 100%;
-  padding: 10px 0;
 }
 
 .add-content-container input {
@@ -32,6 +31,5 @@
   outline: none;
   border: #ffffff 1px solid;
   border-radius: 8px;
-  margin: 10px 0;
   padding: 5px 20px;
 }
