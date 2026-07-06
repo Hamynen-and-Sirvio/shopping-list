@@ -12,22 +12,21 @@
 }
 
 .modal-content {
-  background: #333333;
+  background: #1e2a32;
   padding: 20px;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  border-radius: 8px;
   min-width: 300px;
 }
 
 .modal-title {
-  border-bottom: #f9f9f9 1px solid;
+  border-bottom: #ffffff 1px solid;
   padding-bottom: 10px;
 }
 
 .modal-title h3 {
   margin: 0;
   padding: 0;
-  color: #f9f9f9;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 400;
 }
@@ -42,25 +41,25 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: #f9f9f9;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 400;
 }
 
 .edit-field {
-  background: #f9f9f9;
+  background: #ffffff;
   min-height: 40px;
   width: 100%;
   box-sizing: border-box;
   flex: 1;
   font-size: 16px;
-  color: #333333;
+  color: #333e46;
   font-weight: 400;
   outline: none;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  border: #ffffff 1px solid;
+  border-radius: 8px;
   padding: 0px 10px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .modal-actions {
@@ -71,44 +70,44 @@
 
 .save-button {
   background: #c2d8c4;
-  color: #333333;
+  color: #333e46;
   min-height: 40px;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  border: #1e2a32 1px solid;
+  border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .cancel-button {
-  background: #333333;
+  background: #333e46;
   min-height: 40px;
-  color: #f9f9f9;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  color: #ffffff;
+  border: #1e2a32 1px solid;
+  border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .close-button {
-  background: #333333;
+  background: #333e46;
   min-height: 40px;
-  color: #f9f9f9;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  color: #ffffff;
+  border: #1e2a32 1px solid;
+  border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .modal-settings {
@@ -119,15 +118,15 @@
 }
 
 .settings-button {
-  background: #333333;
+  background: #333e46;
   min-height: 40px;
-  color: #f9f9f9;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  color: #ffffff;
+  border: #1e2a32 1px solid;
+  border-radius: 8px;
   padding: 5px 0px;
   font-size: 16px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Open Sans', sans-serif;
 }

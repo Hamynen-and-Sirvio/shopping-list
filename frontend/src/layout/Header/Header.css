@@ -7,7 +7,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background: #333333;
+  background: #333e46;
+  padding-top: 50px;
 }
 
 .header-title {
@@ -18,7 +19,7 @@
 
 .title {
   font-weight: 600;
-  font-size: 28px;
+  font-size: 20px;
   margin-left: 20px;
 }
 
@@ -38,18 +39,18 @@
   gap: 0.5em;
   justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  margin: 0 20px;
 }
 
 .delete-button {
-  color: #f9f9f9;
+  color: #ffffff;
   background: transparent;
   cursor: pointer;
   border: none;
   display: flex;
   align-items: center;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .delete-button:disabled {
@@ -60,7 +61,7 @@
 }
 
 .settings-button {
-  color: #f9f9f9;
+  color: #ffffff;
   cursor: pointer;
   background: transparent;
   border: none;

@@ -11,7 +11,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: #333333;
+  background-color: #333e46;
   padding: 10px 10px;
 }
 
@@ -22,16 +22,16 @@
 }
 
 .add-content-container input {
-  font-family: 'Roboto Mono', monospace;
-  background: #f9f9f9;
+  font-family: 'Open Sans', sans-serif;
+  background: #ffffff;
   min-height: 40px;
   flex: 1;
   font-size: 16px;
-  color: #333333;
+  color: #1e2a32;
   font-weight: 400;
   outline: none;
-  border: #f9f9f9 1px solid;
-  border-radius: 5px;
+  border: #ffffff 1px solid;
+  border-radius: 8px;
   margin: 10px 0;
   padding: 5px 20px;
 }
