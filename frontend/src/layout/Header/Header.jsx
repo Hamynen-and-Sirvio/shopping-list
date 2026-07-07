@@ -16,32 +16,34 @@ const Header = ({ deleteEntries, checkedEntries, logout }) => {
   }
 
   return (
-    <div className="header">
-      <div className="header-title">
-        <h1 className="title">
-          <a href="/" className="title-link">
-            Shopping list
-          </a>
-        </h1>
-      </div>
-      <div className="header-buttons">
-        <button
-          className={`delete-button ${checkedEntries.length === 0 ? 'disabled' : ''}`}
-          onClick={deleteEntries}
-          disabled={checkedEntries.length === 0}
-        >
-          <LuTrash size={20} />
-        </button>
-        <button className="settings-button" onClick={handleOpenModal}>
-          <MdOutlineSettings size={20} />
-        </button>
+    <>
+      <div className="header">
+        <div className="header-title">
+          <h1 className="title">
+            <a href="/" className="title-link">
+              Shopping list
+            </a>
+          </h1>
+        </div>
+        <div className="header-buttons">
+          <button
+            className={`delete-button ${checkedEntries.length === 0 ? 'disabled' : ''}`}
+            onClick={deleteEntries}
+            disabled={checkedEntries.length === 0}
+          >
+            <LuTrash size={20} />
+          </button>
+          <button className="settings-button" onClick={handleOpenModal}>
+            <MdOutlineSettings size={20} />
+          </button>
+        </div>
       </div>
       <SettingsModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
         logout={logout}
       />
-    </div>
+    </>
   )
 }
 
