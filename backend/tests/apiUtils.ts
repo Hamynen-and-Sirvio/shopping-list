@@ -1,7 +1,6 @@
 import { EntryUpdate } from '../src/types.ts'
 import { Entries, Entry, LoginToken } from '../src/validation.ts'
 
-
 export const login = async (apiUrl: string, password: string) => {
   const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
@@ -22,7 +21,16 @@ export const fetchEntries = async (apiUrl: string, token: string) => {
   return entries
 }
 
-export const createEntry = async (apiUrl: string, token: string, newEntryData: { content: string }) => {
+export const createEntry = async (
+  apiUrl: string,
+  token: string,
+  newEntryData: {
+    content: string
+    quantity: number
+    unit: string
+    additionalInfo: string
+  },
+) => {
   const response = await fetch(`${apiUrl}/entries`, {
     method: 'POST',
     headers: {
@@ -35,7 +43,11 @@ export const createEntry = async (apiUrl: string, token: string, newEntryData: {
   return createdEntry
 }
 
-export const deleteEntry = async (apiUrl: string, token: string, id: number) => {
+export const deleteEntry = async (
+  apiUrl: string,
+  token: string,
+  id: number,
+) => {
   const response = await fetch(`${apiUrl}/entries/${String(id)}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` },
@@ -44,7 +56,11 @@ export const deleteEntry = async (apiUrl: string, token: string, id: number) => 
   return deletedEntry
 }
 
-export const deleteManyEntries = async (apiUrl: string, token: string, ids: number[]) => {
+export const deleteManyEntries = async (
+  apiUrl: string,
+  token: string,
+  ids: number[],
+) => {
   await fetch(`${apiUrl}/entries`, {
     method: 'DELETE',
     headers: {

@@ -19,7 +19,7 @@ beforeAll(async () => {
       await fetch(API_URL)
       break
     } catch {
-      await new Promise(r => setTimeout(r, 100))
+      await new Promise((r) => setTimeout(r, 100))
     }
   }
 })
@@ -42,15 +42,32 @@ describe('Entries', () => {
   })
 
   test('can be created', async () => {
-    const entry = { content: 'Something' }
+    const entry = {
+      content: 'Something',
+      quantity: 1,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
 
     const createdEntry = await createEntry(API_URL, token, entry)
 
-    expect(Object.keys(createdEntry)).toStrictEqual(
-      ['id', 'position', 'content', 'checked'],
-    )
+    expect(Object.keys(createdEntry)).toStrictEqual([
+      'id',
+      'position',
+      'content',
+      'quantity',
+      'unit',
+      'additionalInfo',
+      'checked',
+    ])
 
     expect(createdEntry.content).toBe(entry.content)
+
+    expect(createdEntry.quantity).toBe(entry.quantity)
+
+    expect(createdEntry.unit).toBe(entry.unit)
+
+    expect(createdEntry.additionalInfo).toBe(entry.additionalInfo)
 
     expect(createdEntry.checked).toBe(false)
 
@@ -59,12 +76,17 @@ describe('Entries', () => {
   })
 
   test('can be fetched', async () => {
-    const entry = { content: 'Something' }
+    const entry = {
+      content: 'Something',
+      quantity: 1,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
 
     const createdEntry = await createEntry(API_URL, token, entry)
     const fetchedEntries = await fetchEntries(API_URL, token)
-    const originalEntry = fetchedEntries.find((entry: Entry) =>
-      entry.id === createdEntry.id
+    const originalEntry = fetchedEntries.find(
+      (entry: Entry) => entry.id === createdEntry.id,
     )
 
     expect.assert.isDefined(originalEntry)
@@ -73,7 +95,12 @@ describe('Entries', () => {
   })
 
   test('can be deleted', async () => {
-    const entry = { content: 'Something' }
+    const entry = {
+      content: 'Something',
+      quantity: 1,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
 
     const createdEntry = await createEntry(API_URL, token, entry)
     const deletedEntry = await deleteEntry(API_URL, token, createdEntry.id)
@@ -86,13 +113,23 @@ describe('Entries', () => {
   })
 
   test('can be deleted multiple at a time', async () => {
-    const entry = { content: 'Something' }
-    const entry2 = { content: 'Something else' }
+    const entry = {
+      content: 'Something',
+      quantity: 1,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
+    const entry2 = {
+      content: 'Something else',
+      quantity: 2,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
 
     const createdEntry = await createEntry(API_URL, token, entry)
     const createdEntry2 = await createEntry(API_URL, token, entry2)
 
-    const ids = [ createdEntry.id, createdEntry2.id ]
+    const ids = [createdEntry.id, createdEntry2.id]
     await deleteManyEntries(API_URL, token, ids)
 
     const fetchedEntries = await fetchEntries(API_URL, token)
@@ -102,9 +139,17 @@ describe('Entries', () => {
   })
 
   test('can be edited', async () => {
-    const entry = { content: 'Something' }
+    const entry = {
+      content: 'Something',
+      quantity: 1,
+      unit: 'kg',
+      additionalInfo: 'Fresh',
+    }
     const editedFields = {
       content: 'Something else',
+      quantity: 2,
+      unit: 'kg',
+      additionalInfo: 'Even more fresh',
       checked: true,
       position: 1,
     }
