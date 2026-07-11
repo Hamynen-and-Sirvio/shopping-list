@@ -11,8 +11,8 @@ model Entry {
   id              Int     @id @default(autoincrement())
   position        Int
   content         String
-  quantity        Float
-  unit            String
-  additionalInfo  String
+  quantity        Float   @default(1)
+  unit            String  @default("kpl")
+  additionalInfo  String  @default("")
   checked         Boolean @default(false)
 }
