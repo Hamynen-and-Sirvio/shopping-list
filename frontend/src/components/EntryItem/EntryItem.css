@@ -8,10 +8,6 @@
   margin: 5px 10px;
 }
 
-.entry-container:hover {
-  background-color: #263239;
-}
-
 .entry-container:dragging {
   opacity: 0.5;
 }
