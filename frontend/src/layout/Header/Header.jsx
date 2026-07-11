@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { LuShoppingCart } from 'react-icons/lu'
 import { MdOutlineSettings } from 'react-icons/md'
 import { LuTrash } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
@@ -19,11 +20,14 @@ const Header = ({ deleteEntries, checkedEntries, logout }) => {
     <>
       <div className="header">
         <div className="header-title">
-          <h1 className="title">
+          <div className="title-icon">
+            <LuShoppingCart size={23} />
+          </div>
+          <div className="title-text">
             <a href="/" className="title-link">
               Shopping list
             </a>
-          </h1>
+          </div>
         </div>
         <div className="header-buttons">
           <button
