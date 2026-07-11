@@ -1,5 +1,5 @@
 .entry-container {
-  background-color: #1e2a32;
+  background-color: var(--background-secondary);
   min-height: 40px;
   display: flex;
   align-items: center;
@@ -18,14 +18,14 @@
   display: flex;
   align-items: flex-start;
   max-width: 100%;
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 400;
 }
 
 .entry-text.checked {
   text-decoration: line-through;
-  color: #989898;
+  color: var(--text-secondary);
 }
 
 .checkbox-icon {
@@ -65,12 +65,12 @@
 
 .entry-subtitle {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--text-secondary);
   margin-top: 2px;
 }
 
 .entry-info svg {
   font-size: 30px;
   display: block;
-  color: #ffffff;
+  color: var(--text-primary);
 }

@@ -1,10 +1,22 @@
+:root {
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-contrast: #333e46;
+  --background-primary: #333e46;
+  --background-secondary: #1e2a32;
+  --background-contrast: #ffffff;
+  --button-primary: #c2d8c4;
+  --button-secondary: #333e46;
+  --font-family: 'Open Sans', sans-serif;
+}
+
 html,
 body {
-  background: #333e46;
-  font-family: 'Open Sans', sans-serif;
+  background: var(--background-primary);
+  font-family: var(--font-family);
   margin: 0;
   height: 100%;
-  color: #ffffff;
+  color: var(--text-primary);
   overscroll-behavior: none;
 }
 

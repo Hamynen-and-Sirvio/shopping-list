@@ -12,21 +12,21 @@
 }
 
 .modal-content {
-  background: #1e2a32;
+  background: var(--background-secondary);
   padding: 20px;
   border-radius: 8px;
   min-width: 300px;
 }
 
 .modal-title {
-  border-bottom: #ffffff 1px solid;
+  border-bottom: var(--text-primary) 1px solid;
   padding-bottom: 10px;
 }
 
 .modal-title h3 {
   margin: 0;
   padding: 0;
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 400;
 }
@@ -41,25 +41,25 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 400;
 }
 
 .edit-field {
-  background: #ffffff;
+  background: var(--background-contrast);
   min-height: 40px;
   width: 100%;
   box-sizing: border-box;
   flex: 1;
   font-size: 16px;
-  color: #333e46;
+  color: var(--text-contrast);
   font-weight: 400;
   outline: none;
-  border: #ffffff 1px solid;
+  border: var(--text-primary) 1px solid;
   border-radius: 8px;
   padding: 0px 10px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
 }
 
 .modal-actions {
@@ -69,45 +69,45 @@
 }
 
 .save-button {
-  background: #c2d8c4;
-  color: #333e46;
+  background: var(--button-primary);
+  color: var(--text-contrast);
   min-height: 40px;
-  border: #1e2a32 1px solid;
+  border: var(--background-contrast) 1px solid;
   border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
 }
 
 .cancel-button {
-  background: #333e46;
+  background: var(--button-secondary);
   min-height: 40px;
-  color: #ffffff;
-  border: #1e2a32 1px solid;
+  color: var(--text-primary);
+  border: var(--background-contrast) 1px solid;
   border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
 }
 
 .close-button {
-  background: #333e46;
+  background: var(--button-secondary);
   min-height: 40px;
-  color: #ffffff;
-  border: #1e2a32 1px solid;
+  color: var(--text-primary);
+  border: var(--background-contrast) 1px solid;
   border-radius: 8px;
   padding: 5px 20px;
   font-size: 14px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
 }
 
 .modal-settings {
@@ -118,17 +118,17 @@
 }
 
 .settings-button {
-  background: #333e46;
+  background: var(--button-secondary);
   min-height: 40px;
-  color: #ffffff;
-  border: #1e2a32 1px solid;
+  color: var(--text-primary);
+  border: var(--background-contrast) 1px solid;
   border-radius: 8px;
   padding: 5px 0px;
   font-size: 16px;
   font-weight: 400;
   margin: 0;
   flex: 1;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-family);
   gap: 10px;
 }
 
@@ -151,7 +151,7 @@
 }
 
 .success-message {
-  color: #c2d8c4;
+  color: var(--button-primary);
   font-size: 0.85rem;
   font-weight: 500;
   opacity: 0;

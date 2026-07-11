@@ -18,6 +18,6 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--text-primary);
   padding-bottom: 20px;
 }
