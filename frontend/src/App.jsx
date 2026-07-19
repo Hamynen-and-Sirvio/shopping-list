@@ -46,10 +46,13 @@ const App = ({ entryService, tokenService, userService }) => {
   const deleteEntries = async () => {
     if (!confirm(`Delete ${checkedEntries.length} checked entries?`)) return
     try {
+      setIsLoading(true)
       await entryService.deleteEntries(checkedEntries)
       await reloadEntries()
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
