@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
+import Loading from './components/Loading/Loading'
 import Login from './layout/Login/Login'
 import './App.css'
 
@@ -131,6 +132,7 @@ const App = ({ entryService, tokenService, userService }) => {
           checkEntry={checkEntry}
         />
         <Footer addEntry={addEntry} />
+        {isLoading && <Loading />}
       </div>
     )
   } else {

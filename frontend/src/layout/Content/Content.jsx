@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import EntryItem from '../../components/EntryItem/EntryItem'
 import EditModal from '../../components/Modal/EditModal'
-import Loading from '../../components/Loading/Loading'
 import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable } from '@dnd-kit/react/sortable'
 import './Content.css'
@@ -35,7 +34,7 @@ const Content = ({ entries, isLoading, editEntry, moveEntry, checkEntry }) => {
   }
 
   return (
-    <div className="content">
+    <div className={`content ${isLoading ? 'content-disabled' : ''}`}>
       <div className="content-list">
         <DragDropProvider onDragEnd={handleDragEnd}>
           {entries.map((entry, index) => (
@@ -49,7 +48,6 @@ const Content = ({ entries, isLoading, editEntry, moveEntry, checkEntry }) => {
           ))}
         </DragDropProvider>
       </div>
-      {isLoading && <Loading />}
       <EditModal
         openModal={openModal}
         handleCloseModal={handleCloseModal}
