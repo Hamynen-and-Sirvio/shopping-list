@@ -41,8 +41,8 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
   if (!openModal) return null
 
   return (
-    <div className="modal">
-      <div className="modal-content">
+    <div className="modal" onClick={handleCloseModal}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-title">
           <h3>Add Entry</h3>
         </div>

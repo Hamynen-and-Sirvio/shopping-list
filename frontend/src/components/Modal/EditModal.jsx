@@ -34,8 +34,8 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   if (!openModal || !entry) return null
 
   return (
-    <div className="modal">
-      <div className="modal-content">
+    <div className="modal" onClick={handleCloseModal}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-title">
           <h3>Edit Entry</h3>
         </div>
