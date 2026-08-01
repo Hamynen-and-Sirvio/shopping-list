@@ -63,9 +63,7 @@ export const createEntriesRouter = (entryRepository: EntryRepository) => {
       return
     }
 
-    for (const id of validatedBody.data.ids) {
-      await entryRepository.delete(id)
-    }
+    await entryRepository.deleteMany(validatedBody.data.ids)
 
     res.status(204).end()
   })

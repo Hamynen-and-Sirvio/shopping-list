@@ -79,6 +79,33 @@ export default class EntryRepository {
     return deletedEntry
   }
 
+  async deleteMany(ids: number[]) {
+    await this.#prismaClient.$transaction(
+      async (tx) => {
+        await tx.entry.deleteMany({
+          where: {
+            id: {
+              in: ids,
+            },
+          },
+        })
+
+        await tx.$executeRaw`
+          WITH ordered AS (
+            SELECT
+              id,
+              ROW_NUMBER() OVER (ORDER BY position) AS new_position
+            FROM "Entry"
+          )
+          UPDATE "Entry"
+          SET position = ordered.new_position
+          FROM ordered
+          WHERE "Entry".id = ordered.id
+        `
+      }
+    )
+  }
+
   async update(id: number, editedFields: EntryUpdate) {
     const editedEntry = await this.#prismaClient.$transaction(
       async (tx) => {
