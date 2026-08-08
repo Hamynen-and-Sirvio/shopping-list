@@ -102,7 +102,8 @@ export default class EntryRepository {
           FROM ordered
           WHERE "Entry".id = ordered.id
         `
-      }
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     )
   }
 
