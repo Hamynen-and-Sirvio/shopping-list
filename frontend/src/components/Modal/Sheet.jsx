@@ -13,9 +13,9 @@ const Sheet = ({ handleCloseModal, className = '', children }) => {
     // Lock background scrolling while the sheet is open
     root.style.overflow = 'hidden'
 
-    // Keep the overlay inside the visible area when the on-screen keyboard is open
+    // Keep the sheet inside the visible area when the on-screen keyboard is open
     const fitToViewport = () => {
-      overlay.style.height = `${viewport.height}px`
+      overlay.style.setProperty('--visible-height', `${viewport.height}px`)
       overlay.style.transform = `translateY(${viewport.offsetTop}px)`
     }
 
