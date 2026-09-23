@@ -1,0 +1,238 @@
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--list-overlay);
+  animation: sheet-fade-in 150ms ease-out;
+}
+
+.sheet {
+  box-sizing: border-box;
+  max-height: 100dvh;
+  overflow-y: auto;
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
+  background: var(--list-background);
+  border-top: 2px solid var(--list-text);
+  color: var(--list-text);
+  font-family: var(--font-family);
+  animation: sheet-slide-up 200ms ease-out;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.sheet-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sheet-close-button {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--list-text);
+  background: transparent;
+  border: 1px solid var(--list-border-strong);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.sheet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.sheet-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sheet-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sheet-label {
+  font-size: 13px;
+  color: var(--list-text-muted);
+}
+
+.sheet-success {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(8px);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+  pointer-events: none;
+}
+
+.sheet-success.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sheet-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  color: var(--list-text);
+  background: var(--list-input-background);
+  border: 1px solid var(--list-border-strong);
+  border-radius: 0;
+  outline: none;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.sheet-input-large {
+  min-height: 56px;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.sheet-input::placeholder {
+  color: var(--list-text-done);
+}
+
+.sheet-input:focus {
+  border: 2px solid var(--list-text);
+  padding: 0 11px;
+}
+
+.quantity-stepper {
+  display: flex;
+  height: 56px;
+  border: 1px solid var(--list-border-strong);
+}
+
+.stepper-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  flex-shrink: 0;
+  padding: 0;
+  color: var(--list-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.stepper-button:disabled {
+  color: var(--list-text-done);
+  cursor: default;
+}
+
+.stepper-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  color: var(--list-text);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--list-border-strong);
+  border-right: 1px solid var(--list-border-strong);
+  border-radius: 0;
+  outline: none;
+  text-align: center;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepper-input:focus {
+  background: var(--list-input-background);
+}
+
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.unit-option {
+  min-height: 44px;
+  padding: 0 12px;
+  text-align: left;
+  color: var(--list-text);
+  background: transparent;
+  border: 1px solid var(--list-border-strong);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.unit-option.selected {
+  color: var(--list-button-text);
+  background: var(--list-button);
+  border-color: var(--list-button);
+  font-weight: 700;
+}
+
+.sheet-submit-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 58px;
+  margin-top: 4px;
+  padding: 0 18px;
+  color: var(--list-button-text);
+  background: var(--list-button);
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sheet-submit-button:disabled {
+  background: var(--list-button-disabled);
+  cursor: default;
+}
+
+@keyframes sheet-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-overlay,
+  .sheet {
+    animation: none;
+  }
+}

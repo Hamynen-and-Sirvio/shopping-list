@@ -17,6 +17,9 @@
   --list-border-strong: #6a696c;
   --list-button: #f6f3f1;
   --list-button-text: #2c2b2d;
+  --list-button-disabled: #8a8889;
+  --list-input-background: #444345;
+  --list-overlay: rgba(0, 0, 0, 0.6);
 }
 
 html,
