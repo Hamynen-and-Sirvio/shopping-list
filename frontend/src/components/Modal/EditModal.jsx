@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { LuCheck, LuTrash, LuX } from 'react-icons/lu'
 import { QuantityStepper, UnitPicker } from './SheetFields'
-import './Sheet.css'
+import Sheet from './Sheet'
 
 const EditModal = ({
   openModal,
@@ -51,92 +51,86 @@ const EditModal = ({
   if (!openModal || !entry) return null
 
   return (
-    <div className="sheet-overlay" onClick={handleCloseModal}>
-      <div className="sheet" role="dialog" onClick={(e) => e.stopPropagation()}>
-        <div className="sheet-header">
-          <h2 id="edit-item-title" className="sheet-title">
-            Edit item
-          </h2>
-          <div className="sheet-header-actions">
-            <button
-              type="button"
-              className="sheet-close-button sheet-delete-button"
-              onClick={handleDelete}
-            >
-              <LuTrash size={22} />
-            </button>
-            <button
-              type="button"
-              className="sheet-close-button"
-              onClick={handleCloseModal}
-            >
-              <LuX size={22} />
-            </button>
-          </div>
+    <Sheet handleCloseModal={handleCloseModal}>
+      <div className="sheet-header">
+        <h2 id="edit-item-title" className="sheet-title">
+          Edit item
+        </h2>
+        <div className="sheet-header-actions">
+          <button
+            type="button"
+            className="sheet-close-button sheet-delete-button"
+            onClick={handleDelete}
+          >
+            <LuTrash size={22} />
+          </button>
+          <button
+            type="button"
+            className="sheet-close-button"
+            onClick={handleCloseModal}
+          >
+            <LuX size={22} />
+          </button>
+        </div>
+      </div>
+
+      <form className="sheet-form" onSubmit={handleSave}>
+        <div className="sheet-field">
+          <label htmlFor="edit-content" className="sheet-label">
+            Item
+          </label>
+          <input
+            id="edit-content"
+            className="sheet-input sheet-input-large"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            autoComplete="off"
+            required
+          />
         </div>
 
-        <form className="sheet-form" onSubmit={handleSave}>
-          <div className="sheet-field">
-            <label htmlFor="edit-content" className="sheet-label">
-              Item
-            </label>
-            <input
-              id="edit-content"
-              className="sheet-input sheet-input-large"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              autoComplete="off"
-              required
-            />
-          </div>
+        <div className="sheet-field">
+          <label htmlFor="edit-quantity" className="sheet-label">
+            Quantity
+          </label>
+          <QuantityStepper
+            id="edit-quantity"
+            quantity={quantity}
+            setQuantity={setQuantity}
+          />
+        </div>
 
-          <div className="sheet-field">
-            <label htmlFor="edit-quantity" className="sheet-label">
-              Quantity
-            </label>
-            <QuantityStepper
-              id="edit-quantity"
-              quantity={quantity}
-              setQuantity={setQuantity}
-            />
-          </div>
+        <div className="sheet-field">
+          <span id="edit-unit-label" className="sheet-label">
+            Unit
+          </span>
+          <UnitPicker labelId="edit-unit-label" unit={unit} setUnit={setUnit} />
+        </div>
 
-          <div className="sheet-field">
-            <span id="edit-unit-label" className="sheet-label">
-              Unit
-            </span>
-            <UnitPicker
-              labelId="edit-unit-label"
-              unit={unit}
-              setUnit={setUnit}
-            />
-          </div>
+        <div className="sheet-field">
+          <label htmlFor="edit-info" className="sheet-label">
+            Note
+          </label>
+          <input
+            id="edit-info"
+            className="sheet-input"
+            value={additionalInfo}
+            onChange={(e) => setAdditionalInfo(e.target.value)}
+            placeholder="Additional info"
+            autoComplete="off"
+          />
+        </div>
 
-          <div className="sheet-field">
-            <label htmlFor="edit-info" className="sheet-label">
-              Note
-            </label>
-            <input
-              id="edit-info"
-              className="sheet-input"
-              value={additionalInfo}
-              onChange={(e) => setAdditionalInfo(e.target.value)}
-              placeholder="Additional info"
-              autoComplete="off"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="sheet-submit-button"
-            disabled={!canSubmit}
-          >
-            Save
-            <LuCheck size={24} />
-          </button>
-        </form>
-      </div>
-    </div>
+        <button
+          type="submit"
+          className="sheet-submit-button"
+          disabled={!canSubmit}
+        >
+          Save
+          <LuCheck size={24} />
+        </button>
+      </form>
+    </Sheet>
   )
 }
 
