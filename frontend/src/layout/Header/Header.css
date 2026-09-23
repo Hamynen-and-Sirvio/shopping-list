@@ -60,3 +60,41 @@
 .header-settings-button:active {
   opacity: 0.7;
 }
+
+.loading-track {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  width: 35%;
+  height: 2px;
+  background: var(--list-text);
+  animation: loading-bar-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes loading-bar-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(calc(100% / 0.35));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-bar {
+    width: 100%;
+    animation: loading-bar-pulse 1.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes loading-bar-pulse {
+    from {
+      opacity: 0.3;
+    }
+  }
+}

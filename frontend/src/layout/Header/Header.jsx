@@ -3,7 +3,7 @@ import { LuSettings } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
-const Header = ({ uncheckedCount, checkedCount, logout }) => {
+const Header = ({ uncheckedCount, checkedCount, isLoading, logout }) => {
   const [openModal, setOpenModal] = useState(false)
 
   const handleOpenModal = () => {
@@ -24,12 +24,19 @@ const Header = ({ uncheckedCount, checkedCount, logout }) => {
             </a>
           </h1>
           <span className="header-summary">
-            {uncheckedCount} to get · {checkedCount} picked
+            {isLoading
+              ? 'Updating list...'
+              : `${uncheckedCount} to get · ${checkedCount} picked`}
           </span>
         </div>
         <button className="header-settings-button" onClick={handleOpenModal}>
           <LuSettings size={20} />
         </button>
+        {isLoading && (
+          <div className="loading-track">
+            <div className="loading-bar" />
+          </div>
+        )}
       </div>
       <SettingsModal
         openModal={openModal}

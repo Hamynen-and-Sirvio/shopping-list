@@ -3,14 +3,18 @@ import { LuPlus } from 'react-icons/lu'
 import AddEntryModal from '../../components/Modal/AddEntryModal'
 import './Footer.css'
 
-const Footer = ({ addEntry }) => {
+const Footer = ({ addEntry, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
       <div className="footer">
-        <button className="add-button" onClick={() => setIsOpen(true)}>
-          Add item
+        <button
+          className="add-button"
+          onClick={() => setIsOpen(true)}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Add item'}
           <LuPlus size={26} />
         </button>
       </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Header from './layout/Header/Header'
 import Content from './layout/Content/Content'
 import Footer from './layout/Footer/Footer'
-import Loading from './components/Loading/Loading'
 import Login from './layout/Login/Login'
 import './App.css'
 
@@ -137,6 +136,7 @@ const App = ({ entryService, tokenService, userService }) => {
         <Header
           uncheckedCount={entries.length - checkedEntries.length}
           checkedCount={checkedEntries.length}
+          isLoading={isLoading}
           logout={logout}
         />
         <Content
@@ -148,8 +148,7 @@ const App = ({ entryService, tokenService, userService }) => {
           deleteEntries={deleteEntries}
           deleteEntry={deleteEntry}
         />
-        <Footer addEntry={addEntry} />
-        {isLoading && <Loading />}
+        <Footer addEntry={addEntry} isLoading={isLoading} />
       </div>
     )
   } else {

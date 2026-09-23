@@ -28,3 +28,8 @@
 .add-button:active {
   opacity: 0.85;
 }
+
+.add-button:disabled {
+  background: var(--list-button-disabled);
+  cursor: default;
+}
