@@ -44,11 +44,9 @@ export const QuantityStepper = ({ id, quantity, setQuantity }) => {
 }
 
 export const UnitPicker = ({ unit, setUnit }) => {
-  const units = unit && !UNITS.includes(unit) ? [...UNITS, unit] : UNITS
-
   return (
     <div className="unit-grid" role="radiogroup">
-      {units.map((option) => (
+      {UNITS.map((option) => (
         <button
           key={option}
           type="button"
