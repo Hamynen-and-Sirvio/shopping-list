@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { LuShoppingCart } from 'react-icons/lu'
-import { MdOutlineSettings } from 'react-icons/md'
-import { LuTrash } from 'react-icons/lu'
+import { LuSettings } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
-const Header = ({ deleteEntries, checkedEntries, logout }) => {
+const Header = ({ uncheckedCount, checkedCount, logout }) => {
   const [openModal, setOpenModal] = useState(false)
 
   const handleOpenModal = () => {
@@ -20,27 +18,22 @@ const Header = ({ deleteEntries, checkedEntries, logout }) => {
     <>
       <div className="header">
         <div className="header-title">
-          <div className="title-icon">
-            <LuShoppingCart size={23} />
-          </div>
-          <div className="title-text">
+          <h1 className="title-text">
             <a href="/" className="title-link">
               Shopping list
             </a>
-          </div>
+          </h1>
+          <span className="header-summary">
+            {uncheckedCount} to get · {checkedCount} picked
+          </span>
         </div>
-        <div className="header-buttons">
-          <button
-            className={`delete-button ${checkedEntries.length === 0 ? 'disabled' : ''}`}
-            onClick={deleteEntries}
-            disabled={checkedEntries.length === 0}
-          >
-            <LuTrash size={20} />
-          </button>
-          <button className="settings-button" onClick={handleOpenModal}>
-            <MdOutlineSettings size={20} />
-          </button>
-        </div>
+        <button
+          className="header-settings-button"
+          onClick={handleOpenModal}
+          aria-label="Settings"
+        >
+          <LuSettings size={20} />
+        </button>
       </div>
       <SettingsModal
         openModal={openModal}

@@ -123,8 +123,8 @@ const App = ({ entryService, tokenService, userService }) => {
     return (
       <div className="app-container">
         <Header
-          deleteEntries={deleteEntries}
-          checkedEntries={checkedEntries}
+          uncheckedCount={entries.length - checkedEntries.length}
+          checkedCount={checkedEntries.length}
           logout={logout}
         />
         <Content
@@ -133,6 +133,7 @@ const App = ({ entryService, tokenService, userService }) => {
           editEntry={editEntry}
           moveEntry={moveEntry}
           checkEntry={checkEntry}
+          deleteEntries={deleteEntries}
         />
         <Footer addEntry={addEntry} />
         {isLoading && <Loading />}

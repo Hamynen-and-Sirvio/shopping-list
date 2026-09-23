@@ -8,11 +8,20 @@
   --button-primary: #c2d8c4;
   --button-secondary: #333e46;
   --font-family: 'Montserrat', sans-serif;
+
+  --list-background: #2c2b2d;
+  --list-text: #ffffff;
+  --list-text-muted: #a8a6a9;
+  --list-text-done: #8c8a8d;
+  --list-border: #4a494c;
+  --list-border-strong: #6a696c;
+  --list-button: #f6f3f1;
+  --list-button-text: #2c2b2d;
 }
 
 html,
 body {
-  background: var(--background-primary);
+  background: var(--list-background);
   font-family: var(--font-family);
   margin: 0;
   height: 100%;
@@ -22,6 +31,9 @@ body {
 
 .app-container {
   min-height: 100dvh;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  font-family: var(--font-family);
+  color: var(--list-text);
 }

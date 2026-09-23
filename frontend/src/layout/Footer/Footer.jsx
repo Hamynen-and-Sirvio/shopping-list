@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MdAddCircle } from 'react-icons/md'
+import { LuPlus } from 'react-icons/lu'
 import AddEntryModal from '../../components/Modal/AddEntryModal'
 import './Footer.css'
 
@@ -10,7 +10,8 @@ const Footer = ({ addEntry }) => {
     <>
       <div className="footer">
         <button className="add-button" onClick={() => setIsOpen(true)}>
-          <MdAddCircle size={48} />
+          Add item
+          <LuPlus size={26} />
         </button>
       </div>
 

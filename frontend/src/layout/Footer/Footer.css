@@ -2,22 +2,29 @@
   position: sticky;
   bottom: 0;
   z-index: 10;
-  display: flex;
-  justify-content: center;
   flex: 0;
-}
-
-.add-content-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  background-color: transparent;
+  padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+  background: var(--list-background);
+  border-top: 2px solid var(--list-border-strong);
 }
 
 .add-button {
-  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 18px;
+  color: var(--list-button-text);
+  background: var(--list-button);
   border: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
-  color: var(--text-primary);
-  padding-bottom: 20px;
+}
+
+.add-button:active {
+  opacity: 0.85;
 }
