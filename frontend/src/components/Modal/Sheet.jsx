@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import './Sheet.css'
 
 const Sheet = ({ handleCloseModal, className = '', children }) => {
@@ -34,7 +35,8 @@ const Sheet = ({ handleCloseModal, className = '', children }) => {
     }
   }, [])
 
-  return (
+  // Render at the body level so no parent stacking context can cover the sheet
+  return createPortal(
     <div className="sheet-overlay" ref={overlayRef} onClick={handleCloseModal}>
       <div
         className={`sheet ${className}`}
@@ -43,7 +45,8 @@ const Sheet = ({ handleCloseModal, className = '', children }) => {
       >
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
