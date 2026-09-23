@@ -60,6 +60,65 @@
   color: var(--list-danger);
 }
 
+.sheet-flush {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sheet-flush .sheet-header {
+  padding: 0 16px;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid var(--list-border-strong);
+  border-bottom: 2px solid var(--list-border-strong);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 62px;
+  padding: 12px 16px;
+  text-align: left;
+  color: var(--list-text);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.settings-row + .settings-row {
+  border-top: 1px solid var(--list-border);
+}
+
+.settings-row:active {
+  background: var(--list-input-background);
+}
+
+.settings-row-icon {
+  flex-shrink: 0;
+}
+
+.settings-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-row-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.settings-row-subtitle {
+  font-size: 14px;
+  color: var(--list-text-muted);
+}
+
 .sheet-form {
   display: flex;
   flex-direction: column;
