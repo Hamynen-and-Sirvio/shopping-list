@@ -27,11 +27,7 @@ const Header = ({ uncheckedCount, checkedCount, logout }) => {
             {uncheckedCount} to get · {checkedCount} picked
           </span>
         </div>
-        <button
-          className="header-settings-button"
-          onClick={handleOpenModal}
-          aria-label="Settings"
-        >
+        <button className="header-settings-button" onClick={handleOpenModal}>
           <LuSettings size={20} />
         </button>
       </div>

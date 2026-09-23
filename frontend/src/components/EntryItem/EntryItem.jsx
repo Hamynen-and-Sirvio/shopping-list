@@ -31,8 +31,6 @@ const EntryItem = ({ index, entry, handleOpenModal, checkEntry }) => {
         className="entry-checkbox"
         onClick={() => checkEntry(entry)}
         role="checkbox"
-        aria-checked={entry.checked}
-        aria-label={entry.content}
       >
         <span className="checkbox-box">
           {entry.checked && <LuCheck size={16} strokeWidth={3} />}

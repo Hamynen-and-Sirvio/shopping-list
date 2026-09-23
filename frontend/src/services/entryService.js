@@ -19,6 +19,17 @@ export class EntryService {
     return await response.json()
   }
 
+  async deleteEntry(entry) {
+    const response = await fetch(`${this.#apiUrl}/${entry.id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${this.#tokenService.fetchToken()}` },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+  }
+
   async deleteEntries(entryIds) {
     const response = await fetch(`${this.#apiUrl}`, {
       method: 'DELETE',

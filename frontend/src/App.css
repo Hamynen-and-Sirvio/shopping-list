@@ -20,6 +20,7 @@
   --list-button-disabled: #8a8889;
   --list-input-background: #444345;
   --list-overlay: rgba(0, 0, 0, 0.6);
+  --list-danger: #ff8f73;
 }
 
 html,

@@ -51,6 +51,15 @@
   cursor: pointer;
 }
 
+.sheet-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sheet-delete-button {
+  color: var(--list-danger);
+}
+
 .sheet-form {
   display: flex;
   flex-direction: column;

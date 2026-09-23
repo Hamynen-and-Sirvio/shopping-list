@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react'
-import './Modal.css'
+import { LuCheck, LuTrash, LuX } from 'react-icons/lu'
+import { QuantityStepper, UnitPicker } from './SheetFields'
+import './Sheet.css'
 
-const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
+const EditModal = ({
+  openModal,
+  handleCloseModal,
+  entry,
+  editEntry,
+  deleteEntry,
+}) => {
   const [content, setContent] = useState('')
   const [quantity, setQuantity] = useState('')
   const [unit, setUnit] = useState('')
@@ -10,20 +18,23 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
   useEffect(() => {
     if (entry) {
       setContent(entry.content ?? '')
-      setQuantity(entry.quantity ?? '')
+      setQuantity(String(entry.quantity ?? ''))
       setUnit(entry.unit ?? '')
       setAdditionalInfo(entry.additionalInfo ?? '')
     }
   }, [entry])
 
+  const parsedQuantity = parseFloat(quantity)
+  const canSubmit = content.trim() !== '' && parsedQuantity > 0
+
   const handleSave = (e) => {
     e.preventDefault()
 
-    if (!content.trim()) return
+    if (!canSubmit) return
 
     editEntry(entry, {
       content: content.trim(),
-      quantity: parseFloat(quantity),
+      quantity: parsedQuantity,
       unit: unit,
       additionalInfo: additionalInfo.trim(),
     })
@@ -31,77 +42,99 @@ const EditModal = ({ openModal, handleCloseModal, entry, editEntry }) => {
     handleCloseModal()
   }
 
+  const handleDelete = async () => {
+    if (!confirm(`Delete "${entry.content}"?`)) return
+    handleCloseModal()
+    await deleteEntry(entry)
+  }
+
   if (!openModal || !entry) return null
 
   return (
-    <div className="modal" onClick={handleCloseModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-title">
-          <h3>Edit Entry</h3>
+    <div className="sheet-overlay" onClick={handleCloseModal}>
+      <div className="sheet" role="dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="sheet-header">
+          <h2 id="edit-item-title" className="sheet-title">
+            Edit item
+          </h2>
+          <div className="sheet-header-actions">
+            <button
+              type="button"
+              className="sheet-close-button sheet-delete-button"
+              onClick={handleDelete}
+            >
+              <LuTrash size={22} />
+            </button>
+            <button
+              type="button"
+              className="sheet-close-button"
+              onClick={handleCloseModal}
+            >
+              <LuX size={22} />
+            </button>
+          </div>
         </div>
 
-        <div className="modal-edit-entry">
-          <form onSubmit={handleSave}>
-            <label htmlFor="content">Content</label>
+        <form className="sheet-form" onSubmit={handleSave}>
+          <div className="sheet-field">
+            <label htmlFor="edit-content" className="sheet-label">
+              Item
+            </label>
             <input
-              id="content"
-              className="edit-field"
+              id="edit-content"
+              className="sheet-input sheet-input-large"
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              autoComplete="off"
               required
-              autoFocus
             />
+          </div>
 
-            <div className="quantity-row">
-              <div className="field-group">
-                <label htmlFor="quantity">Quantity</label>
-                <input
-                  id="quantity"
-                  className="edit-field"
-                  type="number"
-                  step="any"
-                  value={quantity}
-                  required
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
-              </div>
+          <div className="sheet-field">
+            <label htmlFor="edit-quantity" className="sheet-label">
+              Quantity
+            </label>
+            <QuantityStepper
+              id="edit-quantity"
+              quantity={quantity}
+              setQuantity={setQuantity}
+            />
+          </div>
 
-              <div className="field-group">
-                <label htmlFor="unit">Unit</label>
-                <input
-                  id="unit"
-                  className="edit-field"
-                  value={unit}
-                  required
-                  onChange={(e) => setUnit(e.target.value)}
-                />
-              </div>
-            </div>
+          <div className="sheet-field">
+            <span id="edit-unit-label" className="sheet-label">
+              Unit
+            </span>
+            <UnitPicker
+              labelId="edit-unit-label"
+              unit={unit}
+              setUnit={setUnit}
+            />
+          </div>
 
-            <label htmlFor="info">Additional info</label>
+          <div className="sheet-field">
+            <label htmlFor="edit-info" className="sheet-label">
+              Note
+            </label>
             <input
-              id="info"
-              className="edit-field"
+              id="edit-info"
+              className="sheet-input"
               value={additionalInfo}
               onChange={(e) => setAdditionalInfo(e.target.value)}
-              placeholder="Optional..."
+              placeholder="Additional info"
+              autoComplete="off"
             />
+          </div>
 
-            <div className="modal-actions">
-              <button
-                type="button"
-                onClick={handleCloseModal}
-                className="cancel-button"
-              >
-                Cancel
-              </button>
-
-              <button type="submit" className="save-button">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="sheet-submit-button"
+            disabled={!canSubmit}
+          >
+            Save
+            <LuCheck size={24} />
+          </button>
+        </form>
       </div>
     </div>
   )

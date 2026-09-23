@@ -56,6 +56,18 @@ const App = ({ entryService, tokenService, userService }) => {
     }
   }
 
+  const deleteEntry = async (entry) => {
+    try {
+      setIsLoading(true)
+      await entryService.deleteEntry(entry)
+      await reloadEntries()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const editEntry = async (entry, content) => {
     try {
       const editedEntry = await entryService.editEntry(entry, content)
@@ -134,6 +146,7 @@ const App = ({ entryService, tokenService, userService }) => {
           moveEntry={moveEntry}
           checkEntry={checkEntry}
           deleteEntries={deleteEntries}
+          deleteEntry={deleteEntry}
         />
         <Footer addEntry={addEntry} />
         {isLoading && <Loading />}

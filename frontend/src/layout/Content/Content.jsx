@@ -13,6 +13,7 @@ const Content = ({
   moveEntry,
   checkEntry,
   deleteEntries,
+  deleteEntry,
 }) => {
   const [openModal, setOpenModal] = useState(false)
   const [currentEntry, setCurrentEntry] = useState(null)
@@ -98,6 +99,7 @@ const Content = ({
         handleCloseModal={handleCloseModal}
         entry={currentEntry}
         editEntry={editEntry}
+        deleteEntry={deleteEntry}
       />
     </div>
   )
