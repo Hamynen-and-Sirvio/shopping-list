@@ -4,8 +4,15 @@ import EntryRepository from '../EntryRepository.ts'
 import { EntryId, EntryIds, EntryUpdate, NewEntry } from '../validation.ts'
 import ArgumentError from '../errors/ArgumentError.ts'
 
-export const createEntriesRouter = (entryRepository: EntryRepository) => {
+export const createEntriesRouter = (entryRepository: EntryRepository, isTesting: boolean) => {
   const entriesRouter = express.Router()
+
+  if (isTesting) {
+    entriesRouter.get('/reset', async (_, res) => {
+      await entryRepository.reset()
+      res.status(200).end()
+    })
+  }
 
   entriesRouter.get('/', async (_, res) => {
     const entries = await entryRepository.fetchAll()

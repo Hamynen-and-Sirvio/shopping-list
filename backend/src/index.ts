@@ -17,6 +17,8 @@ const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
+const isTesting = config.NODE_ENV === 'test'
+
 const entryRepository = new EntryRepository(prisma)
 
 const app = express()
@@ -61,7 +63,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const entriesRouter = createEntriesRouter(entryRepository)
+const entriesRouter = createEntriesRouter(entryRepository, isTesting)
 app.use('/entries', entriesRouter)
 
 app.all('{*splat}', (_, res) => {
