@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, test } from 'vitest'
+import { beforeAll, beforeEach, describe, expect, test } from 'vitest'
 import { Entry } from '../generated/prisma/client.ts'
 
 import {
@@ -8,6 +8,7 @@ import {
   editEntry,
   fetchEntries,
   login,
+  resetEntries,
 } from './apiUtils.ts'
 
 const API_URL = 'http://localhost:3000'
@@ -39,6 +40,10 @@ describe('Entries', () => {
   beforeAll(async () => {
     const loginResponse = await login(API_URL, PASSWORD)
     token = loginResponse.token
+  })
+
+  beforeEach(async () => {
+    await resetEntries(API_URL, token)
   })
 
   test('can be created', async () => {
