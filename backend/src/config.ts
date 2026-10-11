@@ -38,3 +38,5 @@ if (process.env['SECRET'] === undefined) {
 export const SECRET = process.env['SECRET']
 
 export const RATE_LIMITER = process.env['RATE_LIMITER']
+
+export const NODE_ENV = process.env['NODE_ENV']
