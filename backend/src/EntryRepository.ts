@@ -10,6 +10,13 @@ export default class EntryRepository {
     this.#prismaClient = prismaClient
   }
 
+  async reset() {
+    await this.#prismaClient.$executeRaw`
+      TRUNCATE TABLE "Entry"
+      RESTART IDENTITY CASCADE
+    `
+  }
+
   async fetchAll() {
     const fetchedEntries = await this.#prismaClient.entry.findMany({
       orderBy: { position: 'asc' },
