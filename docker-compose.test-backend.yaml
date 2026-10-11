@@ -42,6 +42,7 @@ services:
       PASSWORD_HASH: 2b84ed4184c0fd093b62ef952b4e9025:3481b4599bdf5135a574714bd09bcc11765d6b65896939159ca0e42e615cf8cb5c6cad7f40ed274fa6a6efa0bd8eb1aa404316e623808aebb0af17910b80414b
       SECRET: secret
       RATE_LIMITER: off
+      NODE_ENV: test
     pull_policy: never
     depends_on:
       test-database:
