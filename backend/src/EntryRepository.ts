@@ -98,16 +98,12 @@ export default class EntryRepository {
         })
 
         await tx.$executeRaw`
-          WITH ordered AS (
-            SELECT
-              id,
-              ROW_NUMBER() OVER (ORDER BY position) AS new_position
+          UPDATE "Entry" E
+          SET position = (
+            SELECT COUNT(*)
             FROM "Entry"
+            WHERE position <= E.position
           )
-          UPDATE "Entry"
-          SET position = ordered.new_position
-          FROM ordered
-          WHERE "Entry".id = ordered.id
         `
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
