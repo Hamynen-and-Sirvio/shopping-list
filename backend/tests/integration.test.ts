@@ -118,29 +118,48 @@ describe('Entries', () => {
   })
 
   test('can be deleted multiple at a time', async () => {
-    const entry = {
-      content: 'Something',
-      quantity: 1,
-      unit: 'kg',
-      additionalInfo: 'Fresh',
-    }
-    const entry2 = {
-      content: 'Something else',
-      quantity: 2,
-      unit: 'kg',
-      additionalInfo: 'Fresh',
+    const entryNames = [
+      'Milk',
+      'Juice',
+      'Bread',
+      'Potatoes',
+      'Carrots',
+      'Onions',
+      'Fish',
+      'Chicken',
+      'Salt',
+      'Sugar',
+      'Rice',
+    ]
+
+    const deleteIndices = [1, 4, 8]
+
+    const createdEntries = []
+
+    for (const entryName of entryNames) {
+      const entry = {
+        content: entryName,
+        quantity: 1,
+        unit: 'kpl',
+        additionalInfo: 'Important',
+      }
+
+      createdEntries.push(await createEntry(API_URL, token, entry))
     }
 
-    const createdEntry = await createEntry(API_URL, token, entry)
-    const createdEntry2 = await createEntry(API_URL, token, entry2)
+    const deleteIds = createdEntries
+      .filter((_, index) => deleteIndices.includes(index))
+      .map(element => element.id)
 
-    const ids = [createdEntry.id, createdEntry2.id]
-    await deleteManyEntries(API_URL, token, ids)
+    await deleteManyEntries(API_URL, token, deleteIds)
 
     const fetchedEntries = await fetchEntries(API_URL, token)
 
-    expect(fetchedEntries).not.toContainEqual(createdEntry)
-    expect(fetchedEntries).not.toContainEqual(createdEntry2)
+    const expectedEntries = createdEntries
+      .filter((_, index) => !deleteIndices.includes(index))
+      .map((element, index) => ({ ...element, position: index + 1 }))
+
+    expect(fetchedEntries).toStrictEqual(expectedEntries)
   })
 
   test('can be edited', async () => {
