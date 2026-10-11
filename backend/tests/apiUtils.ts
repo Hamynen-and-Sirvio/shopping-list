@@ -13,6 +13,12 @@ export const login = async (apiUrl: string, password: string) => {
   return responseBody
 }
 
+export const resetEntries = async (apiUrl: string, token: string) => {
+  await fetch(`${apiUrl}/entries/reset`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  })
+}
+
 export const fetchEntries = async (apiUrl: string, token: string) => {
   const response = await fetch(`${apiUrl}/entries`, {
     headers: { 'Authorization': `Bearer ${token}` },
