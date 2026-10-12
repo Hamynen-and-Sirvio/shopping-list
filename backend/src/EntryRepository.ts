@@ -3,18 +3,17 @@ import type { Entry } from '../generated/prisma/client.ts'
 import type { EntryUpdate } from './types.ts'
 import ArgumentError from './errors/ArgumentError.ts'
 
-type TransactionHandler = Parameters<PrismaClient['$transaction']>[0]
-type Transaction = Parameters<TransactionHandler>[0]
-type TransactionCreator = <T>(func: (tx: Transaction) => Promise<T>) => Promise<T>
+type TransactionalOperation<T> = (tx: Prisma.TransactionClient) => Promise<T>
+type TransactionRunner = <T>(operation: TransactionalOperation<T>) => Promise<T>
 
 export default class EntryRepository {
-  #lockedTransaction: TransactionCreator
+  #lockedTransaction: TransactionRunner
 
   constructor(prismaClient: PrismaClient) {
-    this.#lockedTransaction = func =>
+    this.#lockedTransaction = operation =>
       prismaClient.$transaction(async tx => {
         await tx.$executeRaw`LOCK TABLE "Entry" IN ACCESS EXCLUSIVE MODE`
-        return func(tx)
+        return operation(tx)
       })
   }
 
