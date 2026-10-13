@@ -3,7 +3,6 @@ import express from 'express'
 import type { ErrorRequestHandler } from 'express'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
-import { RateLimiterMemory, RateLimiterMongo } from 'rate-limiter-flexible'
 import { prisma } from '../lib/prisma.ts'
 
 import * as config from './config.ts'
@@ -11,6 +10,7 @@ import EntryRepository from './EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter, isLoggedIn } from './routers/login.ts'
 import { limiter } from './middleware/rateLimiter.ts'
+import { MongoDbStoredRateLimiter } from './utils/ratelimiter/MongoDbStoredRateLimiter.ts'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 
@@ -30,26 +30,18 @@ app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
 app.use(express.json())
 
-const insuranceLimiter = new RateLimiterMemory({
-  points: MAX_CONSECUTIVE_FAILS_BY_IP,
-  duration: 60 * 60 * 3,
-  blockDuration: 60 * 15,
-})
-
-const limiterConsecutiveFailsByIp = new RateLimiterMongo({
-  storeClient: MongoClient.connect(config.LIMITER_DB_URL),
+const limiterConsecutiveFailsByIp = new MongoDbStoredRateLimiter({
+  mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
   dbName: config.LIMITER_DB_NAME,
-  points: MAX_CONSECUTIVE_FAILS_BY_IP,
+  maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
   duration: 60 * 60 * 3,
   blockDuration: 60 * 15,
-  insuranceLimiter: insuranceLimiter,
-  keyPrefix: 'limiterConsecutiveFailsByIp',
+  dbKeyPrefix: 'limiterConsecutiveFailsByIp',
 })
 
 const loginRouter = createLoginRouter(
   config.SECRET,
   config.PASSWORD_HASH,
-  MAX_CONSECUTIVE_FAILS_BY_IP,
   limiterConsecutiveFailsByIp,
 )
 app.use('/login', loginRouter)

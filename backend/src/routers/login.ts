@@ -3,17 +3,15 @@ import crypto from 'node:crypto'
 import express from 'express'
 import type { Request } from 'express'
 import jwt from 'jsonwebtoken'
-import { RateLimiterRes } from 'rate-limiter-flexible'
-import type { RateLimiterAbstract} from 'rate-limiter-flexible'
 
 import { LoginPassword } from '../validation.ts'
+import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
 export const createLoginRouter = (
   secret: string,
   passwordHash: string,
-  maxConsecutiveFailsByIp: number,
-  limiterConsecutiveFailsByIp: RateLimiterAbstract,
+  limiterConsecutiveFailsByIp: RateLimiter,
 ) => {
   const loginRouter = express.Router()
 
@@ -25,11 +23,10 @@ export const createLoginRouter = (
       return
     }
 
-    const rlResIp = await limiterConsecutiveFailsByIp.get(ipAddr)
+    const rlInfo = await limiterConsecutiveFailsByIp.getInfo(ipAddr)
 
-    if (rlResIp !== null && rlResIp.consumedPoints > maxConsecutiveFailsByIp) {
-      const retrySecs = Math.round(rlResIp.msBeforeNext / 1000) || 1
-      res.set('Retry-After', String(retrySecs))
+    if (rlInfo.isAboveLimit) {
+      res.set('Retry-After', String(rlInfo.retrySecs))
       res.status(429).json({ error: 'Too many login attempts' })
       return
     } else {
@@ -57,23 +54,20 @@ export const createLoginRouter = (
         .scryptSync(validatedBody.data.password, Buffer.from(salt, 'hex'), 64)
         .toString('hex')
       if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
-        try {
-          await limiterConsecutiveFailsByIp.consume(ipAddr)
+        const rlInfo = await limiterConsecutiveFailsByIp.consume(ipAddr)
+
+        if (rlInfo.isAboveLimit) {
+          res.set('Retry-After', String(rlInfo.retrySecs))
+          res.status(429).json({ error: 'Too many login attempts' })
+          return
+        } else {
           res.status(401).json({ error: 'Incorrect password' })
           return
-        } catch (rlRejected) {
-          if (rlRejected instanceof RateLimiterRes) {
-            res.set('Retry-After', String(Math.round(rlRejected.msBeforeNext / 1000) || 1))
-            res.status(429).json({ error: 'Too many login attempts' })
-            return
-          } else {
-            throw rlRejected
-          }
         }
       }
 
-      if (rlResIp !== null && rlResIp.consumedPoints > 0) {
-        await limiterConsecutiveFailsByIp.delete(ipAddr)
+      if (rlInfo.consumedPoints > 0) {
+        await limiterConsecutiveFailsByIp.reset(ipAddr)
       }
 
       res.json({ token: jwt.sign({}, secret) })
