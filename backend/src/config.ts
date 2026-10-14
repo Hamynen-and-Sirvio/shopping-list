@@ -5,14 +5,9 @@ if (process.env['DATABASE_URL'] === undefined) {
 }
 export const DATABASE_URL = process.env['DATABASE_URL']
 
-if (process.env['LIMITER_DB_URL'] === undefined) {
-  throw new Error('Environment variable LIMITER_DB_URL not defined')
-}
+// MongoDB store is used for the rate limiter only if both LIMITER_DB_URL
+// and LIMITER_DB_NAME are set
 export const LIMITER_DB_URL = process.env['LIMITER_DB_URL']
-
-if (process.env['LIMITER_DB_NAME'] === undefined) {
-  throw new Error('Environment variable LIMITER_DB_NAME not defined')
-}
 export const LIMITER_DB_NAME = process.env['LIMITER_DB_NAME']
 
 if (process.env['PORT'] === undefined) {

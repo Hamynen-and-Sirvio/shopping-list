@@ -10,6 +10,7 @@ import EntryRepository from './EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter, isLoggedIn } from './routers/login.ts'
 import { limiter } from './middleware/rateLimiter.ts'
+import { MemoryStoredRateLimiter } from './utils/ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from './utils/ratelimiter/MongoDbStoredRateLimiter.ts'
 
 const MAX_CONSECUTIVE_FAILS_BY_IP = 5
@@ -30,14 +31,21 @@ app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
 app.use(express.json())
 
-const limiterConsecutiveFailsByIp = new MongoDbStoredRateLimiter({
-  mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
-  dbName: config.LIMITER_DB_NAME,
-  maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
-  duration: 60 * 60 * 3,
-  blockDuration: 60 * 15,
-  dbKeyPrefix: 'limiterConsecutiveFailsByIp',
-})
+const limiterConsecutiveFailsByIp =
+  (config.LIMITER_DB_URL && config.LIMITER_DB_NAME) ?
+  new MongoDbStoredRateLimiter({
+    mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
+    dbName: config.LIMITER_DB_NAME,
+    maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
+    duration: 60 * 60 * 3,
+    blockDuration: 60 * 15,
+    dbKeyPrefix: 'limiterConsecutiveFailsByIp',
+  }) :
+  new MemoryStoredRateLimiter({
+    maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
+    duration: 60 * 60 * 3,
+    blockDuration: 60 * 15,
+  })
 
 const loginRouter = createLoginRouter(
   config.SECRET,

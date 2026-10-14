@@ -1,15 +1,22 @@
 import type { Request, Response, NextFunction } from 'express'
 import { MongoClient } from 'mongodb'
 import * as config from '../config.ts'
+import { MemoryStoredRateLimiter } from '../utils/ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from '../utils/ratelimiter/MongoDbStoredRateLimiter.ts'
 
-const rateLimiter = new MongoDbStoredRateLimiter({
-  mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
-  dbName: config.LIMITER_DB_NAME,
-  maxPoints: 10,
-  duration: 1,
-  dbKeyPrefix: 'rateLimiter'
-})
+const rateLimiter =
+  (config.LIMITER_DB_URL && config.LIMITER_DB_NAME) ?
+  new MongoDbStoredRateLimiter({
+    mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
+    dbName: config.LIMITER_DB_NAME,
+    maxPoints: 10,
+    duration: 1,
+    dbKeyPrefix: 'rateLimiter',
+  }) :
+  new MemoryStoredRateLimiter({
+    maxPoints: 10,
+    duration: 1,
+  })
 
 export const limiter = async (
   req: Request,
