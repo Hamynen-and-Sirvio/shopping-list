@@ -45,7 +45,7 @@ const Login = ({ userService, tokenService, setToken }) => {
           disabled={passwordField === ''}
         >
           Log in
-          <LuArrowRight size={24} />
+          <LuArrowRight size={18} />
         </button>
       </form>
     </div>

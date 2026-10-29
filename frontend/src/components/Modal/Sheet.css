@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
   height: calc(var(--visible-height, 100dvh) + 100lvh);
   padding-bottom: 100lvh;
   background: linear-gradient(
@@ -21,13 +22,17 @@
 
 .sheet {
   box-sizing: border-box;
+  width: 100%;
+  max-width: 430px;
   max-height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
   touch-action: pan-y;
-  padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
   background: var(--list-background);
-  border-top: 2px solid var(--list-text);
+  border: 1px solid var(--list-border);
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
   color: var(--list-text);
   font-family: var(--font-family);
   animation: sheet-slide-up 200ms ease-out;
@@ -38,14 +43,14 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .sheet-title {
   margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .sheet-close-button {
@@ -53,14 +58,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
   padding: 0;
-  color: var(--list-text);
+  color: var(--list-text-secondary);
   background: transparent;
   border: 1px solid var(--list-border-strong);
-  border-radius: 0;
+  border-radius: 10px;
   cursor: pointer;
+}
+
+.sheet-close-button:active {
+  background: var(--list-surface);
 }
 
 .sheet-header-actions {
@@ -78,22 +88,22 @@
 }
 
 .sheet-flush .sheet-header {
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 .settings-list {
   display: flex;
   flex-direction: column;
-  border-top: 2px solid var(--list-border-strong);
-  border-bottom: 2px solid var(--list-border-strong);
+  border-top: 1px solid var(--list-border);
+  border-bottom: 1px solid var(--list-border);
 }
 
 .settings-row {
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-height: 52px;
-  padding: 8px 16px;
+  gap: 14px;
+  min-height: 56px;
+  padding: 8px 20px;
   text-align: left;
   color: var(--list-text);
   background: transparent;
@@ -104,43 +114,44 @@
 }
 
 .settings-row + .settings-row {
-  border-top: 1px solid var(--list-border);
+  border-top: 1px solid var(--list-divider);
 }
 
 .settings-row:active {
-  background: var(--list-input-background);
+  background: var(--list-surface);
 }
 
 .settings-row-icon {
   flex-shrink: 0;
+  color: var(--list-text-secondary);
 }
 
 .settings-row-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .settings-row-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .settings-row-subtitle {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--list-text-muted);
 }
 
 .sheet-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .sheet-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .sheet-label-row {
@@ -150,13 +161,17 @@
 }
 
 .sheet-label {
-  font-size: 13px;
-  color: var(--list-text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--list-text-label);
 }
 
 .sheet-success {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--list-accent);
   opacity: 0;
   transform: translateX(8px);
   transition:
@@ -176,18 +191,17 @@
   min-height: 44px;
   padding: 0 12px;
   color: var(--list-text);
-  background: var(--list-input-background);
+  background: var(--list-surface);
   border: 1px solid var(--list-border-strong);
-  border-radius: 0;
+  border-radius: 10px;
   outline: none;
   font-family: inherit;
   font-size: 16px;
 }
 
 .sheet-input-large {
-  min-height: 46px;
-  font-size: 17px;
-  font-weight: 600;
+  min-height: 48px;
+  font-weight: 500;
 }
 
 .sheet-input::placeholder {
@@ -195,14 +209,21 @@
 }
 
 .sheet-input:focus {
-  border: 2px solid var(--list-text);
-  padding: 0 11px;
+  border-color: var(--list-accent);
 }
 
 .quantity-stepper {
   display: flex;
+  box-sizing: border-box;
   height: 44px;
+  overflow: hidden;
+  background: var(--list-surface);
   border: 1px solid var(--list-border-strong);
+  border-radius: 10px;
+}
+
+.quantity-stepper:focus-within {
+  border-color: var(--list-accent);
 }
 
 .stepper-button {
@@ -218,8 +239,13 @@
   cursor: pointer;
 }
 
+.stepper-button:active {
+  background: var(--list-border);
+}
+
 .stepper-button:disabled {
   color: var(--list-text-done);
+  background: transparent;
   cursor: default;
 }
 
@@ -235,9 +261,9 @@
   border-radius: 0;
   outline: none;
   text-align: center;
-  font-family: inherit;
-  font-size: 20px;
-  font-weight: 800;
+  font-family: var(--font-family-mono);
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .stepper-input::-webkit-outer-spin-button,
@@ -246,34 +272,29 @@
   margin: 0;
 }
 
-.stepper-input:focus {
-  background: var(--list-input-background);
-}
-
 .unit-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
+  gap: 6px;
 }
 
 .unit-option {
   min-height: 40px;
   padding: 0 12px;
-  text-align: left;
-  color: var(--list-text);
-  background: transparent;
+  color: var(--list-chip-text);
+  background: var(--list-surface);
   border: 1px solid var(--list-border-strong);
-  border-radius: 0;
-  font-family: inherit;
-  font-size: 16px;
+  border-radius: 8px;
+  font-family: var(--font-family-mono);
+  font-size: 14px;
   cursor: pointer;
 }
 
 .unit-option.selected {
-  color: var(--list-button-text);
-  background: var(--list-button);
-  border-color: var(--list-button);
-  font-weight: 700;
+  color: var(--list-accent-text);
+  background: var(--list-accent);
+  border-color: var(--list-accent);
+  font-weight: 500;
 }
 
 .sheet-submit-button {
@@ -284,20 +305,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 48px;
-  margin-top: 2px;
+  min-height: 50px;
+  margin-top: 6px;
   padding: 0 18px;
-  color: var(--list-button-text);
-  background: var(--list-button);
+  color: var(--list-accent-text);
+  background: var(--list-accent);
   border: none;
-  border-radius: 0;
+  border-radius: 12px;
   font-family: inherit;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .sheet-submit-button:disabled {
+  color: var(--list-text-muted);
   background: var(--list-button-disabled);
   cursor: default;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { LuCheck, LuTrash, LuX } from 'react-icons/lu'
+import { LuCheck, LuTrash2, LuX } from 'react-icons/lu'
 import { QuantityStepper, UnitPicker } from './SheetFields'
 import Sheet from './Sheet'
 
@@ -62,14 +62,14 @@ const EditModal = ({
             className="sheet-close-button sheet-delete-button"
             onClick={handleDelete}
           >
-            <LuTrash size={22} />
+            <LuTrash2 size={18} />
           </button>
           <button
             type="button"
             className="sheet-close-button"
             onClick={handleCloseModal}
           >
-            <LuX size={22} />
+            <LuX size={18} />
           </button>
         </div>
       </div>
@@ -127,7 +127,7 @@ const EditModal = ({
           disabled={!canSubmit}
         >
           Save
-          <LuCheck size={24} />
+          <LuCheck size={18} />
         </button>
       </form>
     </Sheet>

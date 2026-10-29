@@ -3,6 +3,8 @@ import './Sheet.css'
 
 const UNITS = ['kpl', 'pkt', 'prk', 'plo', 'kg', 'g', 'l', 'dl']
 
+const keepFocus = (e) => e.preventDefault()
+
 export const QuantityStepper = ({ id, quantity, setQuantity }) => {
   const parsedQuantity = parseFloat(quantity)
 
@@ -16,10 +18,11 @@ export const QuantityStepper = ({ id, quantity, setQuantity }) => {
       <button
         type="button"
         className="stepper-button"
+        onMouseDown={keepFocus}
         onClick={() => stepQuantity(-1)}
         disabled={!(parsedQuantity > 1)}
       >
-        <LuMinus size={22} />
+        <LuMinus size={18} />
       </button>
       <input
         id={id}
@@ -35,9 +38,10 @@ export const QuantityStepper = ({ id, quantity, setQuantity }) => {
       <button
         type="button"
         className="stepper-button"
+        onMouseDown={keepFocus}
         onClick={() => stepQuantity(1)}
       >
-        <LuPlus size={22} />
+        <LuPlus size={18} />
       </button>
     </div>
   )
@@ -52,6 +56,7 @@ export const UnitPicker = ({ unit, setUnit }) => {
           type="button"
           role="radio"
           className={`unit-option ${unit === option ? 'selected' : ''}`}
+          onMouseDown={keepFocus}
           onClick={() => setUnit(option)}
         >
           {option}

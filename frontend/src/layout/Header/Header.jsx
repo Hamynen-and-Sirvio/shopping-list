@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LuSettings } from 'react-icons/lu'
+import { LuSettings2 } from 'react-icons/lu'
 import SettingsModal from '../../components/Modal/SettingsModal'
 import './Header.css'
 
@@ -24,13 +24,23 @@ const Header = ({ uncheckedCount, checkedCount, isLoading, logout }) => {
             </a>
           </h1>
           <span className="header-summary">
-            {isLoading
-              ? 'Updating list...'
-              : `${uncheckedCount} to get · ${checkedCount} picked`}
+            {isLoading ? (
+              'Updating list...'
+            ) : (
+              <>
+                <span className="header-summary-count">{uncheckedCount}</span>{' '}
+                to get
+                <span className="header-summary-separator" />
+                <span className="header-summary-count">
+                  {checkedCount}
+                </span>{' '}
+                picked
+              </>
+            )}
           </span>
         </div>
         <button className="header-settings-button" onClick={handleOpenModal}>
-          <LuSettings size={20} />
+          <LuSettings2 size={16} />
         </button>
         {isLoading && (
           <div className="loading-track">

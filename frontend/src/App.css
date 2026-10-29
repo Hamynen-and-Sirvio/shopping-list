@@ -1,16 +1,25 @@
 :root {
-  --font-family: 'Montserrat', sans-serif;
+  --font-family: 'Geist', system-ui, sans-serif;
+  --font-family-mono: 'Geist Mono', ui-monospace, monospace;
 
-  --list-background: #2c2b2d;
-  --list-text: #ffffff;
-  --list-text-muted: #a8a6a9;
-  --list-text-done: #8c8a8d;
-  --list-border: #4a494c;
-  --list-border-strong: #6a696c;
-  --list-button: #f6f3f1;
-  --list-button-text: #2c2b2d;
-  --list-button-disabled: #8a8889;
-  --list-input-background: #444345;
+  --list-background: #111315;
+  --list-surface: #1c1e21;
+  --list-text: #f1f2f4;
+  --list-text-strong: #e3e5e7;
+  --list-text-secondary: #b5b8bb;
+  --list-text-muted: #8f9397;
+  --list-text-label: #7d8185;
+  --list-text-done: #6c6f73;
+  --list-text-dim: #52565a;
+  --list-chip-text: #d5d8db;
+  --list-badge-text: #c2c4c8;
+  --list-divider: #1c1e21;
+  --list-border: #222427;
+  --list-border-strong: #292c2e;
+  --list-checkbox-border: #505357;
+  --list-accent: #5cd7a3;
+  --list-accent-text: #021a10;
+  --list-button-disabled: #2a2d30;
   --list-overlay: rgba(0, 0, 0, 0.6);
   --list-danger: #ff8f73;
 }
@@ -23,6 +32,7 @@ body {
   height: 100%;
   color: var(--list-text);
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .app-container {

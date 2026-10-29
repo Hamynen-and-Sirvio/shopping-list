@@ -55,7 +55,7 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
           className="sheet-close-button"
           onClick={handleCloseModal}
         >
-          <LuX size={22} />
+          <LuX size={18} />
         </button>
       </div>
 
@@ -120,7 +120,7 @@ const AddEntryModal = ({ openModal, handleCloseModal, addEntry }) => {
           disabled={!canSubmit}
         >
           Add to list
-          <LuCheck size={24} />
+          <LuCheck size={18} />
         </button>
       </form>
     </Sheet>

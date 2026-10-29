@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LuTrash } from 'react-icons/lu'
+import { LuTrash2 } from 'react-icons/lu'
 import EntryItem from '../../components/EntryItem/EntryItem'
 import EditModal from '../../components/Modal/EditModal'
 import { DragDropProvider } from '@dnd-kit/react'
@@ -72,11 +72,12 @@ const Content = ({
         {checkedEntries.length > 0 && (
           <div className="picked-section">
             <div className="section-header">
-              <span className="section-label">
-                Picked · {checkedEntries.length}
+              <span className="section-title">
+                <span className="section-label">Picked</span>
+                <span className="section-count">{checkedEntries.length}</span>
               </span>
               <button className="clear-picked-button" onClick={deleteEntries}>
-                <LuTrash size={18} />
+                <LuTrash2 size={12} />
                 Clear picked
               </button>
             </div>

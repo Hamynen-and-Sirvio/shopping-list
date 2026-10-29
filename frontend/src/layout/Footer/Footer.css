@@ -1,27 +1,24 @@
 .footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
   flex: 0;
-  padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
-  background: var(--list-background);
-  border-top: 2px solid var(--list-border-strong);
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--list-border);
 }
 
 .add-button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
   width: 100%;
-  min-height: 52px;
+  min-height: 50px;
   padding: 0 18px;
-  color: var(--list-button-text);
-  background: var(--list-button);
+  color: var(--list-accent-text);
+  background: var(--list-accent);
   border: none;
-  border-radius: 0;
+  border-radius: 12px;
   font-family: inherit;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -30,6 +27,7 @@
 }
 
 .add-button:disabled {
+  color: var(--list-text-muted);
   background: var(--list-button-disabled);
   cursor: default;
 }

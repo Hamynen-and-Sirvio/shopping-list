@@ -4,7 +4,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: 20px;
+  padding-bottom: 4px;
 }
 
 .content-disabled {
@@ -18,48 +18,71 @@
 }
 
 .content-empty {
-  padding: 20px 16px;
+  margin: 0 20px 0 56px;
+  padding: 18px 0;
+  font-size: 15px;
   color: var(--list-text-muted);
-  border-bottom: 1px solid var(--list-border);
+  border-bottom: 1px solid var(--list-divider);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 30px;
-  padding: 0 16px;
-  border-top: 2px solid var(--list-border-strong);
-  border-bottom: 2px solid var(--list-border-strong);
+  box-sizing: border-box;
+  min-height: 35px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--list-border);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .section-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--list-text-muted);
+  color: var(--list-text-label);
+}
+
+.section-count {
+  box-sizing: border-box;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+  color: var(--list-badge-text);
+  background: var(--list-surface);
+  border-radius: 5px;
 }
 
 .picked-section {
   margin-top: 20px;
+  border-top: 1px solid var(--list-border);
 }
 
 .picked-section .section-header {
-  min-height: 44px;
+  min-height: 51px;
 }
 
 .clear-picked-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  color: var(--list-text);
+  gap: 7px;
+  padding: 8px 2px;
+  color: var(--list-text-secondary);
   background: transparent;
   border: none;
   font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
 }
 

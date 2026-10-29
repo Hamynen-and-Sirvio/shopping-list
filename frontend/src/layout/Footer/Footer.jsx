@@ -15,7 +15,7 @@ const Footer = ({ addEntry, isLoading }) => {
           disabled={isLoading}
         >
           {isLoading ? 'Loading...' : 'Add item'}
-          <LuPlus size={26} />
+          <LuPlus size={18} />
         </button>
       </div>
 

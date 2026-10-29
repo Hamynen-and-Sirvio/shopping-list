@@ -1,20 +1,14 @@
 .entry-container {
   display: flex;
   align-items: stretch;
-  min-height: 54px;
-  border-bottom: 1px solid var(--list-border);
   background: var(--list-background);
-}
-
-.entry-container.checked {
-  min-height: 48px;
 }
 
 .entry-checkbox {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding: 0 16px;
+  padding: 0 14px 0 20px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -26,15 +20,19 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--list-text);
-  color: var(--list-button-text);
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--list-checkbox-border);
+  border-radius: 6px;
+  color: var(--list-accent-text);
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
 }
 
 .entry-container.checked .checkbox-box {
-  background: var(--list-button);
-  border-color: var(--list-button);
+  background: var(--list-accent);
+  border-color: var(--list-accent);
 }
 
 .entry-body {
@@ -42,9 +40,17 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 10px 16px 10px 0;
+  gap: 12px;
+  box-sizing: border-box;
+  min-height: 56px;
+  margin-right: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--list-divider);
   cursor: pointer;
+}
+
+.entry-container.checked .entry-body {
+  min-height: 52px;
 }
 
 .entry-content {
@@ -52,37 +58,41 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .entry-title {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
   overflow-wrap: anywhere;
 }
 
 .entry-subtitle {
-  font-size: 14px;
-  line-height: 1.3;
+  font-size: 13px;
+  line-height: 18px;
   color: var(--list-text-muted);
   overflow-wrap: anywhere;
 }
 
 .entry-quantity {
   flex-shrink: 0;
-  font-size: 16px;
-  font-weight: 700;
+  padding: 4px 8px;
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  line-height: 16px;
   white-space: nowrap;
+  color: var(--list-chip-text);
+  background: var(--list-surface);
+  border-radius: 6px;
 }
 
 .entry-container.checked .entry-title {
-  font-weight: 500;
   text-decoration: line-through;
   color: var(--list-text-done);
 }
 
+.entry-container.checked .entry-subtitle,
 .entry-container.checked .entry-quantity {
-  font-weight: 400;
   color: var(--list-text-done);
 }

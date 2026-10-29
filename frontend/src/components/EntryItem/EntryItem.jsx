@@ -33,7 +33,7 @@ const EntryItem = ({ index, entry, handleOpenModal, checkEntry }) => {
         role="checkbox"
       >
         <span className="checkbox-box">
-          {entry.checked && <LuCheck size={16} strokeWidth={3} />}
+          {entry.checked && <LuCheck size={12} strokeWidth={3.5} />}
         </span>
       </button>
       <div className="entry-body" onClick={() => handleOpenModal(entry)}>
