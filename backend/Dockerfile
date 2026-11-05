@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build-stage
+FROM node:26-alpine AS build-stage
 
 ENV NODE_ENV=production
 
@@ -12,7 +12,7 @@ COPY prisma/schema.prisma prisma/schema.prisma
 RUN npx prisma generate
 
 
-FROM node:24-alpine
+FROM node:26-alpine
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
