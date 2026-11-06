@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     watchTriggerPatterns: [
       {
-        pattern: new RegExp(`^${__dirname.replaceAll('\\', '/')}/src/`),
+        pattern: new RegExp(`^${import.meta.dirname.replaceAll('\\', '/')}/src/`),
         testsToRun: () => './tests/integration.test.ts',
       },
     ],
