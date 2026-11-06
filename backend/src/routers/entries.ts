@@ -1,6 +1,6 @@
 import express from 'express'
 
-import EntryRepository from '../EntryRepository.ts'
+import EntryRepository from '../database/EntryRepository.ts'
 import { EntryId, EntryIds, EntryUpdate, NewEntry } from '../validation.ts'
 import ArgumentError from '../errors/ArgumentError.ts'
 

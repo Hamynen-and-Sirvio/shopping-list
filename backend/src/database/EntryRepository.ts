@@ -1,7 +1,7 @@
-import { Prisma, PrismaClient } from '../generated/prisma/client.ts'
-import type { Entry } from '../generated/prisma/client.ts'
-import type { EntryUpdate } from './types.ts'
-import ArgumentError from './errors/ArgumentError.ts'
+import { Prisma, PrismaClient } from '../../generated/prisma/client.ts'
+import type { Entry } from '../../generated/prisma/client.ts'
+import type { EntryUpdate } from '../types.ts'
+import ArgumentError from '../errors/ArgumentError.ts'
 
 type TransactionalOperation<T> = (tx: Prisma.TransactionClient) => Promise<T>
 type TransactionRunner = <T>(operation: TransactionalOperation<T>) => Promise<T>

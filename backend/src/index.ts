@@ -6,7 +6,7 @@ import morgan from 'morgan'
 import { prisma } from '../lib/prisma.ts'
 
 import * as config from './config.ts'
-import EntryRepository from './EntryRepository.ts'
+import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter, isLoggedIn } from './routers/login.ts'
 import { limiter } from './middleware/rateLimiter.ts'
