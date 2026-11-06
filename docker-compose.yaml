@@ -12,7 +12,7 @@ services:
       start_interval: 1s
 
   limiter-data-store:
-    image: mongo:8
+    image: mongo:9
     volumes:
       - mongo_db:/data/db
       - mongo_configdb:/data/configdb

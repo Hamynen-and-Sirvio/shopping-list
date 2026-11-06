@@ -23,7 +23,7 @@ jobs:
           --health-start-interval 1s
 
       test-limiter-data-store:
-        image: mongo:8
+        image: mongo:9
         ports:
           - 127.0.0.1:27017:27017
         options: >-

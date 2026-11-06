@@ -12,7 +12,7 @@ services:
       start_interval: 1s
 
   test-limiter-data-store:
-    image: mongo:8
+    image: mongo:9
     volumes:
       - test_mongo_db:/data/db
       - test_mongo_configdb:/data/configdb
