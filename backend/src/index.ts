@@ -49,7 +49,7 @@ const limiterConsecutiveFailsByIp =
 
 const loginRouter = createLoginRouter(
   config.SECRET,
-  config.PASSWORD_HASH,
+  config.passwordHash,
   limiterConsecutiveFailsByIp,
 )
 app.use('/login', loginRouter)

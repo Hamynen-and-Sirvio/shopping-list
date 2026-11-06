@@ -1,5 +1,12 @@
 import 'dotenv/config'
 
+
+export interface PasswordHash {
+  salt: string
+  key: string
+}
+
+
 if (process.env['DATABASE_URL'] === undefined) {
   throw new Error('Environment variable DATABASE_URL not defined')
 }
@@ -25,7 +32,14 @@ export const CORS_ORIGINS = process.env['CORS_ORIGINS']?.split(',') ?? false
 if (process.env['PASSWORD_HASH'] === undefined) {
   throw new Error('Environment variable PASSWORD_HASH not defined')
 }
-export const PASSWORD_HASH = process.env['PASSWORD_HASH']
+const [passwordSalt, passwordKey] = process.env['PASSWORD_HASH'].split(':')
+if (passwordSalt === undefined || passwordKey === undefined) {
+  throw new Error('Invalid password hash')
+}
+export const passwordHash: PasswordHash = {
+  salt: passwordSalt,
+  key: passwordKey,
+}
 
 if (process.env['SECRET'] === undefined) {
   throw new Error('Environment variable SECRET not defined')

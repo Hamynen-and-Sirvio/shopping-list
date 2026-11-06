@@ -4,13 +4,14 @@ import express from 'express'
 import type { Request } from 'express'
 import jwt from 'jsonwebtoken'
 
+import type { PasswordHash } from '../config.ts'
 import { LoginPassword } from '../validation.ts'
 import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
 export const createLoginRouter = (
   secret: string,
-  passwordHash: string,
+  passwordHash: PasswordHash,
   limiterConsecutiveFailsByIp: RateLimiter,
 ) => {
   const loginRouter = express.Router()
@@ -43,17 +44,10 @@ export const createLoginRouter = (
         return
       }
 
-      const [salt, key] = passwordHash.split(':')
-      if (salt === undefined || key === undefined) {
-        console.error('ERROR: Invalid password hash')
-        res.status(500).json({ error: 'Internal server error' })
-        return
-      }
-
       const hash = crypto
-        .scryptSync(validatedBody.data.password, Buffer.from(salt, 'hex'), 64)
+        .scryptSync(validatedBody.data.password, Buffer.from(passwordHash.salt, 'hex'), 64)
         .toString('hex')
-      if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(key, 'hex'))) {
+      if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(passwordHash.key, 'hex'))) {
         const rlInfo = await limiterConsecutiveFailsByIp.consume(ipAddr)
 
         if (rlInfo.isAboveLimit) {
