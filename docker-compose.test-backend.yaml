@@ -1,8 +1,8 @@
 services:
   test-database:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     volumes:
-      - test_database:/var/lib/postgresql/data
+      - test_database:/var/lib/postgresql
     environment:
       PGUSER: postgres
       POSTGRES_PASSWORD: postgres

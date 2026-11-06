@@ -1,8 +1,8 @@
 services:
   database:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     volumes:
-      - database:/var/lib/postgresql/data
+      - database:/var/lib/postgresql
     environment:
       PGUSER: postgres
       POSTGRES_PASSWORD: postgres
