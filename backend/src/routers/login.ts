@@ -1,11 +1,10 @@
-import crypto from 'node:crypto'
-
 import express from 'express'
 import type { Request } from 'express'
 import jwt from 'jsonwebtoken'
 
-import type { PasswordHash } from '../config.ts'
 import { LoginPassword } from '../validation.ts'
+import { scryptHashMatches } from '../utils/password.ts'
+import type { PasswordHash } from '../utils/password.ts'
 import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
@@ -44,10 +43,7 @@ export const createLoginRouter = (
         return
       }
 
-      const hash = crypto
-        .scryptSync(validatedBody.data.password, Buffer.from(passwordHash.salt, 'hex'), 64)
-        .toString('hex')
-      if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(passwordHash.key, 'hex'))) {
+      if (!scryptHashMatches(validatedBody.data.password, passwordHash)) {
         const rlInfo = await limiterConsecutiveFailsByIp.consume(ipAddr)
 
         if (rlInfo.isAboveLimit) {

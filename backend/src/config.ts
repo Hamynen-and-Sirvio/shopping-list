@@ -1,10 +1,6 @@
 import 'dotenv/config'
 
-
-export interface PasswordHash {
-  salt: string
-  key: string
-}
+import type { PasswordHash } from './utils/password'
 
 
 if (process.env['DATABASE_URL'] === undefined) {
@@ -37,8 +33,8 @@ if (passwordSalt === undefined || passwordKey === undefined) {
   throw new Error('Invalid password hash')
 }
 export const passwordHash: PasswordHash = {
-  salt: passwordSalt,
-  key: passwordKey,
+  salt: Buffer.from(passwordSalt, 'hex'),
+  key: Buffer.from(passwordKey, 'hex'),
 }
 
 if (process.env['SECRET'] === undefined) {
