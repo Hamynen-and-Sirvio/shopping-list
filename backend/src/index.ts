@@ -10,6 +10,7 @@ import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter, isLoggedIn } from './routers/login.ts'
 import { limiter } from './middleware/rateLimiter.ts'
+import { scryptHashMatches } from './utils/password.ts'
 import { MemoryStoredRateLimiter } from './utils/ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from './utils/ratelimiter/MongoDbStoredRateLimiter.ts'
 
@@ -47,9 +48,12 @@ const limiterConsecutiveFailsByIp =
     blockDuration: 60 * 15,
   })
 
+const isPasswordCorrect = (password: string) =>
+  scryptHashMatches(password, config.passwordHash)
+
 const loginRouter = createLoginRouter(
   config.SECRET,
-  config.passwordHash,
+  isPasswordCorrect,
   limiterConsecutiveFailsByIp,
 )
 app.use('/login', loginRouter)

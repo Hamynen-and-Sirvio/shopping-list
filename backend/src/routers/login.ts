@@ -3,14 +3,12 @@ import type { Request } from 'express'
 import jwt from 'jsonwebtoken'
 
 import { LoginPassword } from '../validation.ts'
-import { scryptHashMatches } from '../utils/password.ts'
-import type { PasswordHash } from '../utils/password.ts'
 import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
 export const createLoginRouter = (
   secret: string,
-  passwordHash: PasswordHash,
+  isPasswordCorrect: (password: string) => boolean,
   limiterConsecutiveFailsByIp: RateLimiter,
 ) => {
   const loginRouter = express.Router()
@@ -43,7 +41,7 @@ export const createLoginRouter = (
         return
       }
 
-      if (!scryptHashMatches(validatedBody.data.password, passwordHash)) {
+      if (!isPasswordCorrect(validatedBody.data.password)) {
         const rlInfo = await limiterConsecutiveFailsByIp.consume(ipAddr)
 
         if (rlInfo.isAboveLimit) {
