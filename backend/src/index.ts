@@ -1,6 +1,5 @@
 import cors from 'cors'
 import express from 'express'
-import type { ErrorRequestHandler } from 'express'
 import { MongoClient } from 'mongodb'
 import morgan from 'morgan'
 import { prisma } from '../lib/prisma.ts'
@@ -9,6 +8,7 @@ import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter } from './routers/login.ts'
+import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
 import { JwtAuthorizationManager } from './utils/auth/JwtAuthorizationManager.ts'
 import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationManager.ts'
@@ -97,16 +97,6 @@ app.all('{*splat}', (_, res) => {
   res.status(404).json({ error: 'Resource not found' })
 })
 
-const errorHandler: ErrorRequestHandler = (err, _, res, next) => {
-  if (res.headersSent) {
-    next(err)
-    return
-  }
-  if (err instanceof Error) {
-    console.error(err.stack)
-  }
-  res.status(500).json({ error: 'Internal server error' })
-}
 app.use(errorHandler)
 
 app.listen(parseInt(config.PORT), config.HOST, () => {
