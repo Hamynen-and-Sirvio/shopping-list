@@ -16,7 +16,7 @@ const createRateLimiterMiddleware = (rateLimiter: RateLimiter) => {
 
     if (rlInfo.isAboveLimit) {
       res.set('Retry-After', String(rlInfo.retrySecs))
-      res.status(429).json({ error: 'Too many login attempts' })
+      res.status(429).json({ error: 'Too many requests' })
     } else {
       next()
     }
