@@ -4,7 +4,8 @@ import EntryRepository from '../database/EntryRepository.ts'
 import { EntryId, EntryIds, EntryUpdate, NewEntry } from '../validation.ts'
 import ArgumentError from '../errors/ArgumentError.ts'
 
-export const createEntriesRouter = (entryRepository: EntryRepository, isTesting: boolean) => {
+
+const createEntriesRouter = (entryRepository: EntryRepository, isTesting: boolean) => {
   const entriesRouter = express.Router()
 
   if (isTesting) {
@@ -121,3 +122,6 @@ export const createEntriesRouter = (entryRepository: EntryRepository, isTesting:
 
   return entriesRouter
 }
+
+
+export default createEntriesRouter

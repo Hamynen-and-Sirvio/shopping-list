@@ -4,7 +4,7 @@ import { LoginPassword } from '../validation.ts'
 import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
-export const createLoginRouter = (
+const createLoginRouter = (
   newAuthorizationToken: () => string,
   isPasswordCorrect: (password: string) => boolean,
   limiterConsecutiveFailsByIp: RateLimiter,
@@ -62,3 +62,6 @@ export const createLoginRouter = (
 
   return loginRouter
 }
+
+
+export default createLoginRouter

@@ -6,8 +6,8 @@ import { prisma } from '../lib/prisma.ts'
 
 import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
-import { createEntriesRouter } from './routers/entries.ts'
-import { createLoginRouter } from './routers/login.ts'
+import entriesRouter from './routers/entries.ts'
+import loginRouter from './routers/login.ts'
 import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
@@ -73,23 +73,22 @@ const generateAuthorizationToken = () => authorizationManager.generateToken()
 const isPasswordCorrect = (password: string) =>
   scryptHashMatches(password, config.passwordHash)
 
-const loginRouter = createLoginRouter(
-  generateAuthorizationToken,
-  isPasswordCorrect,
-  limiterConsecutiveFailsByIp,
+app.use(
+  '/login',
+  loginRouter(
+    generateAuthorizationToken,
+    isPasswordCorrect,
+    limiterConsecutiveFailsByIp,
+  )
 )
-app.use('/login', loginRouter)
 
 const isTokenValid = (token: string) => authorizationManager.checkValidityOf(token)
 
 app.use(requireAuthorizationToken(isTokenValid))
 
-const entriesRouter = createEntriesRouter(entryRepository, isTesting)
-app.use('/entries', entriesRouter)
+app.use('/entries', entriesRouter(entryRepository, isTesting))
 
-app.all('{*splat}', (_, res) => {
-  res.status(404).json({ error: 'Resource not found' })
-})
+app.all('{*splat}', (_, res) => res.status(404).json({ error: 'Resource not found' }))
 
 app.use(errorHandler)
 
