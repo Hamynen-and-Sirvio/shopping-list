@@ -49,7 +49,7 @@ if (
     `${SECRET_MIN_LEN}-${SECRET_MAX_LEN} digit long hexadecimal number`
   )
 }
-export const SECRET = Buffer.from(secretFromEnvVar, 'hex')
+export const secretKey = Buffer.from(secretFromEnvVar, 'hex')
 
 export const RATE_LIMITER = process.env['RATE_LIMITER']
 

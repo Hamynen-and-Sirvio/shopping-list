@@ -8,8 +8,11 @@ import { prisma } from '../lib/prisma.ts'
 import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
-import { createLoginRouter, isLoggedIn } from './routers/login.ts'
+import { createLoginRouter } from './routers/login.ts'
 import { limiter } from './middleware/rateLimiter.ts'
+import { JwtAuthorizationManager } from './utils/auth/JwtAuthorizationManager.ts'
+import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationManager.ts'
+import { getTokenFrom } from './utils/auth/utils.ts'
 import { scryptHashMatches } from './utils/password.ts'
 import { MemoryStoredRateLimiter } from './utils/ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from './utils/ratelimiter/MongoDbStoredRateLimiter.ts'
@@ -48,18 +51,24 @@ const limiterConsecutiveFailsByIp =
     blockDuration: 60 * 15,
   })
 
+const authorizationManager: TokenAuthorizationManager =
+  new JwtAuthorizationManager(config.secretKey)
+
+const generateAuthorizationToken = () => authorizationManager.generateToken()
+
 const isPasswordCorrect = (password: string) =>
   scryptHashMatches(password, config.passwordHash)
 
 const loginRouter = createLoginRouter(
-  config.SECRET,
+  generateAuthorizationToken,
   isPasswordCorrect,
   limiterConsecutiveFailsByIp,
 )
 app.use('/login', loginRouter)
 
 app.use((req, res, next) => {
-  if (!isLoggedIn(req, config.SECRET)) {
+  const token = getTokenFrom(req)
+  if (token === null || !authorizationManager.checkValidityOf(token)) {
     res.status(401).json({ error: 'Not authorized to access this URL' })
     return
   }

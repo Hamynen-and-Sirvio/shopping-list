@@ -1,13 +1,11 @@
 import express from 'express'
-import type { Request } from 'express'
-import jwt from 'jsonwebtoken'
 
 import { LoginPassword } from '../validation.ts'
 import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
 export const createLoginRouter = (
-  secret: Buffer,
+  newAuthorizationToken: () => string,
   isPasswordCorrect: (password: string) => boolean,
   limiterConsecutiveFailsByIp: RateLimiter,
 ) => {
@@ -58,32 +56,9 @@ export const createLoginRouter = (
         await limiterConsecutiveFailsByIp.reset(ipAddr)
       }
 
-      res.json({ token: jwt.sign({}, secret) })
+      res.json({ token: newAuthorizationToken() })
     }
   })
 
   return loginRouter
-}
-
-const getTokenFrom = (req: Request) => {
-  const authorization = req.get('authorization')
-  if (authorization?.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
-export const isLoggedIn = (req: Request, secret: Buffer) => {
-  const token = getTokenFrom(req)
-  if (!token) {
-    return false
-  }
-
-  try {
-    jwt.verify(token, secret)
-  } catch {
-    return false
-  }
-
-  return true
 }
