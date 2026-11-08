@@ -7,7 +7,7 @@ import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
 
 export const createLoginRouter = (
-  secret: string,
+  secret: Buffer,
   isPasswordCorrect: (password: string) => boolean,
   limiterConsecutiveFailsByIp: RateLimiter,
 ) => {
@@ -73,7 +73,7 @@ const getTokenFrom = (req: Request) => {
   return null
 }
 
-export const isLoggedIn = (req: Request, secret: string) => {
+export const isLoggedIn = (req: Request, secret: Buffer) => {
   const token = getTokenFrom(req)
   if (!token) {
     return false

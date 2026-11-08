@@ -37,10 +37,19 @@ export const passwordHash: PasswordHash = {
   key: Buffer.from(passwordKey, 'hex'),
 }
 
-if (process.env['SECRET'] === undefined) {
-  throw new Error('Environment variable SECRET not defined')
+const SECRET_MIN_LEN = '32'
+const SECRET_MAX_LEN = '2048'
+const secretFromEnvVar = process.env['SECRET']
+if (
+  secretFromEnvVar === undefined ||
+  !RegExp(`^[0-9a-fA-F]{${SECRET_MIN_LEN},${SECRET_MAX_LEN}}$`).test(secretFromEnvVar)
+) {
+  throw new Error(
+    `Environment variable SECRET should contain a ` +
+    `${SECRET_MIN_LEN}-${SECRET_MAX_LEN} digit long hexadecimal number`
+  )
 }
-export const SECRET = process.env['SECRET']
+export const SECRET = Buffer.from(secretFromEnvVar, 'hex')
 
 export const RATE_LIMITER = process.env['RATE_LIMITER']
 
