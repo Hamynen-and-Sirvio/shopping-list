@@ -8,11 +8,11 @@ import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter } from './routers/login.ts'
+import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
 import { JwtAuthorizationManager } from './utils/auth/JwtAuthorizationManager.ts'
 import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationManager.ts'
-import { getTokenFrom } from './utils/auth/utils.ts'
 import { scryptHashMatches } from './utils/password.ts'
 import { MemoryStoredRateLimiter } from './utils/ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from './utils/ratelimiter/MongoDbStoredRateLimiter.ts'
@@ -80,15 +80,9 @@ const loginRouter = createLoginRouter(
 )
 app.use('/login', loginRouter)
 
-app.use((req, res, next) => {
-  const token = getTokenFrom(req)
-  if (token === null || !authorizationManager.checkValidityOf(token)) {
-    res.status(401).json({ error: 'Not authorized to access this URL' })
-    return
-  }
+const isTokenValid = (token: string) => authorizationManager.checkValidityOf(token)
 
-  next()
-})
+app.use(requireAuthorizationToken(isTokenValid))
 
 const entriesRouter = createEntriesRouter(entryRepository, isTesting)
 app.use('/entries', entriesRouter)
