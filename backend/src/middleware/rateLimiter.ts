@@ -1,40 +1,29 @@
-import type { Request, Response, NextFunction } from 'express'
-import { MongoClient } from 'mongodb'
-import * as config from '../config.ts'
-import { MemoryStoredRateLimiter } from '../utils/ratelimiter/MemoryStoredRateLimiter.ts'
-import { MongoDbStoredRateLimiter } from '../utils/ratelimiter/MongoDbStoredRateLimiter.ts'
+import type { RequestHandler } from 'express'
 
-const rateLimiter =
-  (config.LIMITER_DB_URL && config.LIMITER_DB_NAME) ?
-  new MongoDbStoredRateLimiter({
-    mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
-    dbName: config.LIMITER_DB_NAME,
-    maxPoints: 10,
-    duration: 1,
-    dbKeyPrefix: 'rateLimiter',
-  }) :
-  new MemoryStoredRateLimiter({
-    maxPoints: 10,
-    duration: 1,
-  })
+import type { RateLimiter } from '../utils/ratelimiter/RateLimiter.ts'
 
-export const limiter = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const ipAddr = req.ip
-  if (ipAddr === undefined) {
-    console.error('ERROR: IP address not set in the request')
-    res.status(500).json({ error: 'Internal server error' })
-    return
+
+const createRateLimiterMiddleware = (rateLimiter: RateLimiter) => {
+  const rateLimiterMiddleware: RequestHandler = async (req, res, next) => {
+    const ipAddr = req.ip
+    if (ipAddr === undefined) {
+      console.error('ERROR: IP address not set in the request')
+      res.status(500).json({ error: 'Internal server error' })
+      return
+    }
+
+    const rlInfo = await rateLimiter.consume(ipAddr)
+
+    if (rlInfo.isAboveLimit) {
+      res.set('Retry-After', String(rlInfo.retrySecs))
+      res.status(429).json({ error: 'Too many login attempts' })
+    } else {
+      next()
+    }
   }
 
-  const rlInfo = await rateLimiter.consume(ipAddr)
-
-  if (rlInfo.isAboveLimit) {
-    res.status(429).send('Too many requests')
-  } else {
-    next()
-  }
+  return rateLimiterMiddleware
 }
+
+
+export default createRateLimiterMiddleware

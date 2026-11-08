@@ -9,7 +9,7 @@ import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
 import { createEntriesRouter } from './routers/entries.ts'
 import { createLoginRouter } from './routers/login.ts'
-import { limiter } from './middleware/rateLimiter.ts'
+import rateLimiterMiddleware from './middleware/rateLimiter.ts'
 import { JwtAuthorizationManager } from './utils/auth/JwtAuthorizationManager.ts'
 import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationManager.ts'
 import { getTokenFrom } from './utils/auth/utils.ts'
@@ -28,8 +28,22 @@ const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
+const limiterRequestsByIp =
+  (config.LIMITER_DB_URL && config.LIMITER_DB_NAME) ?
+  new MongoDbStoredRateLimiter({
+    mongoClient: await MongoClient.connect(config.LIMITER_DB_URL),
+    dbName: config.LIMITER_DB_NAME,
+    maxPoints: 10,
+    duration: 1,
+    dbKeyPrefix: 'rateLimiter',
+  }) :
+  new MemoryStoredRateLimiter({
+    maxPoints: 10,
+    duration: 1,
+  })
+
 if (config.RATE_LIMITER !== 'off') {
-  app.use(limiter)
+  app.use(rateLimiterMiddleware(limiterRequestsByIp))
 }
 app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
