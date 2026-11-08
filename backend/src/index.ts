@@ -22,8 +22,6 @@ const MAX_CONSECUTIVE_FAILS_BY_IP = 5
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
-const isTesting = config.NODE_ENV === 'test'
-
 const entryRepository = new EntryRepository(prisma)
 
 const app = express()
@@ -86,7 +84,7 @@ const isTokenValid = (token: string) => authorizationManager.checkValidityOf(tok
 
 app.use(requireAuthorizationToken(isTokenValid))
 
-app.use('/entries', entriesRouter(entryRepository, isTesting))
+app.use('/entries', entriesRouter(entryRepository, config.isInTestingMode))
 
 app.all('{*splat}', (_, res) => res.status(404).json({ error: 'Resource not found' }))
 

@@ -53,4 +53,4 @@ export const secretKey = Buffer.from(secretFromEnvVar, 'hex')
 
 export const RATE_LIMITER = process.env['RATE_LIMITER']
 
-export const NODE_ENV = process.env['NODE_ENV']
+export const isInTestingMode = process.env['NODE_ENV'] === 'test'
