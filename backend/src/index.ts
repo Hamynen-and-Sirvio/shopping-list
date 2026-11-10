@@ -33,7 +33,7 @@ const limiterRequestsByIp =
     dbName: config.LIMITER_DB_NAME,
     maxPoints: 10,
     duration: 1,
-    dbKeyPrefix: 'rateLimiter',
+    dbKeyPrefix: 'limiterRequestsByIp',
   }) :
   new MemoryStoredRateLimiter({
     maxPoints: 10,
