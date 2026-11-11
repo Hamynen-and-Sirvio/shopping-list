@@ -30,7 +30,7 @@ const limiterRequestsByIp = await rateLimiterFactory.createRateLimiter({
   durationSecs: 1,
 })
 
-if (config.RATE_LIMITER !== 'off') {
+if (config.useRateLimiter) {
   app.use(rateLimiterMiddleware(limiterRequestsByIp))
 }
 app.use(morgan('combined'))
