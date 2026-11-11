@@ -3,15 +3,24 @@ import 'dotenv/config'
 import type { PasswordHash } from './utils/password'
 
 
+export interface LimiterDbConfig {
+  url: string
+  dbName: string
+}
+
+
 if (process.env['DATABASE_URL'] === undefined) {
   throw new Error('Environment variable DATABASE_URL not defined')
 }
 export const DATABASE_URL = process.env['DATABASE_URL']
 
-// MongoDB store is used for the rate limiter only if both LIMITER_DB_URL
-// and LIMITER_DB_NAME are set
-export const LIMITER_DB_URL = process.env['LIMITER_DB_URL']
-export const LIMITER_DB_NAME = process.env['LIMITER_DB_NAME']
+const LIMITER_DB_URL = process.env['LIMITER_DB_URL']
+const LIMITER_DB_NAME = process.env['LIMITER_DB_NAME']
+let limiterDbTemp: LimiterDbConfig | null = null
+if (LIMITER_DB_URL && LIMITER_DB_NAME) {
+  limiterDbTemp = Object.freeze({ url: LIMITER_DB_URL, dbName: LIMITER_DB_NAME })
+}
+export const limiterDb = limiterDbTemp
 
 if (process.env['PORT'] === undefined) {
   throw new Error('Environment variable PORT not defined')

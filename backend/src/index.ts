@@ -22,10 +22,7 @@ const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
-const rateLimiterFactory = new RateLimiterFactory(
-  config.LIMITER_DB_URL,
-  config.LIMITER_DB_NAME,
-)
+const rateLimiterFactory = new RateLimiterFactory(config.limiterDb)
 
 const limiterRequestsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterRequestsByIp',

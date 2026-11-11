@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb'
 
+import type { LimiterDbConfig } from '../config.ts'
 import { MemoryStoredRateLimiter } from './ratelimiter/MemoryStoredRateLimiter.ts'
 import { MongoDbStoredRateLimiter } from './ratelimiter/MongoDbStoredRateLimiter.ts'
 
@@ -14,23 +15,21 @@ export interface CreationConfig {
 
 export class RateLimiterFactory {
   #mongoClient: MongoClient | null = null
-  #dbUrl: string | null
-  #dbName: string | null
+  #dbConfig: LimiterDbConfig | null
 
-  constructor(dbUrl: string | undefined, dbName: string | undefined) {
-    this.#dbUrl = dbUrl ?? null
-    this.#dbName = dbName ?? null
+  constructor(dbConfig: LimiterDbConfig | null) {
+    this.#dbConfig = dbConfig
   }
 
   async createRateLimiter(config: CreationConfig) {
-    if (this.#dbUrl && this.#dbName) {
+    if (this.#dbConfig !== null) {
       if (this.#mongoClient === null) {
-        this.#mongoClient = await MongoClient.connect(this.#dbUrl)
+        this.#mongoClient = await MongoClient.connect(this.#dbConfig.url)
       }
 
       return new MongoDbStoredRateLimiter({
         mongoClient: this.#mongoClient,
-        dbName: this.#dbName,
+        dbName: this.#dbConfig.dbName,
         maxPoints: config.maxPoints,
         duration: config.durationSecs,
         ...(config.blockDurationSecs && { blockDuration: config.blockDurationSecs }),
