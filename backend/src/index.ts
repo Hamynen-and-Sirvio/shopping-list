@@ -15,8 +15,6 @@ import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationM
 import { scryptHashMatches } from './utils/password.ts'
 import { RateLimiterFactory } from './utils/RateLimiterFactory.ts'
 
-const MAX_CONSECUTIVE_FAILS_BY_IP = 5
-
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
@@ -44,7 +42,7 @@ app.use(express.json())
 
 const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterConsecutiveFailsByIp',
-  maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
+  maxPoints: 5,
   duration: 60 * 60 * 3,
   blockDuration: 60 * 15,
 })
