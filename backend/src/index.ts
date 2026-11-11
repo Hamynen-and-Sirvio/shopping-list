@@ -1,14 +1,13 @@
 import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
-import { prisma } from '../lib/prisma.ts'
 
 import * as config from './config.ts'
-import EntryRepository from './database/EntryRepository.ts'
 import entriesRouter from './routers/entries.ts'
 import loginRouter from './routers/login.ts'
 import { createAuthUtilFunctions } from './init/createAuthUtilFunctions.ts'
 import { createRateLimiters } from './init/createRateLimiters.ts'
+import { createRepositories } from './init/createRepositories.ts'
 import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
@@ -16,7 +15,7 @@ import rateLimiterMiddleware from './middleware/rateLimiter.ts'
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
-const entryRepository = new EntryRepository(prisma)
+const { entryRepository } = createRepositories()
 
 const app = express()
 
