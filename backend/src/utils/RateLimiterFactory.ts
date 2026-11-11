@@ -22,7 +22,7 @@ export class RateLimiterFactory {
     this.#dbName = dbName ?? null
   }
 
-  async create(config: CreationConfig) {
+  async createRateLimiter(config: CreationConfig) {
     if (this.#dbUrl && this.#dbName) {
       if (this.#mongoClient === null) {
         this.#mongoClient = await MongoClient.connect(this.#dbUrl)

@@ -29,7 +29,7 @@ const rateLimiterFactory = new RateLimiterFactory(
   config.LIMITER_DB_NAME,
 )
 
-const limiterRequestsByIp = await rateLimiterFactory.create({
+const limiterRequestsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterRequestsByIp',
   maxPoints: 10,
   duration: 1,
@@ -42,7 +42,7 @@ app.use(morgan('combined'))
 app.use(cors({ origin: config.CORS_ORIGINS }))
 app.use(express.json())
 
-const limiterConsecutiveFailsByIp = await rateLimiterFactory.create({
+const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterConsecutiveFailsByIp',
   maxPoints: MAX_CONSECUTIVE_FAILS_BY_IP,
   duration: 60 * 60 * 3,
