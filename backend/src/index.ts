@@ -42,17 +42,10 @@ const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
   blockDurationSecs: 60 * 15,
 })
 
-const { generateAuthorizationToken, isTokenValid, isPasswordCorrect } =
+const { generateAuthToken, isTokenValid, isPasswordCorrect } =
   createAuthUtilFunctions(config.secretKey, config.passwordHash)
 
-app.use(
-  '/login',
-  loginRouter(
-    generateAuthorizationToken,
-    isPasswordCorrect,
-    limiterConsecutiveFailsByIp,
-  )
-)
+app.use('/login', loginRouter(generateAuthToken, isPasswordCorrect, limiterConsecutiveFailsByIp))
 
 app.use(requireAuthorizationToken(isTokenValid))
 
