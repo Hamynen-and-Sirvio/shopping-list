@@ -7,12 +7,10 @@ import * as config from './config.ts'
 import EntryRepository from './database/EntryRepository.ts'
 import entriesRouter from './routers/entries.ts'
 import loginRouter from './routers/login.ts'
+import { createAuthUtilFunctions } from './init/createAuthUtilFunctions.ts'
 import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
-import { JwtAuthorizationManager } from './utils/auth/JwtAuthorizationManager.ts'
-import type { TokenAuthorizationManager } from './utils/auth/TokenAuthorizationManager.ts'
-import { scryptHashMatches } from './utils/password.ts'
 import { RateLimiterFactory } from './utils/RateLimiterFactory.ts'
 
 process.on('SIGINT', () => process.exit())
@@ -44,13 +42,8 @@ const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
   blockDurationSecs: 60 * 15,
 })
 
-const authorizationManager: TokenAuthorizationManager =
-  new JwtAuthorizationManager(config.secretKey)
-
-const generateAuthorizationToken = () => authorizationManager.generateToken()
-
-const isPasswordCorrect = (password: string) =>
-  scryptHashMatches(password, config.passwordHash)
+const { generateAuthorizationToken, isTokenValid, isPasswordCorrect } =
+  createAuthUtilFunctions(config.secretKey, config.passwordHash)
 
 app.use(
   '/login',
@@ -60,8 +53,6 @@ app.use(
     limiterConsecutiveFailsByIp,
   )
 )
-
-const isTokenValid = (token: string) => authorizationManager.checkValidityOf(token)
 
 app.use(requireAuthorizationToken(isTokenValid))
 
