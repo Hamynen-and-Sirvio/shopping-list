@@ -8,10 +8,10 @@ import EntryRepository from './database/EntryRepository.ts'
 import entriesRouter from './routers/entries.ts'
 import loginRouter from './routers/login.ts'
 import { createAuthUtilFunctions } from './init/createAuthUtilFunctions.ts'
+import { createRateLimiters } from './init/createRateLimiters.ts'
 import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
-import { RateLimiterFactory } from './utils/RateLimiterFactory.ts'
 
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
@@ -20,13 +20,7 @@ const entryRepository = new EntryRepository(prisma)
 
 const app = express()
 
-const rateLimiterFactory = new RateLimiterFactory(config.limiterDb)
-
-const rateLimiter = await rateLimiterFactory.createRateLimiter({
-  name: 'rateLimiter',
-  maxPoints: 10,
-  durationSecs: 1,
-})
+const { rateLimiter, loginLimiter } = await createRateLimiters(config.limiterDb)
 
 if (config.useRateLimiter) {
   app.use(rateLimiterMiddleware(rateLimiter))
@@ -34,13 +28,6 @@ if (config.useRateLimiter) {
 app.use(morgan('combined'))
 app.use(cors({ origin: config.corsOrigins }))
 app.use(express.json())
-
-const loginLimiter = await rateLimiterFactory.createRateLimiter({
-  name: 'loginLimiter',
-  maxPoints: 5,
-  durationSecs: 60 * 60 * 3,
-  blockDurationSecs: 60 * 15,
-})
 
 const { generateAuthToken, isTokenValid, isPasswordCorrect } =
   createAuthUtilFunctions(config.secretKey, config.passwordHash)
