@@ -7,8 +7,8 @@ import { MongoDbStoredRateLimiter } from './ratelimiter/MongoDbStoredRateLimiter
 export interface CreationConfig {
   name: string
   maxPoints: number
-  duration: number
-  blockDuration?: number
+  durationSecs: number
+  blockDurationSecs?: number
 }
 
 
@@ -32,15 +32,15 @@ export class RateLimiterFactory {
         mongoClient: this.#mongoClient,
         dbName: this.#dbName,
         maxPoints: config.maxPoints,
-        duration: config.duration,
-        ...(config.blockDuration && { blockDuration: config.blockDuration }),
+        duration: config.durationSecs,
+        ...(config.blockDurationSecs && { blockDuration: config.blockDurationSecs }),
         dbKeyPrefix: config.name,
       })
     } else {
       return new MemoryStoredRateLimiter({
         maxPoints: config.maxPoints,
-        duration: config.duration,
-        ...(config.blockDuration && { blockDuration: config.blockDuration }),
+        duration: config.durationSecs,
+        ...(config.blockDurationSecs && { blockDuration: config.blockDurationSecs }),
       })
     }
   }

@@ -30,7 +30,7 @@ const rateLimiterFactory = new RateLimiterFactory(
 const limiterRequestsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterRequestsByIp',
   maxPoints: 10,
-  duration: 1,
+  durationSecs: 1,
 })
 
 if (config.RATE_LIMITER !== 'off') {
@@ -43,8 +43,8 @@ app.use(express.json())
 const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
   name: 'limiterConsecutiveFailsByIp',
   maxPoints: 5,
-  duration: 60 * 60 * 3,
-  blockDuration: 60 * 15,
+  durationSecs: 60 * 60 * 3,
+  blockDurationSecs: 60 * 15,
 })
 
 const authorizationManager: TokenAuthorizationManager =
