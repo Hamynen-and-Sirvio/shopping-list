@@ -22,21 +22,21 @@ const app = express()
 
 const rateLimiterFactory = new RateLimiterFactory(config.limiterDb)
 
-const limiterRequestsByIp = await rateLimiterFactory.createRateLimiter({
-  name: 'limiterRequestsByIp',
+const rateLimiter = await rateLimiterFactory.createRateLimiter({
+  name: 'rateLimiter',
   maxPoints: 10,
   durationSecs: 1,
 })
 
 if (config.useRateLimiter) {
-  app.use(rateLimiterMiddleware(limiterRequestsByIp))
+  app.use(rateLimiterMiddleware(rateLimiter))
 }
 app.use(morgan('combined'))
 app.use(cors({ origin: config.corsOrigins }))
 app.use(express.json())
 
-const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
-  name: 'limiterConsecutiveFailsByIp',
+const loginLimiter = await rateLimiterFactory.createRateLimiter({
+  name: 'loginLimiter',
   maxPoints: 5,
   durationSecs: 60 * 60 * 3,
   blockDurationSecs: 60 * 15,
@@ -45,7 +45,7 @@ const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
 const { generateAuthToken, isTokenValid, isPasswordCorrect } =
   createAuthUtilFunctions(config.secretKey, config.passwordHash)
 
-app.use('/login', loginRouter(generateAuthToken, isPasswordCorrect, limiterConsecutiveFailsByIp))
+app.use('/login', loginRouter(generateAuthToken, isPasswordCorrect, loginLimiter))
 
 app.use(requireAuthorizationToken(isTokenValid))
 
