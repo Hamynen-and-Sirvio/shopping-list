@@ -12,7 +12,7 @@ export interface LimiterDbConfig {
 if (process.env['DATABASE_URL'] === undefined) {
   throw new Error('Environment variable DATABASE_URL not defined')
 }
-export const DATABASE_URL = process.env['DATABASE_URL']
+export const databaseUrl = process.env['DATABASE_URL']
 
 const LIMITER_DB_URL = process.env['LIMITER_DB_URL']
 const LIMITER_DB_NAME = process.env['LIMITER_DB_NAME']
@@ -25,14 +25,14 @@ export const limiterDb = limiterDbTemp
 if (process.env['PORT'] === undefined) {
   throw new Error('Environment variable PORT not defined')
 }
-export const PORT = process.env['PORT']
+export const port = parseInt(process.env['PORT'])
 
 if (process.env['HOST'] === undefined) {
   throw new Error('Environment variable HOST not defined')
 }
-export const HOST = process.env['HOST']
+export const host = process.env['HOST']
 
-export const CORS_ORIGINS = process.env['CORS_ORIGINS']?.split(',') ?? false
+export const corsOrigins = process.env['CORS_ORIGINS']?.split(',') ?? false
 
 if (process.env['PASSWORD_HASH'] === undefined) {
   throw new Error('Environment variable PASSWORD_HASH not defined')

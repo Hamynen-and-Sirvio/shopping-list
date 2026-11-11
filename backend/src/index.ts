@@ -34,7 +34,7 @@ if (config.useRateLimiter) {
   app.use(rateLimiterMiddleware(limiterRequestsByIp))
 }
 app.use(morgan('combined'))
-app.use(cors({ origin: config.CORS_ORIGINS }))
+app.use(cors({ origin: config.corsOrigins }))
 app.use(express.json())
 
 const limiterConsecutiveFailsByIp = await rateLimiterFactory.createRateLimiter({
@@ -71,6 +71,6 @@ app.all('{*splat}', (_, res) => res.status(404).json({ error: 'Resource not foun
 
 app.use(errorHandler)
 
-app.listen(parseInt(config.PORT), config.HOST, () => {
-  console.log(`Server running on 'http://${config.HOST}:${config.PORT}'`)
+app.listen(config.port, config.host, () => {
+  console.log(`Server running on 'http://${config.host}:${String(config.port)}'`)
 })
