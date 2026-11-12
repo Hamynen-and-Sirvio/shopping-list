@@ -2,17 +2,35 @@ import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
 
-import entriesRouter from './routers/entries.ts'
-import loginRouter from './routers/login.ts'
+import EntryRepository from './database/EntryRepository.ts'
 import requireAuthorizationToken from './middleware/authorizationChecker.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import rateLimiterMiddleware from './middleware/rateLimiter.ts'
+import entriesRouter from './routers/entries.ts'
+import loginRouter from './routers/login.ts'
+import type { RateLimiter } from './utils/ratelimiter/RateLimiter.ts'
 
 
-export const createApp = async (
-  authUtilFunctions: any,
-  rateLimiters: any,
-  repositories: any,
+interface AuthUtilFunctions {
+  generateAuthToken: () => string
+  isTokenValid: (token: string) => boolean
+  isPasswordCorrect: (password: string) => boolean
+}
+
+interface RateLimiters {
+  rateLimiter: RateLimiter | null
+  loginLimiter: RateLimiter
+}
+
+interface Repositories {
+  entryRepository: EntryRepository
+}
+
+
+export const createApp = (
+  authUtilFunctions: AuthUtilFunctions,
+  rateLimiters: RateLimiters,
+  repositories: Repositories,
   corsOrigins: false | string[],
   isInTestingMode: boolean,
 ) => {

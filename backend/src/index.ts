@@ -12,7 +12,7 @@ const authUtilFunctions = createAuthUtilFunctions(config.secretKey, config.passw
 const rateLimiters = await createRateLimiters(config.limiterDb, config.useRateLimiter)
 const repositories = createRepositories()
 
-const app = await createApp(
+const app = createApp(
   authUtilFunctions,
   rateLimiters,
   repositories,
