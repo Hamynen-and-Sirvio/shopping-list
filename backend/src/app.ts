@@ -28,16 +28,12 @@ interface Repositories {
 
 
 export const createApp = (
-  authUtilFunctions: AuthUtilFunctions,
-  rateLimiters: RateLimiters,
-  repositories: Repositories,
+  { generateAuthToken, isTokenValid, isPasswordCorrect }: AuthUtilFunctions,
+  { rateLimiter, loginLimiter }: RateLimiters,
+  { entryRepository }: Repositories,
   corsOrigins: false | string[],
   isInTestingMode: boolean,
 ) => {
-  const { generateAuthToken, isTokenValid, isPasswordCorrect } = authUtilFunctions
-  const { rateLimiter, loginLimiter } = rateLimiters
-  const { entryRepository } = repositories
-
   const app = express()
 
   app.use(morgan('combined'))
