@@ -2,14 +2,19 @@ import type { LimiterDbConfig } from '../config'
 import { RateLimiterFactory } from '../utils/RateLimiterFactory.ts'
 
 
-export const createRateLimiters = async (limiterDbConfig: LimiterDbConfig | null) => {
+export const createRateLimiters = async (
+  limiterDbConfig: LimiterDbConfig | null,
+  useRateLimiter: boolean,
+) => {
   const rateLimiterFactory = new RateLimiterFactory(limiterDbConfig)
 
-  const rateLimiter = await rateLimiterFactory.createRateLimiter({
-    name: 'rateLimiter',
-    maxPoints: 10,
-    durationSecs: 1,
-  })
+  const rateLimiter = useRateLimiter ?
+    await rateLimiterFactory.createRateLimiter({
+      name: 'rateLimiter',
+      maxPoints: 10,
+      durationSecs: 1,
+    }) :
+    null
 
   const loginLimiter = await rateLimiterFactory.createRateLimiter({
     name: 'loginLimiter',
