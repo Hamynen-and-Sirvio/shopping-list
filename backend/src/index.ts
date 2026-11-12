@@ -8,10 +8,14 @@ import { createRepositories } from './init/createRepositories.ts'
 process.on('SIGINT', () => process.exit())
 process.on('SIGTERM', () => process.exit())
 
+const authUtilFunctions = createAuthUtilFunctions(config.secretKey, config.passwordHash)
+const rateLimiters = await createRateLimiters(config.limiterDb, config.useRateLimiter)
+const repositories = createRepositories()
+
 const app = await createApp(
-  createAuthUtilFunctions(config.secretKey, config.passwordHash),
-  await createRateLimiters(config.limiterDb, config.useRateLimiter),
-  createRepositories(),
+  authUtilFunctions,
+  rateLimiters,
+  repositories,
   config.corsOrigins,
   config.isInTestingMode,
 )
